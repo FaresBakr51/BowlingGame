@@ -65,11 +65,16 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
 
     private void CheckOtherHit()
     {
-        if (playercontroller._roundScore >= 10)
+        if (playercontroller._roundScore >= 10 && playercontroller._turnRounds == 2)
         {
             Debug.Log("strike");
             playercontroller._frameRounds += 2;
             ResetPins();
+        }
+        if(playercontroller._roundScore >= 10 && playercontroller._turnRounds == 1)
+        {
+            Debug.Log("spare");
+            playercontroller._frameRounds += 1;
         }
       
         AddToLeaderBoard();
@@ -84,17 +89,33 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
         {
             for (int i = 0; i < playercontroller._framesText.Count;)
             {
-                if (playercontroller._framesText[i].text == "")
+                if (playercontroller._turnRounds == 2)
                 {
+                    if (playercontroller._framesText[i].text == "")
+                    {
 
-                    playercontroller._framesText[i].text = "X";
-                    break;
-                }
-                else
+                        playercontroller._framesText[i].text = "X";
+                        break;
+                    }
+
+                    else
+                    {
+                        i++;
+                    }
+                }else if(playercontroller._turnRounds == 1)
                 {
-                    i++;
-                }
+                    if (playercontroller._framesText[i].text == "")
+                    {
 
+                        playercontroller._framesText[i].text = "/";
+                        break;
+                    }
+
+                    else
+                    {
+                        i++;
+                    }
+                }
             }
         }
         else
@@ -136,8 +157,14 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
             playercontroller._totaleScoreTxt.text = playercontroller._totalScore.ToString();
             playercontroller._frameRounds = 2;
             playercontroller._framescore = 0;
+        }
+        playercontroller._turnRounds -= 1;
+        if (playercontroller._turnRounds <= 0)
+        { 
+            playercontroller._turnRounds = 2;
             ResetPins();
         }
+            
     }
     private void ResetPins()
     {

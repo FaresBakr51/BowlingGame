@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI _totaleScoreTxt;
     public int _roundScore;
     public int _frameRounds = 2;
+    public int _turnRounds = 2;
     public int _framescore;
     public int _totalScore;
     public float _speed;
