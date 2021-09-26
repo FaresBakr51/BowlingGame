@@ -73,8 +73,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
             ResetPins();
         }
       
-       // AddToLeaderBoard();
-        
+        AddToLeaderBoard();
         GameEventBus.Publish(GameEventType.reset);
     }
     private void AddToLeaderBoard()
@@ -83,7 +82,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
         {
           for(int i=0;i< playercontroller._framesText.Count;)
             {
-                if(playercontroller._framesText[i].text == "")
+                if(playercontroller._framesText[i].text == null)
                 {
                     
                     playercontroller._framesText[i].text = "X";
@@ -101,7 +100,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
         {
             for (int i = 0; i < playercontroller._framesText.Count;)
             {
-                if (playercontroller._framesText[i].text == "")
+                if (playercontroller._framesText[i].text == null)
                 {
                     playercontroller._framesText[i].text = playercontroller._score.ToString();
                     playercontroller._score = 0;
@@ -128,7 +127,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
             playercontroller._mypins[y+1-1].transform.rotation = playercontroller._resetpins[y+1-1].transform.rotation;
             
             }
-        playercontroller._score = 0;
+      //  playercontroller._score = 0;
     }
     
 }

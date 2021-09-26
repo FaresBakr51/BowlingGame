@@ -83,11 +83,11 @@ public class PlayerController : MonoBehaviour
             {
                 UpdateHookSlider();
             }
-                if ((Input.GetButton("xbutton") || Input.GetKey(KeyCode.Space)))
+                if (Input.GetButton("xbutton"))
                 {
                     UpdateGui();
                 }
-                if (Input.GetButtonUp("xbutton") || Input.GetKeyUp(KeyCode.Space))
+                if (Input.GetButtonUp("xbutton"))
                 {
                 _hookcalclated = true;
                 GetDriftValue();
@@ -148,17 +148,17 @@ public class PlayerController : MonoBehaviour
     {
         
 
-        if (Input.GetButton("obutton") || Input.GetKey(KeyCode.O))
+        if (Input.GetButton("obutton"))
         {
             _scrolltime = 0;
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.1f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.6f);
 
         }
-        if (Input.GetButton("trianglebutton") || Input.GetKey(KeyCode.U)) {
+        if (Input.GetButton("trianglebutton")) {
             _scrolltime = 0;
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.1f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.6f);
         }
 
 
