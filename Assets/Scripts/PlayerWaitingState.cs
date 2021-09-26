@@ -13,8 +13,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
         {
             playercontroller = _playercontroller;
         }
-        playercontroller._hookScrollobj.SetActive(false);
-        playercontroller._powersliderobj.SetActive(false);
+        playercontroller._MyPlayCanavas.SetActive(false);
         _followBall = true;
         StartCoroutine(WaitHit());
     }
@@ -50,7 +49,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
             {
                 if (playercontroller._mypins[i].gameObject.activeInHierarchy == true)
                 {
-                    playercontroller._score += 1;
+                    playercontroller._roundScore += 1;
                     playercontroller._mypins[i].gameObject.SetActive(false);
                 }
             }
@@ -66,10 +65,10 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
 
     private void CheckOtherHit()
     {
-        if (playercontroller._score >= 10)
+        if (playercontroller._roundScore >= 10)
         {
             Debug.Log("strike");
-
+            playercontroller._frameRounds += 2;
             ResetPins();
         }
       
@@ -78,32 +77,18 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
     }
     private void AddToLeaderBoard()
     {
-        if(playercontroller._score >= 10)
-        {
-          for(int i=0;i< playercontroller._framesText.Count;)
-            {
-                if(playercontroller._framesText[i].text == null)
-                {
-                    
-                    playercontroller._framesText[i].text = "X";
-                    playercontroller._score = 0;
-                }
-                else
-                {
-                    i++;
-                }
-               
-            }
-            //playercontroller._score = 0;
-        }
-        else
+        playercontroller._frameRounds -= 1;
+        playercontroller._framescore += playercontroller._roundScore;
+      
+        if (playercontroller._roundScore >= 10)
         {
             for (int i = 0; i < playercontroller._framesText.Count;)
             {
-                if (playercontroller._framesText[i].text == null)
+                if (playercontroller._framesText[i].text == "")
                 {
-                    playercontroller._framesText[i].text = playercontroller._score.ToString();
-                    playercontroller._score = 0;
+
+                    playercontroller._framesText[i].text = "X";
+                    break;
                 }
                 else
                 {
@@ -111,7 +96,47 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
                 }
 
             }
-            //playercontroller._score = 0;
+        }
+        else
+        {
+            for (int i = 0; i < playercontroller._framesText.Count;)
+            {
+                if (playercontroller._framesText[i].text == "")
+                {
+                    playercontroller._framesText[i].text = playercontroller._roundScore.ToString();
+                    break;
+                }
+                else
+                {
+                    i++;
+                   
+                }
+
+            }
+        }
+        if(playercontroller._frameRounds <= 0)
+        {
+
+            for (int i = 0; i < playercontroller._framescoretext.Count;)
+            {
+                if (playercontroller._framescoretext[i].text == "")
+                {
+                    playercontroller._framescoretext[i].text = playercontroller._framescore.ToString();
+                    break;
+                }
+                else
+                {
+                    i++;
+
+                }
+
+            }
+           
+            playercontroller._totalScore += playercontroller._framescore;
+            playercontroller._totaleScoreTxt.text = playercontroller._totalScore.ToString();
+            playercontroller._frameRounds = 2;
+            playercontroller._framescore = 0;
+            ResetPins();
         }
     }
     private void ResetPins()
@@ -127,7 +152,6 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
             playercontroller._mypins[y+1-1].transform.rotation = playercontroller._resetpins[y+1-1].transform.rotation;
             
             }
-      //  playercontroller._score = 0;
     }
     
 }
