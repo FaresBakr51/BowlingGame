@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 1468577}
   - component: {fileID: 1468576}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: leaderboardCanavas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7600,7 +7600,7 @@ GameObject:
   - component: {fileID: 1417002909}
   m_Layer: 5
   m_Name: LeaderBoardCanavas
-  m_TagString: Untagged
+  m_TagString: leaderboard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8536,7 +8536,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11487,6 +11487,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 199534160, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 846138181, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 846138181, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 846138181, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2119529683, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
       propertyPath: _framestextobj
       value: 
@@ -11499,10 +11515,6 @@ PrefabInstance:
       propertyPath: _framesscoretextobj
       value: 
       objectReference: {fileID: 1044762424}
-    - target: {fileID: 2119529683, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
-      propertyPath: _MyLeaderBoardCanavas
-      value: 
-      objectReference: {fileID: 1468574}
     - target: {fileID: 5026486772260086012, guid: 0294fe1178336404e8f2288eae81d1a0, type: 3}
       propertyPath: m_RootOrder
       value: 9

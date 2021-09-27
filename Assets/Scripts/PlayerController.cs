@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     public float _slidertime;
     public float _scrolltime;
     private float inputdir;
-    public GameObject _MyLeaderBoardCanavas;
+  //  public GameObject _MyLeaderBoardCanavas;
     public GameObject _MyPlayCanavas;
     private float _myxpos;
     public bool _hookcalclated;

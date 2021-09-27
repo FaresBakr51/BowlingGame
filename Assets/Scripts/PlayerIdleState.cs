@@ -48,9 +48,8 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
 
     IEnumerator WaitToReset()
     {
-        playerController._MyLeaderBoardCanavas.SetActive(true);
+        GameManager.instance.RequestLeaderBoard();
         yield return new WaitForSeconds(3f);
-        playerController._MyLeaderBoardCanavas.SetActive(false);
         playerController._MyPlayCanavas.SetActive(true);
         ResetCamAndpins();
        
