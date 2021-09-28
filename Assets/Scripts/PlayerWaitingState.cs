@@ -55,7 +55,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
             }
             else
             {
-                //playercontroller._nothitpins.Add(playercontroller._mypins[i].gameObject);
+                playercontroller._nothitpins.Add(playercontroller._mypins[i].gameObject);
             }
         }
         CheckOtherHit();
@@ -68,17 +68,28 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
         if (playercontroller._roundScore >= 10 && playercontroller._turnRounds == 2)
         {
             Debug.Log("strike");
-            playercontroller._frameRounds += 2;
-            ResetPins();
+            Strike();
         }
-        if(playercontroller._roundScore >= 10 && playercontroller._turnRounds == 1)
+        if( playercontroller._turnRounds == 1 && playercontroller._nothitpins.Count ==10)
         {
             Debug.Log("spare");
-            playercontroller._frameRounds += 1;
+            Spare();
         }
       
         AddToLeaderBoard();
         GameEventBus.Publish(GameEventType.reset);
+    }
+    private void Strike()
+    {
+        playercontroller._frameRounds += 2;
+        playercontroller._turnRounds += 2;
+        ResetPins();
+    }
+    private void Spare()
+    {
+        playercontroller._nothitpins.Clear();
+        playercontroller._frameRounds += 1;
+        ResetPins();
     }
     private void AddToLeaderBoard()
     {
@@ -95,19 +106,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
                     {
 
                         playercontroller._framesText[i].text = "X";
-                        break;
-                    }
-
-                    else
-                    {
-                        i++;
-                    }
-                }else if(playercontroller._turnRounds == 1)
-                {
-                    if (playercontroller._framesText[i].text == "")
-                    {
-
-                        playercontroller._framesText[i].text = "/";
+                        playercontroller._framesText[i+1].text = "-";
                         break;
                     }
 

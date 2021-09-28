@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-    public GameObject _leaderBoardobj;
+    private GameObject _leaderBoardobj;
     private static GameManager _instance;
     public static GameManager instance
     {
@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour {
     {
         GetScene(1);
     }
-
 
     private void GetScene(int sceneindx)
     {
