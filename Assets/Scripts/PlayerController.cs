@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+
+
+
 public class PlayerController : MonoBehaviour
 {
 
@@ -18,62 +22,69 @@ public class PlayerController : MonoBehaviour
     public Slider _powerSlider;
     public Scrollbar _hookScroll;
     public List<Transform> _mypins = new List<Transform>();
-    public List<GameObject> _nothitpins = new List<GameObject>();
     public List<Transform> _resetpins = new List<Transform>();
-    public List<TextMeshProUGUI> _framesText = new List<TextMeshProUGUI>();
-    public List<TextMeshProUGUI> _framescoretext = new List<TextMeshProUGUI>();
-    public TextMeshProUGUI _totaleScoreTxt;
-    public int _roundScore;
-    public int _frameRounds = 2;
-    public int _turnRounds = 2;
-    public int _framescore;
-    public int _totalScore;
     public float _speed;
     private PlayerStateContext _playercontext;
     private PlayerState _waitingState, _BowlingState, _idleState;
     public float _slidertime;
     public float _scrolltime;
     private float inputdir;
-  //  public GameObject _MyLeaderBoardCanavas;
     public GameObject _MyPlayCanavas;
     private float _myxpos;
     public bool _hookcalclated;
     public float _driftvalue;
     [SerializeField] private float _driftmaxvalu;
     public bool _canhit;
-  
-
+    public int[] roundScore;
+    private int SumScore1;
+    public int _roundscore;
+    public int round;
+    private ScorePlayer _scoreplayer;
+    public BallSound _ballsound;
+    public AudioClip _movingclip;
+    public Text _totaleScoreTxt;
+    public Text _playername;
     private void Awake()
     {
         GetReady();
         _canhit = true;
         _myxpos = transform.position.x;
+        for (int i = 0; i < roundScore.Length; i++)
+        {
+            roundScore[i] = 0;
+        }
+        _scoreplayer = GetComponent<ScorePlayer>();
     }
     private void OnEnable()
     {
-        GameEventBus.Subscribe(GameEventType.bowling, BowlState);
-        GameEventBus.Subscribe(GameEventType.reset, IdleState);
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
+        GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
     }
     private void OnDisable()
     {
-        GameEventBus.UnSubscribe(GameEventType.bowling, BowlState);
-        GameEventBus.UnSubscribe(GameEventType.reset, IdleState);
+        GameEventBus.UnSubscribe(GameEventType.leaderboard, CheckOtherHit);
         GameEventBus.UnSubscribe(GameEventType.waiting, Waitstate);
     }
     void Start()
     {
-
+   
+       
         _playercontext = new PlayerStateContext(this);
         _BowlingState = gameObject.AddComponent<PlayerBowlingState>();
         _waitingState = gameObject.AddComponent<PlayerWaitingState>();
         _idleState = gameObject.AddComponent<PlayerIdleState>();
         _playerAnim = GetComponent<Animator>();
+        StartCoroutine(getmyname());
     }
 
-
+    IEnumerator getmyname()
+    {
+        yield return new WaitForSeconds(2f);
+        _playername.text = GetNickname.nickname;
+    }
     void Update()
     {
+        
         if (_canhit == true)
         {
             inputdir = Input.GetAxis("Horizontal") * Time.deltaTime;
@@ -94,7 +105,7 @@ public class PlayerController : MonoBehaviour
                 {
                 _hookcalclated = true;
                 GetDriftValue();
-                GameEventBus.Publish(GameEventType.bowling);
+                BowlState();
                 }
         }
 
@@ -114,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
     private void GetReady()
     {
+       
         foreach (Transform obj in _listpins.GetComponentInChildren<Transform>())
         {
             _resetpins.Add(obj);
@@ -126,16 +138,16 @@ public class PlayerController : MonoBehaviour
            
         }
        
-        foreach (Transform framtxt in _framestextobj.GetComponentInChildren<Transform>())
-        {
-            _framesText.Add(framtxt.gameObject.GetComponent<TextMeshProUGUI>());
+        //foreach (Transform framtxt in _framestextobj.GetComponentInChildren<Transform>())
+        //{
+        //    _framesText.Add(framtxt.gameObject.GetComponent<TextMeshProUGUI>());
 
-        }
-        foreach (Transform framtxtscore in _framesscoretextobj.GetComponentInChildren<Transform>())
-        {
-           _framescoretext.Add(framtxtscore.gameObject.GetComponent<TextMeshProUGUI>());
+        //}
+        //foreach (Transform framtxtscore in _framesscoretextobj.GetComponentInChildren<Transform>())
+        //{
+        //   _framescoretext.Add(framtxtscore.gameObject.GetComponent<TextMeshProUGUI>());
 
-        }
+        //}
     }
     public void UpdateAnimator(string val, int value)
     {
@@ -170,7 +182,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_hookScroll.value < 0.45f)
         {
-            float driftval = (-_hookScroll.value * -_driftmaxvalu) - _driftmaxvalu;
+            float driftval = (-_hookScroll.value * _driftmaxvalu);
             _driftvalue = driftval;
         }
         if (_hookScroll.value >= 0.45f)
@@ -178,5 +190,98 @@ public class PlayerController : MonoBehaviour
             float driftval = (_hookScroll.value * _driftmaxvalu);
             _driftvalue = driftval;
         }
+    }
+    private void CheckOtherHit()
+    {
+        AddToLeaderBoard();
+        IdleState();
+    }
+
+    private void AddToLeaderBoard()
+    {
+
+        roundCompleted();
+    }
+    
+
+    private void ResetPins()
+    {
+        if(round % 2 != 0){
+            for (int y = 0; y < _resetpins.Count; y++)
+            {
+                if (_mypins[y].gameObject.activeInHierarchy == false)
+                {
+                    _mypins[y].gameObject.SetActive(true);
+                }
+                _mypins[y + 1 - 1].gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                _mypins[y + 1 - 1].transform.position = _resetpins[y + 1 - 1].transform.position;
+                _mypins[y + 1 - 1].transform.rotation = _resetpins[y + 1 - 1].transform.rotation;
+
+            }
+        }
+    }
+    public void roundCompleted()
+    {
+
+      
+        gaming(_roundscore);
+
+        if (_roundscore == 10)
+        {
+            
+            increase_round();
+            gaming(0);
+
+        }
+
+        ResetPins();
+    }
+
+    public int round_number()
+    {
+
+        return round;
+
+    }
+
+    public void increase_round()
+    {
+        round++;
+    }
+    public void gaming(int score)
+    {
+
+        round = round_number();
+
+        if (round < 19)
+        {
+            roundScore[round] = score;
+            _scoreplayer.ScoreDisplay(roundScore);
+            if (round % 2 == 1)
+            {
+                _scoreplayer.RoundScoreDisplay(roundScore);
+            }
+
+        }
+        else if (round == 19)
+        {
+            roundScore[round] = score;
+            _scoreplayer.ScoreDisplay(roundScore);
+            _scoreplayer.RoundScoreDisplay(roundScore);
+
+            SumScore1 = _scoreplayer.ScoreSum_Player1();
+            Debug.Log("s1" + SumScore1);
+            Invoke("SumFunction", 1);
+
+
+        }
+
+    }
+    public void SumFunction()
+    {
+        _totaleScoreTxt.text = SumScore1.ToString();
+        GameManager.instance.RequestLeaderBoard();
+        
+
     }
 }

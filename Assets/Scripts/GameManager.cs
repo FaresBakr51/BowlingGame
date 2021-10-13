@@ -49,7 +49,13 @@ public class GameManager : MonoBehaviour {
     {
         GetScene(1);
     }
-
+    private void Update()
+    {
+        if (Input.GetButtonDown("square"))
+        {
+            GetScene(1);
+        }
+    }
     private void GetScene(int sceneindx)
     {
         SceneManager.LoadScene(sceneindx);

@@ -39,7 +39,9 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
         playerController._camera.transform.position = _Cambos;
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
         playerController._canhit = true;
-        playerController._roundScore = 0;
+        playerController._roundscore = 0;
+        playerController.increase_round();
+        playerController._ballsound._hit = false;
         foreach (Transform pins in playerController._mypins)
         {
             pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
@@ -48,6 +50,7 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
 
     IEnumerator WaitToReset()
     {
+        yield return new WaitForSeconds(1.5f);
         GameManager.instance.RequestLeaderBoard();
         yield return new WaitForSeconds(3f);
         playerController._MyPlayCanavas.SetActive(true);
