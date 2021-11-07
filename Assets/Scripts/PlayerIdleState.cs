@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PlayerIdleState : MonoBehaviour,PlayerState
+using Photon.Pun;
+public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playerController;
     private Vector3 _Cambos;
     private Vector3 _mypos;
+  
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
@@ -23,7 +24,7 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
         IdleState();
     }
 
-   private void IdleState()
+    private void IdleState()
     {
         StartCoroutine(WaitToReset());
     }
@@ -31,6 +32,7 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
     {
         playerController._hookcalclated = false;
         playerController._ball.GetComponent<Rigidbody>().isKinematic = true;
+        playerController._ball.GetComponent<BallSound>().enabled = false;
         playerController._ball.transform.parent = playerController._playerhand;
         playerController._slidertime = 0;
         playerController._scrolltime = 0;
@@ -38,9 +40,19 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
         playerController._hookScroll.value = 0.5f;
         playerController._camera.transform.position = _Cambos;
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
-        playerController._canhit = true;
+      if(playerController._gameend == true)
+        {
+            playerController._canhit = false;
+            playerController.myleader.SetActive(true);
+           // GameManager.instance.RequestFinalLeaderBoarD();
+        }
+        else
+        {
+            playerController._canhit = true;
+        }
+       
         playerController._roundscore = 0;
-        playerController.increase_round();
+      //  playerController.increase_round();
         playerController._ballsound._hit = false;
         foreach (Transform pins in playerController._mypins)
         {
@@ -51,8 +63,10 @@ public class PlayerIdleState : MonoBehaviour,PlayerState
     IEnumerator WaitToReset()
     {
         yield return new WaitForSeconds(1.5f);
-        GameManager.instance.RequestLeaderBoard();
+        playerController.myleader.SetActive(true);
+        // GameManager.instance.RequestLeaderBoard();
         yield return new WaitForSeconds(3f);
+        playerController.myleader.SetActive(false);
         playerController._MyPlayCanavas.SetActive(true);
         ResetCamAndpins();
        

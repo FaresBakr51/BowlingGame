@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PlayerWaitingState : MonoBehaviour,PlayerState
+using Photon.Pun;
+public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playercontroller;
     private bool _followBall;
@@ -24,7 +24,7 @@ public class PlayerWaitingState : MonoBehaviour,PlayerState
         if (_followBall == true)
         {
            
-            if (playercontroller._camera.transform.position.z >= playercontroller._listpins.transform.position.z +10)
+            if (playercontroller._camera.transform.position.z >= playercontroller._mypinsobj.transform.position.z +10)
             {
                 playercontroller._camera.transform.position = playercontroller._ball.transform.position + new Vector3(0, 1, 1);
             }
