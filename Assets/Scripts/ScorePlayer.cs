@@ -7,6 +7,7 @@ public class ScorePlayer : MonoBehaviour {
 
 	public List<Text> scores_text = new List<Text>();
 	public List<Text> round_scores_text = new List<Text>();
+	public  int totalscre = 0;
 	public void FillRolls(List<int> rolls)
 	{
 		string scoresString = FormatRolls(rolls);
@@ -21,6 +22,7 @@ public class ScorePlayer : MonoBehaviour {
 		for (int i = 0; i < frames.Count; i++)
 		{
 			round_scores_text[i].text = frames[i].ToString();
+		   totalscre  = frames[i];
 		}
 	}
 

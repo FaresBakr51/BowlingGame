@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 8809327693596717355}
   - component: {fileID: 4404042886868020297}
   - component: {fileID: 1147348527735829267}
+  - component: {fileID: 4891790160198153264}
   m_Layer: 0
   m_Name: PhotonNetworkAvatar
-  m_TagString: Untagged
+  m_TagString: playeravatar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6551184403382119711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.356827, y: 1.4206606, z: 37.58389}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,7 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPoints: []
-  _avatar: {fileID: 0}
+  _Currentclient: 1
+  _mytotalscore: {fileID: 0}
+  _mytotal: {fileID: 0}
+  _myavatar: {fileID: 0}
 --- !u!114 &1147348527735829267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,3 +72,16 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4891790160198153264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551184403382119711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28dd60f6abf16d4094cf0f642a043e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 0

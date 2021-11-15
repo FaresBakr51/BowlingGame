@@ -17,7 +17,8 @@ public class PlayerListing : MonoBehaviour
 
     Player = player;
     int randname = Random.Range(0,6966);
-   _text.text  =  GetNickname.nickname + randname;
+    player.NickName = GetNickname.nickname + randname;
+   _text.text  = player.NickName;
    }
   
 }

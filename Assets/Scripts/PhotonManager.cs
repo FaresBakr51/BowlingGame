@@ -10,56 +10,56 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
 
 
-    [SerializeField] private GameObject[] _spawnPoints;
-    private PhotonView _Pvview;
-    public GameObject _avatar;
+    [SerializeField] private List<GameObject> _spawnPoints = new List<GameObject>();
     Player[] _player;
-    private int _Currentclient;
+    [SerializeField]   private int _Currentclient = 1;
+    private PhotonView _pv;
+    private bool StartGame = true;
+    private int index;
+    private List<GameObject> _playerscount = new List<GameObject>();
+    private GameManager _gameManager;
+    private Player _myplayer;
+    public GameObject _mytotalscore;
+     [SerializeField] GameObject _mytotal;
+     public GameObject _myavatar;
+    void Awake(){
    
-    private void Awake()
-    {
+
+     _player = PhotonNetwork.PlayerList;
+        for(int i =0; i< _player.Length;i++){
+
+            if(_player[i].IsLocal){
+
+                _myplayer = _player[i];
+            }
+        }
+        _pv = GetComponent<PhotonView>();
+        _gameManager = FindObjectOfType<GameManager>();
+        StartGame = true;
+      //  _Currentclient =1;
         GetSpawnPoints();
-     
     }
     private void Start()
     {
-        _Pvview = GetComponent<PhotonView>();
-        _player = PhotonNetwork.PlayerList;
-       //   if(GameManager.instance._competitive == false){
-        foreach(Player p in _player)
-        {
-            if(p  != PhotonNetwork.LocalPlayer)
-            {
-                _Currentclient++;
-            }
+        
+        _Currentclient = PhotonNetwork.PlayerList.Length;
+        Debug.Log(_Currentclient);
+        if(_pv.IsMine){
+            Debug.Log(_myplayer.ActorNumber);
+            
+         _myavatar =    PhotonNetwork.Instantiate("Player",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+
+              _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
+             _mytotal = PhotonNetwork.Instantiate("_mytotalscoreprefab",transform.position,Quaternion.identity,0);
+              _mytotal.transform.parent = _mytotalscore.transform;
+              _myavatar.GetComponent<PlayerController>()._mytotal = _mytotal;
         }
-        //  }
-
-       
-        if (_Pvview.IsMine)
-        {
-          
-             // if(GameManager.instance._competitive == true){
-            _Currentclient = PhotonNetwork.CurrentRoom.PlayerCount;
-            _avatar = PhotonNetwork.Instantiate("Player", _spawnPoints[_Currentclient].transform.position, _spawnPoints[_Currentclient].transform.rotation,0);
-            //  }else
-             //   {
-              
-           // _avatar = PhotonNetwork.Instantiate("Player", _spawnPoints[_Currentclient].transform.position, _spawnPoints[_Currentclient].transform.rotation,0);
-
-           }
-        
-           
-
-        
-    }
-    private void GetSpawnPoints()
-    {
-        _spawnPoints = GameObject.FindGameObjectsWithTag("spawnpoint");
-
-
     }
 
+    private void GetSpawnPoints(){
+        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("spawnpoint")){
 
-
+            _spawnPoints.Add(obj);
+        }
+    }
 }

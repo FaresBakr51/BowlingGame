@@ -7,7 +7,7 @@ using System;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PlayerController : MonoBehaviourPunCallbacks
+public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
     public GameObject _ball;
@@ -49,18 +49,32 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public GameObject myleader;
     private GameObject _golballeaderboradcanavas;
     public GameObject _mypinsobj;
+  //  private GameObject _mytotalscore;
+
+    public int _TotalScore;
     // private const Vector3[] _pinpos;
+    public GameObject _mytotal;
+   public GameObject _GoHomebutt;
     private void Awake()
     {
+        
         _photonview = GetComponent<PhotonView>();
        
         _mypinsobj.transform.parent = null;
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
+        //_mytotalscore = GameObject.FindWithTag("totalscorecanavas");
+
+          _scoreplayer = GetComponent<ScorePlayer>();
+          // _mytotal = PhotonNetwork.Instantiate("_mytotalscoreprefab",transform.position,Quaternion.identity,0);
         if (_photonview.IsMine)
         {
+            
            
             myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
-           
+         //  _mytotal.transform.parent = _mytotalscore.transform;
+          _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
+           myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
+         
          //   _mypinsobj = PhotonNetwork.Instantiate("pins", new Vector3(transform.position.x - 1.65f, _listpins.transform.position.y, _listpins.transform.position.z), _listpins.transform.rotation);
             myleader.transform.parent = _golballeaderboradcanavas.transform;
             myleader.gameObject.SetActive(false);
@@ -77,7 +91,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
          //   Destroy(_ball.GetComponent<BallSound>());
         }
       
-        _scoreplayer = GetComponent<ScorePlayer>();
+      
         _canhit = true;
         _myxpos = transform.position.x;
         GetReady();
@@ -96,7 +110,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {
-      
+      if(_photonview.IsMine){
+            _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = 0.ToString();
+      }
         _playercontext = new PlayerStateContext(this);
         _BowlingState = gameObject.AddComponent<PlayerBowlingState>();
         _waitingState = gameObject.AddComponent<PlayerWaitingState>();
@@ -296,7 +312,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             Debug.LogWarning("FillRollCard failed");
         }
-
+       _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = GetNickname.nickname +" :" + _scoreplayer.totalscre.ToString();
         
     }
    
@@ -327,7 +343,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
-  
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+
+        /*   if(stream.IsWriting){
+            stream.SendNext( _mytotal.gameObject.GetComponentInChildren<Text>().text);
+        }else{
+             _mytotal.gameObject.GetComponentInChildren<Text>().text = (string)stream.ReceiveNext();
+         } 
+       */
+    }
 }
 
 public class ActionMasterOld
@@ -415,6 +440,8 @@ public class ActionMasterOld
         // Remember that arrays start counting at 0
         return (bowls[19 - 1] + bowls[20 - 1] >= 10);
     }
+    
+   
 }
 public static class ScoreMaster
 {
@@ -425,12 +452,18 @@ public static class ScoreMaster
         List<int> cumulativeScores = new List<int>();
         int runningTotal = 0;
 
+      //  PlayerController _controll =;
         foreach (int frameScore in ScoreFrames(rolls))
         {
+        
             runningTotal += frameScore;
             cumulativeScores.Add(runningTotal);
+           
         }
 
+      
+
+       
         return cumulativeScores;
     }
 
@@ -463,5 +496,7 @@ public static class ScoreMaster
         }
         return frames;
     }
+
+   
 }
 

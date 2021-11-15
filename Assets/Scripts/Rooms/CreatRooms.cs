@@ -4,40 +4,64 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 public class CreatRooms : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField _roommax;
-  [SerializeField]  private string _roomname;
+     [SerializeField] private TMP_InputField _roomname;
+ 
 
      private GetNickname _getRoomname;
     // Start is called before the first frame update
     private RoomsController _roomController;
+    [SerializeField] private GameObject _roomspanel;
     public void FirstIniatlize(RoomsController _controll){
         _roomController  = _controll;
     }
 void start(){
     _getRoomname = GetComponent<GetNickname>();
 
-    StartCoroutine(getmyname());
+   
 }
 
- IEnumerator getmyname()
-    {
-        yield return new WaitForSeconds(2f);
-       _roomname = GetNickname.nickname;
-    }
+
     public void OnCreatRoom(){
 
        if(!PhotonNetwork.IsConnected)
        return;
         RoomOptions roomOptions = new RoomOptions();
 
-        if(_roommax.text !=null && (int.Parse(_roommax.text)!= 2 ||int.Parse(_roommax.text)!= 4)){
+        if(_roommax.text !="" && (int.Parse(_roommax.text)!= 2 ||int.Parse(_roommax.text)!= 4)){
         roomOptions.MaxPlayers = byte.Parse(_roommax.text);
-        }else{
-              roomOptions.MaxPlayers = 4;
         }
-        PhotonNetwork.JoinOrCreateRoom(_roomname,roomOptions,TypedLobby.Default);
+        if(_roommax.text == ""){
+
+              roomOptions.MaxPlayers = 8;
+        }
+
+
+        
+        if(_roomname.text !=""){
+        PhotonNetwork.JoinOrCreateRoom(_roomname.text,roomOptions,TypedLobby.Default);
+        }
+        if(_roomname.text == ""){
+
+               PhotonNetwork.JoinOrCreateRoom(GetNickname.nickname,roomOptions,TypedLobby.Default);
+        }
+    }
+    void Update(){
+           if(SceneManager.GetActiveScene().name == "MainMenu"  && _roomspanel.activeInHierarchy == true){
+               if (Input.GetButtonDown("trianglebutton"))
+            {
+                if(!PhotonNetwork.InRoom){
+                OnCreatRoom();
+               
+                }
+            
+            }
+
+        }
+       
     }
     public override void OnJoinedRoom()
     { 
@@ -47,8 +71,12 @@ void start(){
 
     public override void OnCreatedRoom()
     {
+
+        if(PhotonNetwork.OfflineMode == false){
+
         Debug.Log("room created");
       _roomController.CurrentRoomCanavas.Show();
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)

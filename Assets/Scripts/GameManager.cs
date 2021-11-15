@@ -11,17 +11,30 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private GameObject _leaderBoardobj;
     private static GameManager _instance;
-    private GameObject[] _spawnPoints;
+    private List<GameObject> _spawnPoints = new List<GameObject>();
     private PhotonView _photonview;
   //  public bool _competitive;
     public Button _playbutt;
     public Button _compettbutt;
       public GameObject _roomsPanel;
+      [SerializeField] private GameObject _roomsPanelPlayers;
       private int PlayerIngame;
       private RoomOptions _roomoption;
       private int _rand;
     public static GameManager instance;
-    
+    //[SerializeField] private int _currentplayers;
+    private int _currentplayers;
+   // private bool _practice;
+    public  int Currentplayers{
+
+        get{
+            return _currentplayers;
+        }
+        set{
+
+            _currentplayers = value;
+        }
+    }
     private void Awake()
     {
       
@@ -39,40 +52,53 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
          DontDestroyOnLoad(this.gameObject);
-   
 
+       /*   _roomsPanel = GameObject.FindWithTag("creatorjoin");
+         _roomsPanelPlayers = GameObject.FindWithTag("currentroom");
+         _playbutt = GameObject.FindWithTag("practicebutt").GetComponent<Button>();
+         _compettbutt = GameObject.FindWithTag("onlinebutt").GetComponent<Button>();
+         _roomsPanelPlayers.SetActive(false);
+         _roomsPanel.SetActive(false); */
 
     }
     
-    public void ActiveRoompanel(){
+    /* public void ActiveRoompanel(){
+       // _practice = false;
         _roomsPanel.SetActive(true);
-    }
+    } */
+   
     private void Start(){
        
-       _playbutt.enabled = false;
-        _compettbutt.enabled = false;
+       //_playbutt.enabled = false;
+       // _compettbutt.enabled = false;
         _photonview = GetComponent<PhotonView>();
-        PhotonNetwork.ConnectUsingSettings();
+       // PhotonNetwork.ConnectUsingSettings();
 
     }
 
-    public override void OnConnectedToMaster()
+   /*  public override void OnConnectedToMaster()
     {
       //   _competitive = false;
+
+      if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
         PhotonNetwork.JoinLobby();
+      }
         PhotonNetwork.AutomaticallySyncScene = true;
         _playbutt.enabled = true;
         _compettbutt.enabled = true;
+      
         Debug.Log("inlobby");
     }
-    public override void OnEnable()
+ */    public override void OnEnable()
     {
+        base.OnEnable();
         PhotonNetwork.AddCallbackTarget(this);
         SceneManager.sceneLoaded += OnSceneLoadingFinished;
 
     }
     public override void OnDisable()
     {
+        base.OnDisable();
         PhotonNetwork.RemoveCallbackTarget(this);
         SceneManager.sceneLoaded -= OnSceneLoadingFinished;
     }
@@ -82,29 +108,43 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (lvl.name == "Map1")
         {
-       _spawnPoints = GameObject.FindGameObjectsWithTag("spawnpoint");
-         CreatPlayer();
+    //   _spawnPoints = GameObject.FindGameObjectsWithTag("spawnpoint");
+       foreach(GameObject obj in GameObject.FindGameObjectsWithTag("spawnpoint") ){
+           _spawnPoints.Add(obj);
+
+           // CreatPlayer();
+       }
+        CreatPlayer();
         }
 
     }
+     private void CreatPlayer(){
+
+           if(PhotonNetwork.OfflineMode == false){
+     Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
+    PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
+    _currentplayers ++;
  
-    private void CreatPlayer(){
-     //if(_competitive == false){
     
-     if(PlayerIngame == PhotonNetwork.CurrentRoom.PlayerCount){
-       PhotonNetwork.Instantiate("Player", _spawnPoints[PlayerIngame].transform.position, _spawnPoints[PlayerIngame].transform.rotation, 0);
+     }else{
+           PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
      }
-     }
+    } 
+  /*   [PunRPC]
+    private void CreatPlayerRpc(){
+
+        _currentplayers++;
+     } */
    // }
 
 
 
-    public override void OnJoinRandomFailed(short returnCode, string message)
+   /*  public override void OnJoinRandomFailed(short returnCode, string message)
     {
         CreatRoom();
     }
-  
-    private void CreatRoom()
+   */
+   /*  private void CreatRoom()
     {
       
          _roomoption = new RoomOptions()
@@ -122,34 +162,47 @@ public class GameManager : MonoBehaviourPunCallbacks
       
         PhotonNetwork.CreateRoom(null, _roomoption);
     
-    }
-    public override void OnJoinedRoom()
+    } */
+   /*  public override void OnJoinedRoom()
     {
         if(_roomsPanel.activeInHierarchy == false){
        PlayerIngame += 1;
         HandleNormalRoom();
         }
-    }
+    } */
 
-    private void HandleNormalRoom(){
+   /*  private void HandleNormalRoom(){
       
          PhotonNetwork.LoadLevel(1);
          Debug.Log("no competitive");
     }
-    
+     */
 
 
 
    
     
-    public void JoinRoom()
+  /*   public void JoinRoom()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.JoinRandomRoom();
-        }
+
+      PhotonNetwork.Disconnect();
+     StartCoroutine(GoOffline());
+     
 
     }
+    IEnumerator GoOffline(){
+        yield return new WaitForSeconds(1f);
+        PhotonNetwork.OfflineMode = true;
+          if(PhotonNetwork.OfflineMode == true){
+        // PhotonNetwork.CreateRoom(null);
+         PhotonNetwork.JoinRoom(null);
+         PhotonNetwork.CurrentRoom.IsOpen = false;
+           PhotonNetwork.CurrentRoom.IsVisible = false;
+         PhotonNetwork.LoadLevel(1);
+      }
+    } */
+   
+ 
 
     public void RequestLeaderBoard()
     {
@@ -167,19 +220,38 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         _leaderBoardobj.transform.GetChild(0).gameObject.SetActive(true);
     }
-    private void Update()
+   /*  private void Update()
     {
-        if (SceneManager.GetActiveScene().name == "MainMenu")
+        if (SceneManager.GetActiveScene().name == "MainMenu" && _roomsPanel.activeInHierarchy == false && _roomsPanelPlayers.activeInHierarchy == false)
         {
+           // _practice = true;
             if (Input.GetButtonDown("square"))
             {
                 JoinRoom();
             }
         }
 
+        if(SceneManager.GetActiveScene().name == "MainMenu"){
+               if (Input.GetButtonDown("obutton"))
+            {
+                if(_roomsPanel.activeInHierarchy == false){
+                ActiveRoompanel();
+                }
+            }
+        }
+          if(SceneManager.GetActiveScene().name == "MainMenu"){
+               if (Input.GetButtonDown("xbutton"))
+            {
+                if(_roomsPanel.activeInHierarchy == true){
+                 _roomsPanel.SetActive(false);
+                }
+            }
+        }
+      
+
 
         //  PhotonNetwork.Reconnect();
-    }
+    } */
     IEnumerator Waitleader()
     {
         _leaderBoardobj.transform.GetChild(0).gameObject.SetActive(true);

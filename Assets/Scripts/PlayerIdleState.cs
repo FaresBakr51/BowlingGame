@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playerController;
@@ -44,6 +45,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         {
             playerController._canhit = false;
             playerController.myleader.SetActive(true);
+            playerController._GoHomebutt.SetActive(true);
            // GameManager.instance.RequestFinalLeaderBoarD();
         }
         else
@@ -53,11 +55,12 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
        
         playerController._roundscore = 0;
       //  playerController.increase_round();
-        playerController._ballsound._hit = false;
+        playerController._ball.GetComponent<BallSound>()._hit = false;
         foreach (Transform pins in playerController._mypins)
         {
             pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }
+     
     }
 
     IEnumerator WaitToReset()
