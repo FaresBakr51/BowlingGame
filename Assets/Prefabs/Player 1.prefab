@@ -1697,7 +1697,6 @@ MonoBehaviour:
   _powerSlider: {fileID: 5392073277156053793}
   _hookScroll: {fileID: 5392073277979943525}
   _mypins: []
-  _resetpins: []
   _speed: 0.5
   _slidertime: 0
   _scrolltime: 0
@@ -1712,7 +1711,20 @@ MonoBehaviour:
   _playername: {fileID: 0}
   _gameend: 0
   _leaderboardprefab: {fileID: 1234403425327534529, guid: 0a677aff29c220040901c911c2b86d66, type: 3}
-  _myleaderboard: {fileID: 0}
+  myleader: {fileID: 0}
+  _mypinsobj: {fileID: 0}
+  _TotalScore: 0
+  _mytotal: {fileID: 0}
+  _GoHomebutt: {fileID: 0}
+  _powerAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: db4bbd88-bfdb-4426-9873-bf2cb75ea3a9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+  _powerval: 0
 --- !u!114 &5392073276336316235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1727,6 +1739,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scores_text: []
   round_scores_text: []
+  totalscre: 0
 --- !u!114 &5392073276336316276
 MonoBehaviour:
   m_ObjectHideFlags: 0

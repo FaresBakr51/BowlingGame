@@ -6,7 +6,7 @@ using TMPro;
 using System;
 using Photon.Pun;
 using Photon.Realtime;
-
+using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -27,10 +27,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private PlayerState _waitingState, _BowlingState, _idleState;
     public float _slidertime;
     public float _scrolltime;
-    private float inputdir;
+    private Vector3 inputdir;
     public GameObject _MyPlayCanavas;
     private float _myxpos;
     public bool _hookcalclated;
+   
     public float _driftvalue;
     [SerializeField] private float _driftmaxvalu;
     public bool _canhit;
@@ -55,8 +56,22 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     // private const Vector3[] _pinpos;
     public GameObject _mytotal;
    public GameObject _GoHomebutt;
+   public InputAction _powerAction;
+   public GameActions _gameactions;
+   public bool _powerval;
+   private bool _moveright;
+   private Vector3 _moving;
     private void Awake()
     {
+          _gameactions = new GameActions();
+            _gameactions.Enable();
+            Debug.Log(_gameactions.ButtonActions.powerupaction.name);
+      //  _powerAction.ReadValue<float>()> .1f
+  
+       /*   _gameactions.ButtonActions.powerupaction.canceled += x =>   _hookcalclated = true;
+          _gameactions.ButtonActions.powerupaction.canceled += x =>  GetDriftValue();
+             _gameactions.ButtonActions.powerupaction.canceled += x => BowlState();
+        */
         
         _photonview = GetComponent<PhotonView>();
        
@@ -73,6 +88,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
          //  _mytotal.transform.parent = _mytotalscore.transform;
           _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
+
+
+     
            myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
          
          //   _mypinsobj = PhotonNetwork.Instantiate("pins", new Vector3(transform.position.x - 1.65f, _listpins.transform.position.y, _listpins.transform.position.z), _listpins.transform.rotation);
@@ -96,20 +114,40 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _myxpos = transform.position.x;
         GetReady();
     }
+   
     public override void OnEnable()
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
+         //  _gameactions.ButtonActions.powerupaction.started += x =>  GetPowerValue();
+
+         _gameactions.ButtonActions.moving.performed += cntxt => _moving = cntxt.ReadValue<Vector2>();
+           _gameactions.ButtonActions.moving.canceled += cntxt => _moving =Vector2.zero;
+          _gameactions.ButtonActions.powerupaction.performed += x =>{
+                   GetPowerValue();
+          };
+        
+          _gameactions.ButtonActions.driftbar.performed += y => {
+               _hookcalclated = true;
+              GetDriftValue();
+
+
+          };
+            _gameactions.Enable();
     }
 
     public override void OnDisable()
     {
         GameEventBus.UnSubscribe(GameEventType.leaderboard, CheckOtherHit);
         GameEventBus.UnSubscribe(GameEventType.waiting, Waitstate);
+          _gameactions.Disable();
     }
 
     void Start()
     {
+
+          
+     
       if(_photonview.IsMine){
             _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = 0.ToString();
       }
@@ -126,45 +164,63 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         yield return new WaitForSeconds(2f);
       //  _playername.text = GetNickname.nickname;
     }
+   
     void Update()
     {
         if (_photonview.IsMine)
         {
             if (_canhit == true)
             {
-                inputdir = Input.GetAxis("Horizontal") * Time.deltaTime;
+                if(_hookcalclated ==false){
+
+                    UpdateHookSlider();
+                }
+                if(_hookcalclated == true && _powerval == false){
+
+                    UpdateGui();
+                }
+                inputdir = new Vector3(_moving.x ,0,0);
+                 transform.Translate(inputdir * Time.deltaTime );
+                  Vector3 clampedPosition = transform.position;
+                clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
+                transform.position = clampedPosition;
+                /* inputdir = Input.GetAxis("Horizontal") * Time.deltaTime;
                 transform.Translate(inputdir, 0, 0f);
                 Vector3 clampedPosition = transform.position;
                 clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
                 transform.position = clampedPosition;
-
+ *//* 
                 if (_hookcalclated == false)
                 {
                     UpdateHookSlider();
-                }
-                if (Input.GetButton("xbutton"))
+                } */
+               /*  if (_powercalcult == true)
                 {
                     UpdateGui();
-                }
-                if (Input.GetButtonUp("xbutton"))
+                } */
+               /*  if (UnityEngine.Input.GetButtonUp("xbutton"))
                 {
                     _hookcalclated = true;
                     GetDriftValue();
                     BowlState();
-                }
+                } */
             }
 
         }
     }
-
+  
     private void BowlState()
     {
+       if(_gameend == false){
         _playercontext.Transition(_BowlingState);
+       }
     }
+   
     private void Waitstate()
     {
         _playercontext.Transition(_waitingState);
     }
+   
     private void IdleState()
     {
         _playercontext.Transition(_idleState);
@@ -232,24 +288,59 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void UpdateGui()
     {
+        Debug.Log("We are updateing power bar");
         _slidertime += Time.deltaTime;
-        _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 2);
-        _power = _powerSlider.value;
+        _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 10f);
+     
+    }
+    private void GetPowerValue(){
+
+          
+         
+          _powerval = true;
+           _power = _powerSlider.value;
+       
+          BowlState();
     }
     private void UpdateHookSlider()
     {
-        if (Input.GetButton("obutton"))
-        {
-            _scrolltime = 0;
-            _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.6f);
+        /* if (Input.GetButton("obutton"))
+        { */
 
-        }
-        if (Input.GetButton("trianglebutton")) {
-            _scrolltime = 0;
+       
+         if(_moveright == false){
+           
+             _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.6f);
-        }
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.6f);
+            
+            if(_hookScroll.value >= 0.9){
+                _moveright = true;
+            }
+         }else{
+        _scrolltime = 0; 
+            _scrolltime += Time.deltaTime;
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.6f);
+
+            if(_hookScroll.value <= 0.1f){
+
+                _moveright = false;
+            }
+
+         }
+         
+
+           /*  if(_hookScroll.value >= 0.9f){
+                _hookScroll.value = Mathf.Lerp(_hookScroll.value,0.9f,5f);
+            }; */
+        
+
+        
+
+      /*   } */
+       //  if (Input.GetButton("trianglebutton")) {
+          
+       /*  } */
     }
     private void GetDriftValue()
     {

@@ -46,13 +46,25 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log(_Currentclient);
         if(_pv.IsMine){
             Debug.Log(_myplayer.ActorNumber);
-            
-         _myavatar =    PhotonNetwork.Instantiate("Player",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+           switch(PlayerPrefs.GetInt("character")){
 
+               case 0:
+                  _myavatar =    PhotonNetwork.Instantiate("Player2",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+
+
+               break;
+               case 1:
+                  _myavatar =    PhotonNetwork.Instantiate("Player",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+
+               break;
+           }
+      
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
              _mytotal = PhotonNetwork.Instantiate("_mytotalscoreprefab",transform.position,Quaternion.identity,0);
               _mytotal.transform.parent = _mytotalscore.transform;
+              _mytotal.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
               _myavatar.GetComponent<PlayerController>()._mytotal = _mytotal;
+              
         }
     }
 

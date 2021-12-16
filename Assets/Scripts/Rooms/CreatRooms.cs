@@ -15,12 +15,13 @@ public class CreatRooms : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     private RoomsController _roomController;
     [SerializeField] private GameObject _roomspanel;
+    public MainMenuManager _menumanager;
     public void FirstIniatlize(RoomsController _controll){
         _roomController  = _controll;
     }
 void start(){
     _getRoomname = GetComponent<GetNickname>();
-
+    
    
 }
 
@@ -29,9 +30,15 @@ void start(){
 
        if(!PhotonNetwork.IsConnected)
        return;
+       if(!PhotonNetwork.InLobby)
+       return;
         RoomOptions roomOptions = new RoomOptions();
+        
+        roomOptions.MaxPlayers = 8;
+          PhotonNetwork.JoinOrCreateRoom(GetNickname.nickname,roomOptions,TypedLobby.Default);
+          
 
-        if(_roommax.text !="" && (int.Parse(_roommax.text)!= 2 ||int.Parse(_roommax.text)!= 4)){
+     /*    if(_roommax.text !="" && (int.Parse(_roommax.text)!= 2 ||int.Parse(_roommax.text)!= 4)){
         roomOptions.MaxPlayers = byte.Parse(_roommax.text);
         }
         if(_roommax.text == ""){
@@ -47,18 +54,20 @@ void start(){
         if(_roomname.text == ""){
 
                PhotonNetwork.JoinOrCreateRoom(GetNickname.nickname,roomOptions,TypedLobby.Default);
-        }
+        } */
+        
     }
+  
     void Update(){
            if(SceneManager.GetActiveScene().name == "MainMenu"  && _roomspanel.activeInHierarchy == true){
-               if (Input.GetButtonDown("trianglebutton"))
+           /*     if (Input.GetButtonDown("trianglebutton"))
             {
                 if(!PhotonNetwork.InRoom){
                 OnCreatRoom();
                
                 }
             
-            }
+            } */
 
         }
        
@@ -81,6 +90,6 @@ void start(){
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        Debug.Log("room failed creat");
+      OnCreatRoom();
     }
 }

@@ -21,7 +21,7 @@ public class RoomListing : MonoBehaviour
         PhotonNetwork.JoinRoom(RoomInfo.Name);
     }
     void Update(){
-         if(SceneManager.GetActiveScene().name == "MainMenu" ){
+         /* if(SceneManager.GetActiveScene().name == "MainMenu" ){
                if (Input.GetButtonDown("square"))
             {
                 if(!PhotonNetwork.InRoom){
@@ -31,5 +31,6 @@ public class RoomListing : MonoBehaviour
             
             }
         }
-    }
+    } */
+}
 }

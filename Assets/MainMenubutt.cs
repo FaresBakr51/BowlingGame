@@ -16,14 +16,14 @@ if(PhotonNetwork.InRoom){
    void Update(){
 
         if(SceneManager.GetActiveScene().name == "Map1" ){
-               if (Input.GetButtonDown("square"))
+        /*        if (Input.GetButtonDown("square"))
             {
                
                 
                   GoHombutt();
                 
             
-            }
+            } */
         }
    }
 }

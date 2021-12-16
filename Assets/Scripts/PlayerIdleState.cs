@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playerController;
@@ -31,6 +32,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
     }
     private void ResetCamAndpins()
     {
+        playerController._powerval = false;
         playerController._hookcalclated = false;
         playerController._ball.GetComponent<Rigidbody>().isKinematic = true;
         playerController._ball.GetComponent<BallSound>().enabled = false;
@@ -46,6 +48,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             playerController._canhit = false;
             playerController.myleader.SetActive(true);
             playerController._GoHomebutt.SetActive(true);
+               EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
            // GameManager.instance.RequestFinalLeaderBoarD();
         }
         else

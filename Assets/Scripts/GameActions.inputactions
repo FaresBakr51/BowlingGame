@@ -1,0 +1,104 @@
+{
+    "name": "GameActions",
+    "maps": [
+        {
+            "name": "ButtonActions",
+            "id": "a7f26d43-ca3e-4aca-9248-99362d0010c6",
+            "actions": [
+                {
+                    "name": "powerupaction",
+                    "type": "Button",
+                    "id": "421b8609-13e1-4749-8cf0-f0aa2ab731d8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "driftbar",
+                    "type": "Button",
+                    "id": "2037763c-0abf-46fd-ba65-8225675ac4b9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "moving",
+                    "type": "Value",
+                    "id": "24eae9dd-3d6f-461d-952d-a394132dc575",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "997f60b3-df8a-4b90-8cfa-d501ef37baa4",
+                    "path": "<HID::Microntek              USB Joystick          >/button3",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "317d911d-301a-4be9-8bac-684a4e75e32c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "Hold(duration=5)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2bb4fe24-880a-4a4c-a18a-a47bbacfce1c",
+                    "path": "<DualShockGamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c28246ec-3ddf-40a0-a412-7adfa9187c23",
+                    "path": "<HID::Microntek              USB Joystick          >/button2",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb1c3886-7076-4fdf-986d-c7c97c3033b1",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ed723dc-08e4-4d78-90ca-2f79b977f0a4",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "moving",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class RoomListingMenu : MonoBehaviourPunCallbacks
 {
 
@@ -13,6 +14,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
 
     private RoomsController _roomcontroll;
     [SerializeField] private Button _startbutt;
+    [SerializeField] private MainMenuManager _menuManager;
     public void FirstIniatlize(RoomsController _controll){
 
         _roomcontroll = _controll;
@@ -23,8 +25,10 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
          _roomcontroll.CurrentRoomCanavas.Show();
          _content.DestroyChildren();
          _listings.Clear();
+           _menuManager.ActiveCurrentRoompanel();
             if(!PhotonNetwork.IsMasterClient){
-             _startbutt.interactable = false;
+             _startbutt.gameObject.SetActive(false);
+             EventSystem.current.SetSelectedGameObject(_menuManager._mainMenubuttns[4]);
              
          }
         }

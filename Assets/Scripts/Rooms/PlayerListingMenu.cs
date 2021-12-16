@@ -91,7 +91,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     }
     void Update(){
 
-         if(SceneManager.GetActiveScene().name == "MainMenu" && _currentroompanel.activeInHierarchy == true){
+        /*  if(SceneManager.GetActiveScene().name == "MainMenu" && _currentroompanel.activeInHierarchy == true){
                if (Input.GetButtonDown("trianglebutton"))
             {
                 if(PhotonNetwork.InRoom){
@@ -100,7 +100,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
                 }
             
             }
-        }
+        } */
     }
     public void Onclick_StartGame(){
         if(PhotonNetwork.IsMasterClient){
