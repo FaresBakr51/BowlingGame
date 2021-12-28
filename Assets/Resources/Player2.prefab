@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 6485954799434798597}
   - component: {fileID: 1836619140433451883}
   - component: {fileID: 5951906885314900655}
-  - component: {fileID: 7907243803029963207}
   m_Layer: 0
   m_Name: Ball02
   m_TagString: Untagged
@@ -31,12 +30,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468316450950524577}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.026603106, y: 0.05005124, z: 0.008595809}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalRotation: {x: 0.67666, y: 0.23937963, z: -0.49456877, w: -0.49013314}
+  m_LocalPosition: {x: -0.04360015, y: 0.045644883, z: -0.003275998}
+  m_LocalScale: {x: 0.4000002, y: 0.40000013, z: 0.39999995}
   m_Children: []
-  m_Father: {fileID: 6475400318924308809}
-  m_RootOrder: 6
+  m_Father: {fileID: 6475400318924308723}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6771522056482521046
 MeshFilter:
@@ -233,7 +232,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5951906885314900655}
-  - {fileID: 7907243803029963207}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -252,22 +250,6 @@ MonoBehaviour:
   _audiosource: {fileID: 6485954799434798597}
   _clip: {fileID: 8300000, guid: 2a3934bdba70c9f43a5f81a73cd43d43, type: 3}
   _hit: 0
---- !u!114 &7907243803029963207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 468316450950524577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &6475400318202670080
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +340,6 @@ GameObject:
   - component: {fileID: 6475400318248941785}
   - component: {fileID: 6475400318248941784}
   - component: {fileID: 6475400318248941787}
-  - component: {fileID: 6475400318248941786}
   - component: {fileID: 6475400318248941789}
   m_Layer: 0
   m_Name: Pin
@@ -439,7 +420,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318248941791}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -497,23 +478,10 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318248941784}
-  - {fileID: 6475400318248941786}
   - {fileID: 6475400318248941789}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318248941786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318248941791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318248941789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -620,7 +588,6 @@ GameObject:
   - component: {fileID: 6475400318298606538}
   - component: {fileID: 6475400318298606541}
   - component: {fileID: 6475400318298606540}
-  - component: {fileID: 6475400318298606543}
   - component: {fileID: 6475400318298606542}
   m_Layer: 0
   m_Name: Pin
@@ -701,7 +668,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318298606528}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -759,23 +726,10 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318298606541}
-  - {fileID: 6475400318298606543}
   - {fileID: 6475400318298606542}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318298606543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318298606528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318298606542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,7 +761,6 @@ GameObject:
   - component: {fileID: 6475400318482247320}
   - component: {fileID: 6475400318482247323}
   - component: {fileID: 6475400318482247322}
-  - component: {fileID: 6475400318482247325}
   - component: {fileID: 6475400318482247324}
   m_Layer: 0
   m_Name: Pin
@@ -888,7 +841,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318482247326}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -946,23 +899,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318482247323}
-  - {fileID: 6475400318482247325}
+  - {fileID: 0}
   - {fileID: 6475400318482247324}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318482247325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318482247326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318482247324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1075,7 +1016,6 @@ GameObject:
   - component: {fileID: 6475400318616113474}
   - component: {fileID: 6475400318616113477}
   - component: {fileID: 6475400318616113476}
-  - component: {fileID: 6475400318616113479}
   - component: {fileID: 6475400318616113478}
   m_Layer: 0
   m_Name: Pin
@@ -1156,7 +1096,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318616113496}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -1214,23 +1154,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318616113477}
-  - {fileID: 6475400318616113479}
+  - {fileID: 0}
   - {fileID: 6475400318616113478}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318616113479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318616113496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318616113478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1262,7 +1190,6 @@ GameObject:
   - component: {fileID: 6475400318638860125}
   - component: {fileID: 6475400318638860124}
   - component: {fileID: 6475400318638860127}
-  - component: {fileID: 6475400318638860126}
   - component: {fileID: 6475400318638860113}
   m_Layer: 0
   m_Name: Pin
@@ -1343,7 +1270,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318638860115}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -1401,23 +1328,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318638860124}
-  - {fileID: 6475400318638860126}
+  - {fileID: 0}
   - {fileID: 6475400318638860113}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318638860126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318638860115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318638860113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1449,7 +1364,6 @@ GameObject:
   - component: {fileID: 6475400318670865773}
   - component: {fileID: 6475400318670865772}
   - component: {fileID: 6475400318670865775}
-  - component: {fileID: 6475400318670865774}
   - component: {fileID: 6475400318670865761}
   m_Layer: 0
   m_Name: Pin
@@ -1530,7 +1444,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318670865763}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -1588,23 +1502,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318670865772}
-  - {fileID: 6475400318670865774}
+  - {fileID: 0}
   - {fileID: 6475400318670865761}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318670865774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318670865763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318670865761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1965,6 +1867,7 @@ Transform:
   - {fileID: 6475400318924308693}
   - {fileID: 6475400318924308717}
   - {fileID: 6475400318924308709}
+  - {fileID: 3236249416400903669}
   m_Father: {fileID: 6475400318924308735}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3466,7 +3369,7 @@ GameObject:
   - component: {fileID: 1346878254614779124}
   m_Layer: 0
   m_Name: Player2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3501,7 +3404,7 @@ Animator:
   m_GameObject: {fileID: 6475400318923889945}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: e5bfd85487ef95a40a4b521be6af2fb8, type: 3}
-  m_Controller: {fileID: 9100000, guid: 11dcf1c83aeee554ca151875babb9df9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5cde6e78adad8fc4da2aa344e9694c7d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -3553,11 +3456,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ball: {fileID: 468316450950524577}
-  _playerhand: {fileID: 6475400318924308809}
+  _playerhand: {fileID: 6475400318924308723}
   _BallConstantPos: {x: -0.02660311, y: 0.05005124, z: 0.008595809}
   _power: 0
   _camera: {fileID: 6475400319270017575}
-  _listpins: {fileID: 6354565281080666747, guid: 2d809d2b48a0a0e4a938b2ed9c68738f, type: 3}
   _powerSlider: {fileID: 6475400319621677683}
   _hookScroll: {fileID: 6475400319796311635}
   _mypins: []
@@ -3567,9 +3469,10 @@ MonoBehaviour:
   _MyPlayCanavas: {fileID: 6475400319801822849}
   _hookcalclated: 0
   _driftvalue: 0
-  _driftmaxvalu: 55
+  _driftmaxvalu: 60
   _canhit: 0
   _roundscore: 0
+  _scoreplayer: {fileID: 0}
   _ballsound: {fileID: 5951906885314900655}
   _movingclip: {fileID: 8300000, guid: d301df4167fb6054080c3e49a6cf76d7, type: 3}
   _playername: {fileID: 0}
@@ -3577,18 +3480,10 @@ MonoBehaviour:
   _leaderboardprefab: {fileID: 1234403425327534529, guid: 0a677aff29c220040901c911c2b86d66, type: 3}
   myleader: {fileID: 0}
   _mypinsobj: {fileID: 6475400318509351276}
-  _TotalScore: 0
   _mytotal: {fileID: 0}
   _GoHomebutt: {fileID: 0}
-  _powerAction:
-    m_Name: Power
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: c2c9d414-1359-4b3b-a6a2-f28a7d17d5be
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
   _powerval: 0
+  _calcScore: 0
 --- !u!114 &1648955904132123506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4426,7 +4321,6 @@ Transform:
   - {fileID: 6475400318924308651}
   - {fileID: 6475400318924308643}
   - {fileID: 6475400318924308667}
-  - {fileID: 3236249416400903669}
   m_Father: {fileID: 6475400318924308661}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4899,7 +4793,6 @@ GameObject:
   - component: {fileID: 6475400318974781741}
   - component: {fileID: 6475400318974781740}
   - component: {fileID: 6475400318974781743}
-  - component: {fileID: 6475400318974781742}
   - component: {fileID: 6475400318974781729}
   m_Layer: 0
   m_Name: Pin
@@ -4980,7 +4873,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400318974781731}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -5038,23 +4931,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400318974781740}
-  - {fileID: 6475400318974781742}
+  - {fileID: 0}
   - {fileID: 6475400318974781729}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400318974781742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400318974781731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400318974781729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5086,7 +4967,6 @@ GameObject:
   - component: {fileID: 6475400319032208578}
   - component: {fileID: 6475400319032208581}
   - component: {fileID: 6475400319032208580}
-  - component: {fileID: 6475400319032208583}
   - component: {fileID: 6475400319032208582}
   m_Layer: 0
   m_Name: Pin
@@ -5167,7 +5047,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400319032208600}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -5225,23 +5105,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400319032208581}
-  - {fileID: 6475400319032208583}
+  - {fileID: 0}
   - {fileID: 6475400319032208582}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400319032208583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400319032208600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400319032208582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5797,7 +5665,6 @@ GameObject:
   - component: {fileID: 6475400320261797503}
   - component: {fileID: 6475400320261797502}
   - component: {fileID: 6475400320261797489}
-  - component: {fileID: 6475400320261797488}
   - component: {fileID: 6475400320261797491}
   m_Layer: 0
   m_Name: Pin
@@ -5878,7 +5745,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400320261797493}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -5936,23 +5803,10 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400320261797502}
-  - {fileID: 6475400320261797488}
   - {fileID: 6475400320261797491}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400320261797488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400320261797493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400320261797491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5984,7 +5838,6 @@ GameObject:
   - component: {fileID: 6475400320284366724}
   - component: {fileID: 6475400320284366727}
   - component: {fileID: 6475400320284366726}
-  - component: {fileID: 6475400320284366745}
   - component: {fileID: 6475400320284366744}
   m_Layer: 0
   m_Name: Pin
@@ -6065,7 +5918,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475400320284366746}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -6123,23 +5976,11 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6475400320284366727}
-  - {fileID: 6475400320284366745}
+  - {fileID: 0}
   - {fileID: 6475400320284366744}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6475400320284366745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475400320284366746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18377b79656f9274b96c1965522dc3a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6475400320284366744
 MonoBehaviour:
   m_ObjectHideFlags: 0

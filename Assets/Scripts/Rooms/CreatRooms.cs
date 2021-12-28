@@ -34,7 +34,7 @@ void start(){
        return;
         RoomOptions roomOptions = new RoomOptions();
         
-        roomOptions.MaxPlayers = 8;
+        roomOptions.MaxPlayers = 6;
           PhotonNetwork.JoinOrCreateRoom(GetNickname.nickname,roomOptions,TypedLobby.Default);
           
 

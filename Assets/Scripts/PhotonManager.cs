@@ -4,24 +4,27 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.IO;
+using TMPro;
+using UnityEngine.UI;
 
-public class PhotonManager : MonoBehaviourPunCallbacks
+public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 {
 
 
 
     [SerializeField] private List<GameObject> _spawnPoints = new List<GameObject>();
     Player[] _player;
-    [SerializeField]   private int _Currentclient = 1;
     private PhotonView _pv;
-    private bool StartGame = true;
-    private int index;
-    private List<GameObject> _playerscount = new List<GameObject>();
     private GameManager _gameManager;
     private Player _myplayer;
     public GameObject _mytotalscore;
-     [SerializeField] GameObject _mytotal;
+  [SerializeField]  private GameObject totalscorePref;
+  //   [SerializeField] GameObject _mytotal;
      public GameObject _myavatar;
+     [SerializeField] private Text _myTextScore;
+     [SerializeField] private int myscore;
+     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>();
+     [SerializeField] private int _mynumb;
     void Awake(){
    
 
@@ -35,17 +38,26 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
         _pv = GetComponent<PhotonView>();
         _gameManager = FindObjectOfType<GameManager>();
-        StartGame = true;
       //  _Currentclient =1;
         GetSpawnPoints();
+       
     }
     private void Start()
     {
+         SetUpPlayer();
+        StartCoroutine(_GETAlltotalscore());
         
-        _Currentclient = PhotonNetwork.PlayerList.Length;
-        Debug.Log(_Currentclient);
+    }
+    IEnumerator _GETAlltotalscore(){
+        yield return new WaitForSeconds(1.5f);
+         foreach(GameObject obj in GameObject.FindGameObjectsWithTag("totalplayerscore")){
+          _totalScoretexts.Add(obj);
+
+      }
+    }
+    private void SetUpPlayer(){
         if(_pv.IsMine){
-            Debug.Log(_myplayer.ActorNumber);
+        //    Debug.Log(_myplayer.ActorNumber);
            switch(PlayerPrefs.GetInt("character")){
 
                case 0:
@@ -58,20 +70,63 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
                break;
            }
-      
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
-             _mytotal = PhotonNetwork.Instantiate("_mytotalscoreprefab",transform.position,Quaternion.identity,0);
-              _mytotal.transform.parent = _mytotalscore.transform;
-              _mytotal.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
-              _myavatar.GetComponent<PlayerController>()._mytotal = _mytotal;
-              
+            
+              RpcSharetotalScore();
+       
         }
+     
     }
 
+    private void RpcSharetotalScore(){
+
+       totalscorePref = PhotonNetwork.Instantiate("_mytotalscoreprefab",_mytotalscore.transform.position,Quaternion.identity,0);
+      _myavatar.GetComponent<PlayerController>()._mytotal = totalscorePref;
+        _myTextScore =  totalscorePref.GetComponentInChildren<Text>();
+     
+        
+        
+    }
+    void Update(){
+        if(_pv.IsMine){
+            if( _myavatar.GetComponent<PlayerController>()._calcScore ==true){
+                myscore = _myavatar.GetComponent<PlayerController>()._scoreplayer.totalscre;
+                photonView.RPC("RpcTest",RpcTarget.All,myscore.ToString());
+                _myavatar.GetComponent<PlayerController>()._calcScore =false;
+            }
+             
+        }
+    }
+    [PunRPC]
+    private void RpcTest(string usedString){
+  
+      Debug.Log(_pv.Owner.ActorNumber);
+   /*    if(_pv.Owner.ActorNumber  == 1){
+    
+    _totalScoretexts[0].GetComponentInChildren<Text>().text = usedString;
+      }else if (_pv.Owner.ActorNumber == 2){
+           */
+       _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = GetNickname.nickname + ": " + usedString;
+          
+   //   }
+    }
     private void GetSpawnPoints(){
         foreach(GameObject obj in GameObject.FindGameObjectsWithTag("spawnpoint")){
 
             _spawnPoints.Add(obj);
         }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+    /*    if(stream.IsWriting){
+           stream.SendNext(myscore);
+           stream.SendNext(_myTextScore.text);
+
+       }else{
+           myscore = (int)stream.ReceiveNext();
+           _myTextScore.text = (string)stream.ReceiveNext();
+
+       } */
     }
 }

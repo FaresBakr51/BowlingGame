@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class ScorePlayer : MonoBehaviour {
+using TMPro;
+using Photon.Pun;
+using Photon.Realtime;
+public class ScorePlayer : MonoBehaviourPunCallbacks {
 
 	public List<Text> scores_text = new List<Text>();
 	public List<Text> round_scores_text = new List<Text>();
 	public  int totalscre = 0;
+	private PlayerController _playercontroll;
+
+	void Awake(){
+		_playercontroll = GetComponent<PlayerController>();
+	
+	}
 	public void FillRolls(List<int> rolls)
 	{
 		string scoresString = FormatRolls(rolls);
@@ -17,15 +25,28 @@ public class ScorePlayer : MonoBehaviour {
 		}
 	}
 
+
 	public void FillFrames(List<int> frames)
 	{
 		for (int i = 0; i < frames.Count; i++)
 		{
 			round_scores_text[i].text = frames[i].ToString();
+		
 		   totalscre  = frames[i];
+		
+		  
 		}
+	
+		   
+			/* 	photonView.RPC("RpcChangeScore", RpcTarget.AllBuffered); */
+			
 	}
+	/* [PunRPC]
+    private void RpcChangeScore(){
 
+		_playercontroll._mytotal.GetComponentInChildren<TextMeshProUGUI>().text = GetNickname.nickname +" :" + totalscre.ToString();
+	}
+ */
 	public static string FormatRolls(List<int> rolls)
 	{
 		string output = "";
@@ -59,7 +80,5 @@ public class ScorePlayer : MonoBehaviour {
 		return output;
 	}
 
-
-
-
+   
 }

@@ -88,11 +88,6 @@ namespace Photon.Pun
         /// <summary>Parameters: PhotonView for which ownership was requested, player who requested (but didn't get) ownership.</summary>
         private static event Action<PhotonView, Player> OnOwnershipTransferFailedEv;
 
-        public static void CloseConnection()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Registers an object for callbacks for the implemented callback-interfaces.
         /// </summary>
@@ -308,7 +303,9 @@ namespace Photon.Pun
                     }
                     // For non-instantiated objects (scene objects) - reset the view
                     else
+                    {
                         view.ResetPhotonView(true);
+                    }
                 }
 
                 foreach (GameObject go in instantiatedGos)

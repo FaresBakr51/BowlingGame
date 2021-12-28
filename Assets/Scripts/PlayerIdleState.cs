@@ -34,6 +34,8 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
     {
         playerController._powerval = false;
         playerController._hookcalclated = false;
+        playerController._powerSlider.gameObject.SetActive(false);
+        playerController._hookScroll.gameObject.SetActive(true);
         playerController._ball.GetComponent<Rigidbody>().isKinematic = true;
         playerController._ball.GetComponent<BallSound>().enabled = false;
         playerController._ball.transform.parent = playerController._playerhand;

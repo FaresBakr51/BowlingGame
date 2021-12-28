@@ -6,6 +6,10 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
 {
     private PlayerController playercontroller;
     private bool _goforword;
+    private PhotonView _pv;
+    void Awake(){
+        _pv = GetComponent<PhotonView>();
+    }
     public void Handle(PlayerController _playercontroller)
     {
         if (!playercontroller)
@@ -13,15 +17,21 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
             playercontroller = _playercontroller;
         }
         playercontroller._canhit = false;
-        ShotBall();
+        
+        RpcShotBall();
     }
-    public void ShotBall()
+    
+    
+    public void RpcShotBall()
     {
        
         playercontroller.UpdateAnimator("shot", 1);
-        StartCoroutine(WaitGrounded());
+      StartCoroutine(WaitGrounded());
+        
+     
         
     }
+   
     private void Update()
     {
         if(_goforword == true)
@@ -31,6 +41,7 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
             
         }
     }
+   
     IEnumerator WaitGrounded()
     {
         _goforword = true;
@@ -43,7 +54,7 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         playercontroller._ball.GetComponent<BallSound>().enabled = true;
         playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power));
         playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(-playercontroller._driftvalue, 0, 0));
-
+      
         GameEventBus.Publish(GameEventType.waiting);
     }
 

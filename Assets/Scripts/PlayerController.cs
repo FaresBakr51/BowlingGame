@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public float _power;
     public GameObject _camera;
     private Animator _playerAnim;
-    public GameObject _listpins;
     public Slider _powerSlider;
     public Scrollbar _hookScroll;
     public List<Transform> _mypins = new List<Transform>();
@@ -31,69 +30,49 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _MyPlayCanavas;
     private float _myxpos;
     public bool _hookcalclated;
-   
     public float _driftvalue;
     [SerializeField] private float _driftmaxvalu;
     public bool _canhit;
     public int _roundscore;
-    private ScorePlayer _scoreplayer;
+    public ScorePlayer _scoreplayer;
     public BallSound _ballsound;
     public AudioClip _movingclip;
     public TextMeshProUGUI _playername;
     private List<int> rolls = new List<int>();
     public bool _gameend;
    public GameObject _leaderboardprefab;
-  //  public GameObject _myleaderboard;
     private GameObject _frametextobj;
     private GameObject _framescoretextobj;
     private PhotonView _photonview;
     public GameObject myleader;
     private GameObject _golballeaderboradcanavas;
     public GameObject _mypinsobj;
-  //  private GameObject _mytotalscore;
-
-    public int _TotalScore;
-    // private const Vector3[] _pinpos;
     public GameObject _mytotal;
    public GameObject _GoHomebutt;
-   public InputAction _powerAction;
    public GameActions _gameactions;
    public bool _powerval;
    private bool _moveright;
    private Vector3 _moving;
+   public bool _calcScore;
+ 
     private void Awake()
     {
-          _gameactions = new GameActions();
-            _gameactions.Enable();
-            Debug.Log(_gameactions.ButtonActions.powerupaction.name);
-      //  _powerAction.ReadValue<float>()> .1f
-  
-       /*   _gameactions.ButtonActions.powerupaction.canceled += x =>   _hookcalclated = true;
-          _gameactions.ButtonActions.powerupaction.canceled += x =>  GetDriftValue();
-             _gameactions.ButtonActions.powerupaction.canceled += x => BowlState();
-        */
-        
+        _powerSlider.gameObject.SetActive(false);
+        _hookScroll.gameObject.SetActive(false);
+         _gameactions = new GameActions();
+        _gameactions.Enable();
         _photonview = GetComponent<PhotonView>();
-       
         _mypinsobj.transform.parent = null;
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
-        //_mytotalscore = GameObject.FindWithTag("totalscorecanavas");
 
           _scoreplayer = GetComponent<ScorePlayer>();
-          // _mytotal = PhotonNetwork.Instantiate("_mytotalscoreprefab",transform.position,Quaternion.identity,0);
+        
         if (_photonview.IsMine)
         {
-            
-           
+
             myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
-         //  _mytotal.transform.parent = _mytotalscore.transform;
           _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
-
-
-     
            myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
-         
-         //   _mypinsobj = PhotonNetwork.Instantiate("pins", new Vector3(transform.position.x - 1.65f, _listpins.transform.position.y, _listpins.transform.position.z), _listpins.transform.rotation);
             myleader.transform.parent = _golballeaderboradcanavas.transform;
             myleader.gameObject.SetActive(false);
             myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
@@ -105,7 +84,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
           _camera.GetComponent<Camera>().enabled = false;
           _camera.GetComponent<AudioListener>().enabled = false;
-           Destroy(GetComponent<PlayerController>());
+         GetComponent<PlayerController>().enabled = false;
+         //  Destroy(GetComponent<PlayerController>());
+           Destroy(GetComponent<PlayerBowlingState>());
          //   Destroy(_ball.GetComponent<BallSound>());
         }
       
@@ -119,15 +100,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
-         //  _gameactions.ButtonActions.powerupaction.started += x =>  GetPowerValue();
-
          _gameactions.ButtonActions.moving.performed += cntxt => _moving = cntxt.ReadValue<Vector2>();
            _gameactions.ButtonActions.moving.canceled += cntxt => _moving =Vector2.zero;
           _gameactions.ButtonActions.powerupaction.performed += x =>{
+              if(_hookcalclated == true){
+                  
                    GetPowerValue();
+              }
           };
         
           _gameactions.ButtonActions.driftbar.performed += y => {
+
+
                _hookcalclated = true;
               GetDriftValue();
 
@@ -148,9 +132,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
           
      
-      if(_photonview.IsMine){
-            _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = 0.ToString();
-      }
+    /*   if(_photonview.IsMine){
+             _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = GetNickname.nickname +" :" + _scoreplayer.totalscre.ToString();
+      } */
+        _hookScroll.gameObject.SetActive(true);
         _playercontext = new PlayerStateContext(this);
         _BowlingState = gameObject.AddComponent<PlayerBowlingState>();
         _waitingState = gameObject.AddComponent<PlayerWaitingState>();
@@ -174,9 +159,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 if(_hookcalclated ==false){
 
                     UpdateHookSlider();
+                }else{
+                       _hookScroll.gameObject.SetActive(false);
                 }
                 if(_hookcalclated == true && _powerval == false){
-
+                 
                     UpdateGui();
                 }
                 inputdir = new Vector3(_moving.x ,0,0);
@@ -184,26 +171,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                   Vector3 clampedPosition = transform.position;
                 clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
                 transform.position = clampedPosition;
-                /* inputdir = Input.GetAxis("Horizontal") * Time.deltaTime;
-                transform.Translate(inputdir, 0, 0f);
-                Vector3 clampedPosition = transform.position;
-                clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
-                transform.position = clampedPosition;
- *//* 
-                if (_hookcalclated == false)
-                {
-                    UpdateHookSlider();
-                } */
-               /*  if (_powercalcult == true)
-                {
-                    UpdateGui();
-                } */
-               /*  if (UnityEngine.Input.GetButtonUp("xbutton"))
-                {
-                    _hookcalclated = true;
-                    GetDriftValue();
-                    BowlState();
-                } */
+          
             }
 
         }
@@ -229,14 +197,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private void GetReady()
     {
         if (photonView.IsMine)
-        {
-
-
-          
-
-          
-
-           
+        {        
             foreach (Transform obj in myleader.GetComponentInChildren<Transform>())
             {
 
@@ -261,8 +222,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 _mypins.Add(obj);
             }
 
-           
-          
             StartCoroutine(waitReady());
         }
 
@@ -282,6 +241,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
         }
     }
+    
     public void UpdateAnimator(string val, int value)
     {
         _playerAnim.SetInteger(val, value);
@@ -290,24 +250,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         Debug.Log("We are updateing power bar");
         _slidertime += Time.deltaTime;
-        _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 10f);
+        _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 6f);
      
     }
     private void GetPowerValue(){
-
-          
-         
           _powerval = true;
            _power = _powerSlider.value;
-       
           BowlState();
     }
     private void UpdateHookSlider()
     {
-        /* if (Input.GetButton("obutton"))
-        { */
-
-       
          if(_moveright == false){
            
              _scrolltime = 0; 
@@ -328,19 +280,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
 
          }
-         
 
-           /*  if(_hookScroll.value >= 0.9f){
-                _hookScroll.value = Mathf.Lerp(_hookScroll.value,0.9f,5f);
-            }; */
-        
-
-        
-
-      /*   } */
-       //  if (Input.GetButton("trianglebutton")) {
-          
-       /*  } */
     }
     private void GetDriftValue()
     {
@@ -354,13 +294,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             float driftval = (_hookScroll.value * _driftmaxvalu);
             _driftvalue = driftval;
         }
+           _hookScroll.gameObject.SetActive(false);
+           _powerSlider.gameObject.SetActive(true);
     }
     private void CheckOtherHit()
     {
+
+      
         AddToLeaderBoard();
         IdleState();
     }
-
+   
     private void AddToLeaderBoard()
     {
         Bowl(_roundscore);
@@ -386,7 +330,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         try
         {
             rolls.Add(pinFall);
-            //SumScore1 += pinFall;
             PerformAction(ActionMasterOld.NextAction(rolls));
         }
         catch
@@ -403,18 +346,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             Debug.LogWarning("FillRollCard failed");
         }
-       _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = GetNickname.nickname +" :" + _scoreplayer.totalscre.ToString();
-        
+        _calcScore = true;
     }
    
-    //public void SumFunction()
-    //{
-    //    _gameend = true;
-    //    GameManager.instance.RequestFinalLeaderBoarD();
-
-
-    //}
-
+  
     public void PerformAction(ActionMasterOld.Action action)
     {
          if (action == ActionMasterOld.Action.EndTurn)
@@ -436,13 +371,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-
-        /*   if(stream.IsWriting){
-            stream.SendNext( _mytotal.gameObject.GetComponentInChildren<Text>().text);
-        }else{
-             _mytotal.gameObject.GetComponentInChildren<Text>().text = (string)stream.ReceiveNext();
-         } 
-       */
+      
+       
     }
 }
 
