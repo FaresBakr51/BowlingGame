@@ -52,9 +52,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
    public GameActions _gameactions;
    public bool _powerval;
    private bool _moveright;
-   private Vector3 _moving;
+   private Vector3 _movingL;
+   
    public bool _calcScore;
- 
+   public bool _calcPower;
+
     private void Awake()
     {
         _powerSlider.gameObject.SetActive(false);
@@ -100,23 +102,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
-         _gameactions.ButtonActions.moving.performed += cntxt => _moving = cntxt.ReadValue<Vector2>();
-           _gameactions.ButtonActions.moving.canceled += cntxt => _moving =Vector2.zero;
-          _gameactions.ButtonActions.powerupaction.performed += x =>{
-              if(_hookcalclated == true){
-                  
-                   GetPowerValue();
-              }
-          };
-        
-          _gameactions.ButtonActions.driftbar.performed += y => {
-
-
-               _hookcalclated = true;
-              GetDriftValue();
-
-
-          };
+         _gameactions.ButtonActions.moving.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
+           _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
+      
             _gameactions.Enable();
     }
 
@@ -142,6 +130,25 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _idleState = gameObject.AddComponent<PlayerIdleState>();
         _playerAnim = GetComponent<Animator>();
         StartCoroutine(getmyname());
+             _gameactions.ButtonActions.powerupaction.performed += x => {
+                 if(_canhit == true){
+            if(_hookcalclated == true){
+            if(_calcPower == true){
+               GetPowerValue();
+            }
+            }
+                 }
+           };
+          _gameactions.ButtonActions.driftbar.performed += y => {
+              if(_canhit == true){
+         if(_hookcalclated == false){
+            
+             
+             GetDriftValue();
+             _hookcalclated = true;
+        }
+          }
+          };
     }
 
     IEnumerator getmyname()
@@ -152,6 +159,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
    
     void Update()
     {
+        Debug.Log(_hookcalclated);
         if (_photonview.IsMine)
         {
             if (_canhit == true)
@@ -166,7 +174,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                  
                     UpdateGui();
                 }
-                inputdir = new Vector3(_moving.x ,0,0);
+              
+                inputdir = new Vector3(_movingL.x ,0,0);
+               
                  transform.Translate(inputdir * Time.deltaTime );
                   Vector3 clampedPosition = transform.position;
                 clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
@@ -248,10 +258,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void UpdateGui()
     {
+       
         Debug.Log("We are updateing power bar");
         _slidertime += Time.deltaTime;
         _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 6f);
-     
+         
+    }
+    IEnumerator ActivePowerShot(){
+
+        yield return new WaitForSeconds(0.5f);
+         _calcPower = true;
     }
     private void GetPowerValue(){
           _powerval = true;
@@ -294,8 +310,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             float driftval = (_hookScroll.value * _driftmaxvalu);
             _driftvalue = driftval;
         }
+         
            _hookScroll.gameObject.SetActive(false);
            _powerSlider.gameObject.SetActive(true);
+           StartCoroutine(ActivePowerShot());
     }
     private void CheckOtherHit()
     {

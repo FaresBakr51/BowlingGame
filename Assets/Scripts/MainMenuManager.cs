@@ -22,21 +22,25 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
          public Image _selectedMrbill;
            public Image _selectpaul;
               public Image _selectmrbill;
+
+              public GameObject _PickPlayerPanel;
+
+
+              private bool _offlinemode;
+
      public void ActiveRoompanel(){
        // _practice = false;
 
-    
+        _offlinemode = false;
+      _PickPlayerPanel.SetActive(true);
+       _mainPanel.SetActive(false);
+        SetSelectedGameObject(_mainMenubuttns[6]);
    /*   if(_roomsContent.transform.GetChild(0) != null){
 
        SetSelectedGameObject(_roomsContent.transform.GetChild(0).gameObject);
 
      }else{ */
 
-     if(!PhotonNetwork.InLobby)return;
-        SetSelectedGameObject(_mainMenubuttns[2]);
-    // }
-        _roomsPanel.SetActive(true);
-        _mainPanel.SetActive(false);
       
     }
     public void ActivealreadyRoompanel(){
@@ -74,6 +78,9 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         //  _playbutt.enabled = false;
         //_compettbutt.enabled = false;
          PhotonNetwork.ConnectUsingSettings();
+           _offlinemode = false;
+      _mainPanel.SetActive(true);
+      SetSelectedGameObject(_mainMenubuttns[0]);
     }
  public override void OnConnectedToMaster()
     {
@@ -105,7 +112,9 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     _selectedPaul.enabled = true;
     _selectedMrbill.enabled = false;
     _selectmrbill.enabled = true;
-    
+   // _PickPlayerPanel.SetActive(false);
+    SetSelectedGameObject(_mainMenubuttns[0]);
+     CheckGameMode();
    }
    public void SelectMrbill(){
        PlayerPrefs.SetInt("character",1);
@@ -113,12 +122,36 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     _selectedPaul.enabled = false;
     _selectedMrbill.enabled = true;
     _selectmrbill.enabled = false;
+  //  _PickPlayerPanel.SetActive(false);
+     SetSelectedGameObject(_mainMenubuttns[0]);
+     CheckGameMode();
+     
+   }
+   private void CheckGameMode(){
+
+     _PickPlayerPanel.SetActive(false);
+     if(_offlinemode == true){
+
+        PhotonNetwork.Disconnect();
+     StartCoroutine(GoOffline());
+     }else{
+       
+     if(!PhotonNetwork.InLobby)return;
+        SetSelectedGameObject(_mainMenubuttns[2]);
+    // }
+    
+        _roomsPanel.SetActive(true);
+        _mainPanel.SetActive(false);
+     }
    }
       public void JoinRoom()
     {
-
-      PhotonNetwork.Disconnect();
-     StartCoroutine(GoOffline());
+ SetSelectedGameObject(_mainMenubuttns[6]);
+      _offlinemode = true;
+      _PickPlayerPanel.SetActive(true);
+      _mainPanel.SetActive(false);
+     /*  PhotonNetwork.Disconnect();
+     StartCoroutine(GoOffline()); */
      
 
     }
