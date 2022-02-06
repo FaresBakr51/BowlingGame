@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -45,7 +44,6 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
                }
 
            }else{
-               Debug.Log("room instaniated");
 
           int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
           if(index == -1){
@@ -55,8 +53,6 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
                _listings.Add(listing);
            }
            }else{
-
-               //modify listing
            }
            }
        }

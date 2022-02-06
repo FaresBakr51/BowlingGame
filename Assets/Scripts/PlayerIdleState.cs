@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 {
@@ -24,6 +22,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         this.transform.position = _mypos;
         IdleState();
+        Debug.Log("Idle State");
     }
 
     private void IdleState()
@@ -52,7 +51,6 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             playerController.myleader.SetActive(true);
             playerController._GoHomebutt.SetActive(true);
                EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
-           // GameManager.instance.RequestFinalLeaderBoarD();
         }
         else
         {
@@ -60,7 +58,6 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
        
         playerController._roundscore = 0;
-      //  playerController.increase_round();
         playerController._ball.GetComponent<BallSound>()._hit = false;
         foreach (Transform pins in playerController._mypins)
         {

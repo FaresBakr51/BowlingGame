@@ -2,10 +2,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
-using Photon.Realtime;
-using UnityEngine.UI;
-using System.Collections.Generic;
-
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
@@ -60,7 +56,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3")
         {
+            if(PhotonNetwork.OfflineMode == false){
+
+
+            
            CreatPlayer();
+            }
         }
 
     }

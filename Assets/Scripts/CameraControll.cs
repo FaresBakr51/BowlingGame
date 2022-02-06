@@ -12,9 +12,4 @@ public class CameraControll : MonoBehaviour
         this.target = target;
         gameObject.transform.position = target.position + offset;
     }
-
-    public void LateUpdate()
-    {
-       // gameObject.transform.position = target.position + offset;
-    }
 }

@@ -1,31 +1,79 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEngine.UI;
-using TMPro;
 using Photon.Pun;
-using Photon.Realtime;
+using UnityEngine;
+using System.Collections;
+
 public class ScorePlayer : MonoBehaviourPunCallbacks {
 
 	public List<Text> scores_text = new List<Text>();
 	public List<Text> round_scores_text = new List<Text>();
 	public  int totalscre = 0;
 	private PlayerController _playercontroll;
+	private PlayerControllOFFlineMode _offlinemodeControll;
+	private int _currentframe;
+	private int _counter;
+	void Start(){
+		_currentframe = 0;
+		if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+				_playercontroll = GetComponent<PlayerController>();
+			_playercontroll.UpdateSound(_playercontroll._FramesClips[0]);
+	
+		}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
 
-	void Awake(){
-		_playercontroll = GetComponent<PlayerController>();
+			_offlinemodeControll = GetComponent<PlayerControllOFFlineMode>();
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[0]);
+		}
+	     
 	
 	}
 	public void FillRolls(List<int> rolls)
 	{
+		
 		string scoresString = FormatRolls(rolls);
 		for (int i = 0; i < scoresString.Length; i++)
 		{
 			scores_text[i].text = scoresString[i].ToString();
+
+			
+		   
 		}
+
+		string str = scoresString;
+		if(str.EndsWith("X ")){
+					   	   	   
+		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
+			_playercontroll.UpdateSound(_playercontroll._gameClips[0]);
+				StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
+			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[0]);
+					StartCoroutine(WaitTxt(_offlinemodeControll._strikeTxt));
+			}
+
+		}else if(str.EndsWith("/")){
+					   	   	   
+		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
+			_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
+			StartCoroutine(WaitTxt(_playercontroll._spareTxt));
+			
+			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[1]);
+					StartCoroutine(WaitTxt(_offlinemodeControll._spareTxt));
+				
+			}
+
+		}
+		   
 	}
 
+	 IEnumerator WaitTxt(GameObject obj){
 
+         obj.SetActive(true);
+
+         yield return new WaitForSeconds(2.5f);
+
+         obj.SetActive(false);
+     }
 	public void FillFrames(List<int> frames)
 	{
 		for (int i = 0; i < frames.Count; i++)
@@ -33,27 +81,39 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			round_scores_text[i].text = frames[i].ToString();
 		
 		   totalscre  = frames[i];
-		
+		  
 		  
 		}
-	
-		   
-			/* 	photonView.RPC("RpcChangeScore", RpcTarget.AllBuffered); */
+
+		UpdateFrameSound(round_scores_text);
 			
 	}
-	/* [PunRPC]
-    private void RpcChangeScore(){
+	private void UpdateFrameSound(List<Text> currentframes){
 
-		_playercontroll._mytotal.GetComponentInChildren<TextMeshProUGUI>().text = GetNickname.nickname +" :" + totalscre.ToString();
+		for(int i =0; i < currentframes.Count; i++){
+
+			if(currentframes[i].text != "" && _currentframe == i){
+				_currentframe++;
+			if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
+			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[_currentframe]);
+			}
+
+			}
+		}
+		
+		
 	}
- */
-	public static string FormatRolls(List<int> rolls)
+	public  string FormatRolls(List<int> rolls)
 	{
 		string output = "";
 
 		for (int i = 0; i < rolls.Count; i++)
 		{
 			int box = output.Length + 1;                            // Score box 1 to 21 
+		
+			
 
 			if (rolls[i] == 0)
 			{                                   // Always enter 0 as -
@@ -61,6 +121,8 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			}
 			else if ((box % 2 == 0 || box == 21) && rolls[i - 1] + rolls[i] == 10)
 			{   // SPARE
+
+			
 				output += "/";
 			}
 			else if (box >= 19 && rolls[i] == 10)
@@ -69,13 +131,17 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			}
 			else if (rolls[i] == 10)
 			{                           // STRIKE in frame 1-9
+		
+			
 				output += "X ";
 			}
 			else
 			{
-				output += rolls[i].ToString();                      // Normal 1-9 bowl
+				output += rolls[i].ToString();                // Normal 1-9 bowl
 			}
 		}
+
+		
 
 		return output;
 	}

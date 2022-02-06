@@ -25,6 +25,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
      [SerializeField] private int myscore;
      [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>();
      [SerializeField] private int _mynumb;
+
     void Awake(){
    
 
@@ -46,6 +47,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     {
          SetUpPlayer();
         StartCoroutine(_GETAlltotalscore());
+      
+     
         
     }
     IEnumerator _GETAlltotalscore(){
@@ -54,7 +57,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
           _totalScoretexts.Add(obj);
 
       }
+       
+      
     }
+  
     private void SetUpPlayer(){
         if(_pv.IsMine){
         //    Debug.Log(_myplayer.ActorNumber);
@@ -99,16 +105,15 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     }
     [PunRPC]
     private void RpcTest(string usedString){
-  
-      Debug.Log(_pv.Owner.ActorNumber);
-   /*    if(_pv.Owner.ActorNumber  == 1){
-    
-    _totalScoretexts[0].GetComponentInChildren<Text>().text = usedString;
-      }else if (_pv.Owner.ActorNumber == 2){
-           */
-       _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = GetNickname.nickname + ": " + usedString;
-          
-   //   }
+     if(PhotonNetwork.OfflineMode == true){
+          _totalScoretexts[0].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
+     }else{
+           _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
+     }
+   /*    Debug.Log(_pv.Owner.ActorNumber);
+     
+      _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
+      */
     }
     private void GetSpawnPoints(){
         foreach(GameObject obj in GameObject.FindGameObjectsWithTag("spawnpoint")){

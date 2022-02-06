@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
@@ -48,7 +47,6 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         yield return new WaitForSeconds(1.06f);
         playercontroller._ball.GetComponent<Rigidbody>().isKinematic = false;
         playercontroller._ball.transform.parent = null;
-     //   playercontroller._ball.transform.Reset();
         _goforword = false;
         playercontroller.UpdateAnimator("shot", 0);
         playercontroller._ball.GetComponent<BallSound>().enabled = true;

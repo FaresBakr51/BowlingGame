@@ -2,19 +2,47 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Net.NetworkInformation;
-
+using UnityEngine.UI;
+using Photon.Pun;
 public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
 
-    public static string device_id;
-    public  static string nickname;
+    public  string device_id;
+    public   string nickname;
+    public GameObject _mynameSet;
+    [SerializeField] private InputField _NameInputfield;
+   
 
     //---------------------------------------------------
     // Awake
     //---------------------------------------------------
+    
+    public void SetMyName(){
+
+        nickname = _NameInputfield.text;
+     PhotonNetwork.LocalPlayer.NickName = nickname;
+     StartCoroutine(ShowMyname());
+    }
+    IEnumerator ShowMyname(){
+        if(_NameInputfield.text != ""){
+        _mynameSet.SetActive(true);
+        yield return new WaitForSeconds(2);
+        _mynameSet.SetActive(false);
+        }
+
+    }
     void Awake() {
+     
         StartCoroutine(GetUserNickname());
+       // nickname = "fares";
+          //nickname = "fares" + Random.Range(0,5).ToString();
+        
+    }
+    void Start(){
+
+
+      
     }
 
     // Update is called once per frame
@@ -47,6 +75,9 @@ public class GetNickname : MonoBehaviour {
             }
 
             nickname = request.downloadHandler.text;
+         
+            PhotonNetwork.LocalPlayer.NickName = nickname;
+           //  _pv.Owner.NickName = nickname;
             Debug.Log($"{device_id} : {nickname}");
         }
     }

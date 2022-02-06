@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public ScorePlayer _scoreplayer;
     public BallSound _ballsound;
     public AudioClip _movingclip;
-    public TextMeshProUGUI _playername;
+   // public TextMeshProUGUI _playername;
     private List<int> rolls = new List<int>();
     public bool _gameend;
    public GameObject _leaderboardprefab;
@@ -56,55 +56,53 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
    
    public bool _calcScore;
    public bool _calcPower;
+private bool _ControllPower;
+private GetNickname _getMyname;
+private OfflinePlayerMode _offlinemode;
+public int _mycontroll;
+  public AudioSource _gameAudio;
+    public AudioClip[] _gameClips;
+     public AudioClip[] _FramesClips;
+     public GameObject _strikeTxt;
+     public GameObject _spareTxt;
 
+   
     private void Awake()
     {
+        _offlinemode = FindObjectOfType<OfflinePlayerMode>();
+        _getMyname = GetComponent<GetNickname>();
         _powerSlider.gameObject.SetActive(false);
         _hookScroll.gameObject.SetActive(false);
          _gameactions = new GameActions();
-        _gameactions.Enable();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
-
           _scoreplayer = GetComponent<ScorePlayer>();
-        
-        if (_photonview.IsMine)
-        {
-
-            myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
-          _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
-           myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
-            myleader.transform.parent = _golballeaderboradcanavas.transform;
-            myleader.gameObject.SetActive(false);
-            myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
-            myleader.transform.GetComponent<RectTransform>().localScale = new Vector3(2, 2f, 2);
-        }
-       
-      
         if (!_photonview.IsMine)
         {
           _camera.GetComponent<Camera>().enabled = false;
           _camera.GetComponent<AudioListener>().enabled = false;
          GetComponent<PlayerController>().enabled = false;
-         //  Destroy(GetComponent<PlayerController>());
-           Destroy(GetComponent<PlayerBowlingState>());
-         //   Destroy(_ball.GetComponent<BallSound>());
+        //   Destroy(GetComponent<PlayerBowlingState>());
         }
       
       
         _canhit = true;
         _myxpos = transform.position.x;
-        GetReady();
+      //  GetReady();
     }
-   
+     public void UpdateSound(AudioClip clip){
+
+     
+        _gameAudio.PlayOneShot(clip);
+        
+    }
     public override void OnEnable()
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
          _gameactions.ButtonActions.moving.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
-      
             _gameactions.Enable();
     }
 
@@ -117,19 +115,38 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     void Start()
     {
+            CheckControlles();
+        
+        if (_photonview.IsMine)
+        {
+           if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+            myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
+           }
+          _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
+           myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
+            myleader.transform.parent = _golballeaderboradcanavas.transform;
+            myleader.gameObject.SetActive(false);
+            myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
+            myleader.transform.GetComponent<RectTransform>().localScale = new Vector3(2, 2f, 2);
+            
+    
+        }
 
-          
-     
-    /*   if(_photonview.IsMine){
-             _mytotal.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = GetNickname.nickname +" :" + _scoreplayer.totalscre.ToString();
-      } */
+        
         _hookScroll.gameObject.SetActive(true);
         _playercontext = new PlayerStateContext(this);
         _BowlingState = gameObject.AddComponent<PlayerBowlingState>();
         _waitingState = gameObject.AddComponent<PlayerWaitingState>();
         _idleState = gameObject.AddComponent<PlayerIdleState>();
         _playerAnim = GetComponent<Animator>();
-        StartCoroutine(getmyname());
+         GetReady();
+     
+
+        //  _myName = GetNickname.nickname;
+    }
+    private void CheckControlles(){
+
+           if(PhotonNetwork.OfflineMode == false){
              _gameactions.ButtonActions.powerupaction.performed += x => {
                  if(_canhit == true){
             if(_hookcalclated == true){
@@ -141,25 +158,69 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            };
           _gameactions.ButtonActions.driftbar.performed += y => {
               if(_canhit == true){
-         if(_hookcalclated == false){
-            
-             
+         if(_hookcalclated == false){          
+             GetDriftValue();
+             _hookcalclated = true;
+        }
+          }
+          };
+        }else{
+           
+           // _offlinemode.SwitchControll(this.gameObject);
+            if(_mycontroll == 0){
+
+     
+                FirstControll();
+            }else if(_mycontroll ==1){
+
+                SecondControll();
+            }
+        }
+
+    }
+    private void FirstControll(){
+
+            _gameactions.ButtonActions.powerupaction.performed += x => {
+                 if(_canhit == true){
+            if(_hookcalclated == true){
+            if(_calcPower == true){
+               GetPowerValue();
+            }
+            }
+                 }
+           };
+          _gameactions.ButtonActions.driftbar.performed += y => {
+              if(_canhit == true){
+         if(_hookcalclated == false){          
              GetDriftValue();
              _hookcalclated = true;
         }
           }
           };
     }
+    private void SecondControll(){
 
-    IEnumerator getmyname()
-    {
-        yield return new WaitForSeconds(2f);
-      //  _playername.text = GetNickname.nickname;
+            _gameactions.ButtonActions.powerupaction2.performed += x => {
+                 if(_canhit == true){
+            if(_hookcalclated == true){
+            if(_calcPower == true){
+               GetPowerValue();
+            }
+            }
+                 }
+           };
+          _gameactions.ButtonActions.driftbar2.performed += y => {
+              if(_canhit == true){
+         if(_hookcalclated == false){          
+             GetDriftValue();
+             _hookcalclated = true;
+        }
+          }
+          };
     }
-   
     void Update()
     {
-        Debug.Log(_hookcalclated);
+    
         if (_photonview.IsMine)
         {
             if (_canhit == true)
@@ -185,11 +246,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
 
         }
+       
+       
     }
   
     private void BowlState()
     {
        if(_gameend == false){
+           Debug.Log("bowl state");
         _playercontext.Transition(_BowlingState);
        }
     }
@@ -206,6 +270,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     private void GetReady()
     {
+   
         if (photonView.IsMine)
         {        
             foreach (Transform obj in myleader.GetComponentInChildren<Transform>())
@@ -258,10 +323,30 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void UpdateGui()
     {
-       
-        Debug.Log("We are updateing power bar");
-        _slidertime += Time.deltaTime;
-        _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 6f);
+        if(_powerSlider.value == _powerSlider.maxValue){
+
+            _ControllPower = true;
+             _slidertime =0;
+      
+        }
+        if(_powerSlider.value == _powerSlider.minValue ){
+           _slidertime =0;
+
+         _ControllPower = false;
+           
+        }
+         
+        if(_ControllPower == false){
+
+             Debug.Log("moving maxmum");
+              _slidertime += Time.deltaTime;
+              _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.5f);
+        }else{
+         
+              _slidertime += Time.deltaTime;
+             _powerSlider.value = Mathf.Lerp(_powerSlider.maxValue, _powerSlider.minValue, _slidertime / 0.5f);
+        }
+        
          
     }
     IEnumerator ActivePowerShot(){
@@ -280,7 +365,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            
              _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.6f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.3f);
             
             if(_hookScroll.value >= 0.9){
                 _moveright = true;
@@ -288,7 +373,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          }else{
         _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.6f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.3f);
 
             if(_hookScroll.value <= 0.1f){
 
@@ -329,7 +414,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void ResetPins()
     {
-        Debug.Log("reseted");
+     
             for (int y = 0; y < _resetpins.Count; y++)
             {
                 if (_mypins[y].gameObject.activeInHierarchy == false)

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
@@ -57,7 +56,6 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
             }
             else
             {
-             //   playercontroller._nothitpins.Add(playercontroller._mypins[i].gameObject);
             }
         }
 

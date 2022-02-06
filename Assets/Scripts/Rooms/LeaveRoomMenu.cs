@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.SceneManagement;
 public class LeaveRoomMenu : MonoBehaviour
 {
 
@@ -19,19 +16,4 @@ public class LeaveRoomMenu : MonoBehaviour
 
        _controller = controll;
    }
-
-     void Update(){
-/* 
-         if(SceneManager.GetActiveScene().name == "MainMenu" && _currentroompanel.activeInHierarchy == true){
-               if (Input.GetButtonDown("obutton"))
-            {
-                if(PhotonNetwork.InRoom){
-                
-                 Onclick_Leavroom();
-                }
-            
-            }
-        } */
-    }
-   
 }

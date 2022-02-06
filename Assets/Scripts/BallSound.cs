@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
@@ -29,11 +27,13 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
     }
   void Update()
     {
+        if(PhotonNetwork.OfflineMode == false){
       if (!photonView.IsMine)
     {
        transform.position = Vector3.Lerp(transform.position, _netpos,  0.5f);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, _netrot,720f * Time.deltaTime);
     }
+        }
     }
    
     public void UpdateSound(AudioClip _clip)
@@ -47,16 +47,12 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
         {
            stream.SendNext(this.transform.position);
         stream.SendNext(this.transform.rotation);
-       // stream.SendNext(this._rig.velocity);
         }
         else if (stream.IsReading)
         {
-
-               _netpos = (Vector3) stream.ReceiveNext();
+        _netpos = (Vector3) stream.ReceiveNext();
         _netrot = (Quaternion) stream.ReceiveNext();
-       /*  _rig.velocity = (Vector3) stream.ReceiveNext();
-             float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
-        _netpos += (this._rig.velocity * lag); */
+    
         }
 
     }

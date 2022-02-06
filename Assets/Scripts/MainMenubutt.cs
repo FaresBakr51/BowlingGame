@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using UnityEngine.SceneManagement;
 public class MainMenubutt : MonoBehaviourPunCallbacks
 {
     
@@ -13,17 +9,4 @@ if(PhotonNetwork.InRoom){
 }
         PhotonNetwork.LoadLevel(0);
     }
-   void Update(){
-
-        if(SceneManager.GetActiveScene().name == "Map1" ){
-        /*        if (Input.GetButtonDown("square"))
-            {
-               
-                
-                  GoHombutt();
-                
-            
-            } */
-        }
-   }
 }

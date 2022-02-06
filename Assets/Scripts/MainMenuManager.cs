@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
- using UnityEngine.EventSystems;
- using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using Photon.Realtime;
 public class MainMenuManager : MonoBehaviourPunCallbacks
 {
        public Button _playbutt;
@@ -14,33 +12,55 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       [SerializeField] private GameObject _roomsPanelPlayers;
        [SerializeField] private GameObject _mainPanel;
       public GameObject[] _mainMenubuttns;
-        public GameObject[] _creatorjoinroompanelButtns;
-      private GameObject _oldbtnselected;
-      private GameObject _currentbtnselected;
-      public GameObject _roomsContent;
        public Image _selectedPaul;
          public Image _selectedMrbill;
            public Image _selectpaul;
               public Image _selectmrbill;
-
               public GameObject _PickPlayerPanel;
 
-
               private bool _offlinemode;
-
+              public GameObject[] _guidePic;
+              public GameObject _guidPanel;
+              public int _counter;
      public void ActiveRoompanel(){
-       // _practice = false;
-
         _offlinemode = false;
       _PickPlayerPanel.SetActive(true);
        _mainPanel.SetActive(false);
         SetSelectedGameObject(_mainMenubuttns[6]);
-   /*   if(_roomsContent.transform.GetChild(0) != null){
+      
+    }
+    public void NextPic(){
+     if(_counter != 2){
+       _counter++;
+      _guidePic[_counter].SetActive(true);
+     }
+     
 
-       SetSelectedGameObject(_roomsContent.transform.GetChild(0).gameObject);
+    }
+    public void Skip(){
 
-     }else{ */
+      PlayerPrefs.SetInt("guide",1);
+       _guidPanel.SetActive(false);
+        _mainPanel.SetActive(true);
 
+       
+        SetSelectedGameObject(_mainMenubuttns[0]);
+    }
+    void Update(){
+
+     /*  if(_mainPanel.activeInHierarchy == true){
+
+        if(EventSystem.current.currentSelectedGameObject == _mainMenubuttns[7]){
+
+         StartCoroutine(SetDefultbutt());
+        }
+      }
+ */
+    }
+    IEnumerator SetDefultbutt(){
+
+      yield return new WaitForSeconds(3f);
+       SetSelectedGameObject(_mainMenubuttns[8]);
       
     }
     public void ActivealreadyRoompanel(){
@@ -56,11 +76,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       _roomsPanel.SetActive(false);
     }
     public void SetSelectedGameObject(GameObject selected){
-
-     // EventSystem.current.SetSelectedGameObject(selected);
-     selected.GetComponent<Button>().Select();
-   
-
+    selected.GetComponent<Button>().Select();
     }
     public void Back(){
 
@@ -73,27 +89,30 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     void Start()
     {
        PhotonNetwork.OfflineMode = false;
-     //  m_EventSystem =  EventSystem.current;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
-        //  _playbutt.enabled = false;
-        //_compettbutt.enabled = false;
          PhotonNetwork.ConnectUsingSettings();
            _offlinemode = false;
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
+         if(PlayerPrefs.HasKey("guide")){
+        _guidPanel.SetActive(false);
+        _mainPanel.SetActive(true);
+      }else{
+
+        _mainPanel.SetActive(false);
+        _guidPanel.SetActive(true);
+        SetSelectedGameObject(_mainMenubuttns[9]);
+      }
     }
  public override void OnConnectedToMaster()
     {
-      //   _competitive = false;
-
       if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
         PhotonNetwork.JoinLobby();
       }
         PhotonNetwork.AutomaticallySyncScene = true;
         _playbutt.enabled = true;
         _compettbutt.enabled = true;
-      
-        Debug.Log("inlobby");
+  
     }
 
     public void TransferSelection(GameObject[] obj,int index){
@@ -104,7 +123,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       }
      
     }
-    // Update is called once per frame
    public void SelectPaul(){
 
      PlayerPrefs.SetInt("character",0);
@@ -112,7 +130,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     _selectedPaul.enabled = true;
     _selectedMrbill.enabled = false;
     _selectmrbill.enabled = true;
-   // _PickPlayerPanel.SetActive(false);
     SetSelectedGameObject(_mainMenubuttns[0]);
      CheckGameMode();
    }
@@ -122,24 +139,28 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     _selectedPaul.enabled = false;
     _selectedMrbill.enabled = true;
     _selectmrbill.enabled = false;
-  //  _PickPlayerPanel.SetActive(false);
      SetSelectedGameObject(_mainMenubuttns[0]);
      CheckGameMode();
      
    }
+   public void playersmode(){
+
+     PhotonNetwork.Disconnect();
+     StartCoroutine(Join2PMODE());
+   }
    private void CheckGameMode(){
 
      _PickPlayerPanel.SetActive(false);
+     
      if(_offlinemode == true){
 
-        PhotonNetwork.Disconnect();
-     StartCoroutine(GoOffline());
+      PhotonNetwork.Disconnect();
+     StartCoroutine(DisconnectJoinPractice());
      }else{
        
      if(!PhotonNetwork.InLobby)return;
+     if(!PhotonNetwork.IsConnected)return;
         SetSelectedGameObject(_mainMenubuttns[2]);
-    // }
-    
         _roomsPanel.SetActive(true);
         _mainPanel.SetActive(false);
      }
@@ -150,20 +171,40 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       _offlinemode = true;
       _PickPlayerPanel.SetActive(true);
       _mainPanel.SetActive(false);
-     /*  PhotonNetwork.Disconnect();
-     StartCoroutine(GoOffline()); */
-     
-
     }
-    IEnumerator GoOffline(){
-        yield return new WaitForSeconds(1f);
+    IEnumerator DisconnectJoinPractice()
+    {
+       
+      PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
+        {
+            yield return null;
+        }
         PhotonNetwork.OfflineMode = true;
           if(PhotonNetwork.OfflineMode == true){
-        // PhotonNetwork.CreateRoom(null);
-         PhotonNetwork.JoinRoom(null);
-         PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.JoinRoom(null);
+          PhotonNetwork.CurrentRoom.IsOpen = false;
            PhotonNetwork.CurrentRoom.IsVisible = false;
-         PhotonNetwork.LoadLevel(Random.Range(1,3));
-      }
+           // PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LoadLevel(Random.Range(2,4));
+      } 
     }
+     IEnumerator Join2PMODE()
+    {
+       
+      PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
+        {
+            yield return null;
+        }
+        PhotonNetwork.OfflineMode = true;
+          //  PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel(Random.Range(2,4));
+      
+    }
+
+ 
+   
+  
+    
 }

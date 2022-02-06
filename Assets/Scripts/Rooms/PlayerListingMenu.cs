@@ -1,19 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
 using Photon.Pun;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 public class PlayerListingMenu : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform _content;
     [SerializeField] private PlayerListing _playerlisting;
     private List<PlayerListing> _listings = new List<PlayerListing>();
     private RoomsController _controller;
-    [SerializeField] private Button _startButt;
+    [SerializeField] private GameObject _startButt;
     [SerializeField] private GameObject _currentroompanel;
-
+    [SerializeField] private GameObject _WaitingPlayerMass;
     public override void OnEnable()
     {
         base.OnEnable();
@@ -47,28 +45,36 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
 
     private void AddPlayerListing(Player player){
 
-        int index = _listings.FindIndex(x => x.Player == player);
+       /*  int index = _listings.FindIndex(x => x.Player == player);
         if(index != -1){
             _listings[index].SetPlayerInfo(player);
-        }else{
+        }else{ */
             PlayerListing listing = Instantiate(_playerlisting,_content);
            if(listing !=null){
                listing.SetPlayerInfo(player);
                _listings.Add(listing);
            }
-        }
+       // }
          if(!PhotonNetwork.IsMasterClient){
-             _startButt.interactable = false;
-             
+             _WaitingPlayerMass.SetActive(true);
+             _startButt.SetActive(false);
+        
          }
-           
-
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
        
          AddPlayerListing(newPlayer);
-      
+         if(PhotonNetwork.IsMasterClient){
+         if(PhotonNetwork.CurrentRoom.PlayerCount >=2){
+             _WaitingPlayerMass.SetActive(false);
+             _startButt.SetActive(true);
+         }
+         if(PhotonNetwork.CurrentRoom.PlayerCount <2){
+                 _WaitingPlayerMass.SetActive(true);
+             _startButt.SetActive(false);
+         }
+         }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -78,37 +84,14 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
                    Destroy(_listings[index].gameObject);
                    _listings.RemoveAt(index);
                }
-
-
-                 if(!PhotonNetwork.IsMasterClient){
-             _startButt.interactable = false;
-             
-         }else{
-                _startButt.interactable = true;
-         }
-
                 
-    }
-    void Update(){
-
-        /*  if(SceneManager.GetActiveScene().name == "MainMenu" && _currentroompanel.activeInHierarchy == true){
-               if (Input.GetButtonDown("trianglebutton"))
-            {
-                if(PhotonNetwork.InRoom){
-                
-                  Onclick_StartGame();
-                }
-            
-            }
-        } */
     }
     public void Onclick_StartGame(){
         if(PhotonNetwork.IsMasterClient){
             if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers || PhotonNetwork.CurrentRoom.PlayerCount >=2){
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(Random.Range(1,3));
-        //PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.LoadLevel(Random.Range(2,4));
             }
         }else{
 

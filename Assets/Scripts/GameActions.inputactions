@@ -14,6 +14,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "powerupaction2",
+                    "type": "Button",
+                    "id": "75d00f2c-d190-4f8a-ad48-392ba3ff4ee5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "driftbar",
                     "type": "Button",
                     "id": "2037763c-0abf-46fd-ba65-8225675ac4b9",
@@ -22,9 +30,25 @@
                     "interactions": ""
                 },
                 {
+                    "name": "driftbar2",
+                    "type": "Button",
+                    "id": "d07662cc-fa04-4c67-a42b-2d9931b365bb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "moving",
                     "type": "Value",
                     "id": "24eae9dd-3d6f-461d-952d-a394132dc575",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "moving2",
+                    "type": "Value",
+                    "id": "d7a5af90-2181-4c09-8b32-32b687707c5b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -132,12 +156,144 @@
                 },
                 {
                     "name": "",
+                    "id": "b9442208-87e4-437c-bff5-9c46eca7d485",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6ed723dc-08e4-4d78-90ca-2f79b977f0a4",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "moving",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "476269e4-21a4-442f-8eda-72df4ca673ba",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50d8d104-d95e-4b51-b333-93c5de3be8fa",
+                    "path": "<SwitchProControllerHID>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9201907d-4a43-4e30-8f14-1aa6b37182b3",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70ae3a56-c1b7-42a8-bdbc-83db8c7b2b30",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "950a7a12-8770-422b-9519-4c34245bcc1f",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7322dcd8-adc6-4d5d-b989-c94ec7478552",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6164db55-71a5-491c-b8b7-33b52427a695",
+                    "path": "<SwitchProControllerHID>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74869ff1-fc8e-49b4-909d-1ee860a4fe43",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30840917-33d7-40dc-804e-95183afde131",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b819caa8-f0d2-486d-8ae0-39caf4cae4a6",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "driftbar2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7d58a777-2809-4afc-aa65-0ebb569d311c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "moving2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
