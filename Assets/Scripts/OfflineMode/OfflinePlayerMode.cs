@@ -14,7 +14,7 @@ public class OfflinePlayerMode : MonoBehaviour
  public List<GameObject> _CurrentPlayers = new List<GameObject>();
     void Awake()
     {
-    //  PhotonNetwork.OfflineMode = true;
+      PhotonNetwork.OfflineMode = true;
       if(PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true){
 
           PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
