@@ -33,6 +33,10 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
      if(_counter != 2){
        _counter++;
       _guidePic[_counter].SetActive(true);
+     }else{
+       _guidPanel.SetActive(false);
+        _mainPanel.SetActive(true);
+        SetSelectedGameObject(_mainMenubuttns[0]);
      }
      
 
@@ -42,31 +46,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       PlayerPrefs.SetInt("guide",1);
        _guidPanel.SetActive(false);
         _mainPanel.SetActive(true);
-
-       
         SetSelectedGameObject(_mainMenubuttns[0]);
     }
-    void Update(){
-
-     /*  if(_mainPanel.activeInHierarchy == true){
-
-        if(EventSystem.current.currentSelectedGameObject == _mainMenubuttns[7]){
-
-         StartCoroutine(SetDefultbutt());
-        }
-      }
- */
-    }
-    IEnumerator SetDefultbutt(){
-
-      yield return new WaitForSeconds(3f);
-       SetSelectedGameObject(_mainMenubuttns[8]);
-      
-    }
+   
     public void ActivealreadyRoompanel(){
 
       SetSelectedGameObject(_mainMenubuttns[2]);
-    // }
         _roomsPanel.SetActive(true);
         _mainPanel.SetActive(false);
     }
@@ -81,7 +66,13 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public void Back(){
 
         SetSelectedGameObject(_mainMenubuttns[0]);
-        _roomsPanel.SetActive(false);
+        if(_roomsPanel.activeInHierarchy){
+          _roomsPanel.SetActive(false);
+        }
+        if(_PickPlayerPanel.activeInHierarchy){
+
+          _PickPlayerPanel.SetActive(false);
+        }
         _mainPanel.SetActive(true);
     }
 
