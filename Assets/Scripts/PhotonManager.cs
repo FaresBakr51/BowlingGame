@@ -64,18 +64,20 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     private void SetUpPlayer(){
         if(_pv.IsMine){
         //    Debug.Log(_myplayer.ActorNumber);
-           switch(PlayerPrefs.GetInt("character")){
+
+            _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character"),_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+          /*  switch(PlayerPrefs.GetString("character")){
 
                case 0:
-                  _myavatar =    PhotonNetwork.Instantiate("Player2",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+                  _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character"),_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
 
 
                break;
                case 1:
-                  _myavatar =    PhotonNetwork.Instantiate("Player",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+                  _myavatar =    PhotonNetwork.Instantiate("Izzy",_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
 
                break;
-           }
+           } */
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
             
               RpcSharetotalScore();

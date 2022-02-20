@@ -65,6 +65,14 @@ public class @GameActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""bb89a99d-7ce2-4163-8640-16567146bfbd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -309,6 +317,28 @@ public class @GameActions : IInputActionCollection, IDisposable
                     ""action"": ""moving2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21944295-91ac-41cb-8349-9d53ed47e61c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60f193a5-cfe8-4004-b796-184a142dedb5"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -323,6 +353,7 @@ public class @GameActions : IInputActionCollection, IDisposable
         m_ButtonActions_driftbar2 = m_ButtonActions.FindAction("driftbar2", throwIfNotFound: true);
         m_ButtonActions_moving = m_ButtonActions.FindAction("moving", throwIfNotFound: true);
         m_ButtonActions_moving2 = m_ButtonActions.FindAction("moving2", throwIfNotFound: true);
+        m_ButtonActions_pause = m_ButtonActions.FindAction("pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -378,6 +409,7 @@ public class @GameActions : IInputActionCollection, IDisposable
     private readonly InputAction m_ButtonActions_driftbar2;
     private readonly InputAction m_ButtonActions_moving;
     private readonly InputAction m_ButtonActions_moving2;
+    private readonly InputAction m_ButtonActions_pause;
     public struct ButtonActionsActions
     {
         private @GameActions m_Wrapper;
@@ -388,6 +420,7 @@ public class @GameActions : IInputActionCollection, IDisposable
         public InputAction @driftbar2 => m_Wrapper.m_ButtonActions_driftbar2;
         public InputAction @moving => m_Wrapper.m_ButtonActions_moving;
         public InputAction @moving2 => m_Wrapper.m_ButtonActions_moving2;
+        public InputAction @pause => m_Wrapper.m_ButtonActions_pause;
         public InputActionMap Get() { return m_Wrapper.m_ButtonActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -415,6 +448,9 @@ public class @GameActions : IInputActionCollection, IDisposable
                 @moving2.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnMoving2;
                 @moving2.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnMoving2;
                 @moving2.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnMoving2;
+                @pause.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPause;
+                @pause.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPause;
+                @pause.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_ButtonActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -437,6 +473,9 @@ public class @GameActions : IInputActionCollection, IDisposable
                 @moving2.started += instance.OnMoving2;
                 @moving2.performed += instance.OnMoving2;
                 @moving2.canceled += instance.OnMoving2;
+                @pause.started += instance.OnPause;
+                @pause.performed += instance.OnPause;
+                @pause.canceled += instance.OnPause;
             }
         }
     }
@@ -449,5 +488,6 @@ public class @GameActions : IInputActionCollection, IDisposable
         void OnDriftbar2(InputAction.CallbackContext context);
         void OnMoving(InputAction.CallbackContext context);
         void OnMoving2(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

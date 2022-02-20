@@ -2,8 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using Photon.Realtime;
+using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviourPunCallbacks
 {
        public Button _playbutt;
@@ -12,16 +11,15 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       [SerializeField] private GameObject _roomsPanelPlayers;
        [SerializeField] private GameObject _mainPanel;
       public GameObject[] _mainMenubuttns;
-       public Image _selectedPaul;
-         public Image _selectedMrbill;
-           public Image _selectpaul;
-              public Image _selectmrbill;
+    
               public GameObject _PickPlayerPanel;
 
               private bool _offlinemode;
               public GameObject[] _guidePic;
               public GameObject _guidPanel;
               public int _counter;
+
+              public GameObject[] _CharacterButtons;
      public void ActiveRoompanel(){
         _offlinemode = false;
       _PickPlayerPanel.SetActive(true);
@@ -30,7 +28,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       
     }
     public void NextPic(){
-     if(_counter != 2){
+     if(_counter != 3){
        _counter++;
       _guidePic[_counter].SetActive(true);
      }else{
@@ -41,9 +39,19 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
      
 
     }
+    public void ShowTut(){
+
+      _guidPanel.SetActive(true);
+      _mainPanel.SetActive(false);
+      SetSelectedGameObject(_mainMenubuttns[9]);
+    }
+    public void ShowCredits(){
+
+      SceneManager.LoadScene(0);
+    }
     public void Skip(){
 
-      PlayerPrefs.SetInt("guide",1);
+      
        _guidPanel.SetActive(false);
         _mainPanel.SetActive(true);
         SetSelectedGameObject(_mainMenubuttns[0]);
@@ -85,15 +93,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
            _offlinemode = false;
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
-         if(PlayerPrefs.HasKey("guide")){
-        _guidPanel.SetActive(false);
-        _mainPanel.SetActive(true);
-      }else{
-
-        _mainPanel.SetActive(false);
-        _guidPanel.SetActive(true);
-        SetSelectedGameObject(_mainMenubuttns[9]);
-      }
+      
     }
  public override void OnConnectedToMaster()
     {
@@ -105,34 +105,15 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         _compettbutt.enabled = true;
   
     }
+ 
+   public void SelectCharacter(string ch){
 
-    public void TransferSelection(GameObject[] obj,int index){
-
-      obj[index].transform.GetChild(1).GetComponent<Image>().enabled = true; 
-      if(index > 0){
-      obj[index-1].transform.GetChild(1).GetComponent<Image>().enabled = false; 
-      }
-     
-    }
-   public void SelectPaul(){
-
-     PlayerPrefs.SetInt("character",0);
-    _selectpaul.enabled = false;
-    _selectedPaul.enabled = true;
-    _selectedMrbill.enabled = false;
-    _selectmrbill.enabled = true;
-    SetSelectedGameObject(_mainMenubuttns[0]);
-     CheckGameMode();
-   }
-   public void SelectMrbill(){
-       PlayerPrefs.SetInt("character",1);
-    _selectpaul.enabled = true;
-    _selectedPaul.enabled = false;
-    _selectedMrbill.enabled = true;
-    _selectmrbill.enabled = false;
-     SetSelectedGameObject(_mainMenubuttns[0]);
-     CheckGameMode();
-     
+       PlayerPrefs.SetString("character",ch);
+       foreach(GameObject obj in _CharacterButtons){
+         obj.GetComponent<Button>().interactable = true;
+       }
+       SetSelectedGameObject(_mainMenubuttns[0]);
+        CheckGameMode();
    }
    public void playersmode(){
 

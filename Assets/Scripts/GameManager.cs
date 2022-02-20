@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3")
         {
-            if(PhotonNetwork.OfflineMode == false){
+            if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true)){
 
 
             

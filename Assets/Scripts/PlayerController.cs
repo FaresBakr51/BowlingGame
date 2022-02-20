@@ -7,6 +7,7 @@ using System;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -35,7 +36,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public bool _canhit;
     public int _roundscore;
     public ScorePlayer _scoreplayer;
-    public BallSound _ballsound;
     public AudioClip _movingclip;
    // public TextMeshProUGUI _playername;
     private List<int> rolls = new List<int>();
@@ -65,8 +65,10 @@ public int _mycontroll;
      public AudioClip[] _FramesClips;
      public GameObject _strikeTxt;
      public GameObject _spareTxt;
-
-   
+     [SerializeField] private GameObject _pauseMenupanel;
+    [SerializeField] private GameObject _pauseMenuFirstbutt;
+      [SerializeField] private GameObject[] _soundOnOF;
+    private bool _gamePaused;
     private void Awake()
     {
         _offlinemode = FindObjectOfType<OfflinePlayerMode>();
@@ -101,8 +103,22 @@ public int _mycontroll;
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
-         _gameactions.ButtonActions.moving.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
+         _gameactions.ButtonActions.moving.performed += cntxt =>{
+             
+             if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
+              _movingL = cntxt.ReadValue<Vector2>();
+             }
+              
+              };
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
+           _gameactions.ButtonActions.pause.performed += x =>{
+               if(!_gameend){
+                _pauseMenupanel.SetActive(true);
+                _gamePaused = true;
+                 EventSystem.current.SetSelectedGameObject(_pauseMenuFirstbutt);
+               }
+           };
+           
             _gameactions.Enable();
     }
 
@@ -146,78 +162,36 @@ public int _mycontroll;
     }
     private void CheckControlles(){
 
-           if(PhotonNetwork.OfflineMode == false){
+           if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true)){
+
+             
              _gameactions.ButtonActions.powerupaction.performed += x => {
+                  if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
                  if(_canhit == true){
-            if(_hookcalclated == true){
-            if(_calcPower == true){
-               GetPowerValue();
-            }
-            }
-                 }
+                     if(_hookcalclated == true){
+                          if(_calcPower == true){
+                               GetPowerValue();
+                           }
+                     }
+                   }
+               }
            };
           _gameactions.ButtonActions.driftbar.performed += y => {
+               if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               if(_canhit == true){
-         if(_hookcalclated == false){          
-             GetDriftValue();
-             _hookcalclated = true;
-        }
-          }
+                  if(_hookcalclated == false){
+                      GetDriftValue();
+                    _hookcalclated = true;
+                   }
+              }
+         }
           };
-        }else{
-           
-           // _offlinemode.SwitchControll(this.gameObject);
-            if(_mycontroll == 0){
-
-     
-                FirstControll();
-            }else if(_mycontroll ==1){
-
-                SecondControll();
-            }
-        }
+        
+           }
 
     }
-    private void FirstControll(){
-
-            _gameactions.ButtonActions.powerupaction.performed += x => {
-                 if(_canhit == true){
-            if(_hookcalclated == true){
-            if(_calcPower == true){
-               GetPowerValue();
-            }
-            }
-                 }
-           };
-          _gameactions.ButtonActions.driftbar.performed += y => {
-              if(_canhit == true){
-         if(_hookcalclated == false){          
-             GetDriftValue();
-             _hookcalclated = true;
-        }
-          }
-          };
-    }
-    private void SecondControll(){
-
-            _gameactions.ButtonActions.powerupaction2.performed += x => {
-                 if(_canhit == true){
-            if(_hookcalclated == true){
-            if(_calcPower == true){
-               GetPowerValue();
-            }
-            }
-                 }
-           };
-          _gameactions.ButtonActions.driftbar2.performed += y => {
-              if(_canhit == true){
-         if(_hookcalclated == false){          
-             GetDriftValue();
-             _hookcalclated = true;
-        }
-          }
-          };
-    }
+    
+  
     void Update()
     {
     
@@ -476,6 +450,30 @@ public int _mycontroll;
     {
       
        
+    }
+    public void Resume(){
+
+        _pauseMenupanel.SetActive(false);
+       StartCoroutine(WaitPause());
+    }
+    IEnumerator WaitPause(){
+        yield return new WaitForSeconds(1);
+        _gamePaused = false;
+    }
+    public void QuitGame(){
+
+        PhotonNetwork.LoadLevel(1);
+    }
+    public void SoundOn(){
+    
+        AudioListener.volume = 1;
+          EventSystem.current.SetSelectedGameObject(_soundOnOF[1]);
+
+    }
+     public void Soundoff(){
+    
+        AudioListener.volume = 0;
+        EventSystem.current.SetSelectedGameObject(_soundOnOF[0]);
     }
 }
 
