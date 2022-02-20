@@ -68,7 +68,9 @@ public int _mycontroll;
      [SerializeField] private GameObject _pauseMenupanel;
     [SerializeField] private GameObject _pauseMenuFirstbutt;
       [SerializeField] private GameObject[] _soundOnOF;
+      public GameObject _StrikeParticle;
     private bool _gamePaused;
+    public int _strikeEffectCounter;
     private void Awake()
     {
         _offlinemode = FindObjectOfType<OfflinePlayerMode>();

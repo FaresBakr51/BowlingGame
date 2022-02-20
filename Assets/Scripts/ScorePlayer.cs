@@ -45,6 +45,8 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[0]);
 				StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
+				_playercontroll._StrikeParticle.SetActive(true);
+				_playercontroll._strikeEffectCounter++;
 			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
 				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[0]);
 					StartCoroutine(WaitTxt(_offlinemodeControll._strikeTxt));

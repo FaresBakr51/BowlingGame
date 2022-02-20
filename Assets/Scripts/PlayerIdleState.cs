@@ -45,6 +45,12 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._hookScroll.value = 0.5f;
         playerController._camera.transform.position = _Cambos;
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
+
+        if(playerController._strikeEffectCounter >=2){
+
+            playerController._StrikeParticle.SetActive(false);
+            playerController._strikeEffectCounter = 0;
+        }
       if(playerController._gameend == true)
         {
             playerController._canhit = false;
