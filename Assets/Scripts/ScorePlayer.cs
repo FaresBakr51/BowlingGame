@@ -12,7 +12,8 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	private PlayerController _playercontroll;
 	private PlayerControllOFFlineMode _offlinemodeControll;
 	private int _currentframe;
-	private int _counter;
+	private string _scoreStrn;
+	private int _counterStringFrames;
 	void Start(){
 		_currentframe = 0;
 		if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
@@ -30,29 +31,31 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	public void FillRolls(List<int> rolls)
 	{
 		
-		string scoresString = FormatRolls(rolls);
-		for (int i = 0; i < scoresString.Length; i++)
+		 _scoreStrn = FormatRolls(rolls);
+		for (int i = 0; i < _scoreStrn.Length; i++)
 		{
-			scores_text[i].text = scoresString[i].ToString();
+			scores_text[i].text = _scoreStrn[i].ToString();
 
 			
 		   
 		}
+		Debug.Log(_scoreStrn.Length);
+	   StartCoroutine(waitFrameSound());
 
-		string str = scoresString;
-		if(str.EndsWith("X ")){
+		
+		if(_scoreStrn.EndsWith("X ")){
 					   	   	   
 		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[0]);
 				StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
-				_playercontroll._StrikeParticle.SetActive(true);
+			
 				_playercontroll._strikeEffectCounter++;
 			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
 				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[0]);
 					StartCoroutine(WaitTxt(_offlinemodeControll._strikeTxt));
 			}
 
-		}else if(str.EndsWith("/")){
+		}else if(_scoreStrn.EndsWith("/")){
 					   	   	   
 		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
@@ -65,7 +68,23 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			}
 
 		}
+
+		  if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
+		
+				if(_playercontroll._strikeEffectCounter >=3){
+
+						_playercontroll._StrikeParticle.SetActive(true);
+						_playercontroll._StrikeParticle.GetComponentInChildren<ParticleSystem>().Play();
+						_playercontroll._strikeEffectCounter = 0;
+
+				}
+		  }
 		   
+	}
+	IEnumerator waitFrameSound(){
+
+		yield return new WaitForSeconds(1.5f);
+			UpdateFrameSound();
 	}
 
 	 IEnumerator WaitTxt(GameObject obj){
@@ -87,12 +106,34 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 		  
 		}
 
-		UpdateFrameSound(round_scores_text);
+	
 			
 	}
-	private void UpdateFrameSound(List<Text> currentframes){
+	private void UpdateFrameSound(){
 
-		for(int i =0; i < currentframes.Count; i++){
+		if(_scoreStrn.Length >= _counterStringFrames+2){
+
+			_counterStringFrames = _scoreStrn.Length;
+			_currentframe++;
+			if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
+			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[_currentframe]);
+			}
+		
+		}
+		//if(_scoreStrn.Length )
+		/* if(currentframes[_currentframe].text != "" && currentframes[_currentframe +1 ].text != ""){
+
+				_currentframe++;
+
+				if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
+			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[_currentframe]);
+			}
+		} */
+	/* 	for(int i =0; i < currentframes.Count; i++){
 
 			if(currentframes[i].text != "" && _currentframe == i){
 				_currentframe++;
@@ -104,7 +145,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 
 			}
 		}
-		
+		 */
 		
 	}
 	public  string FormatRolls(List<int> rolls)

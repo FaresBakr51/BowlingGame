@@ -71,6 +71,7 @@ public int _mycontroll;
       public GameObject _StrikeParticle;
     private bool _gamePaused;
     public int _strikeEffectCounter;
+    public int _strikeOFflineEffectCounter ;
     private void Awake()
     {
         _offlinemode = FindObjectOfType<OfflinePlayerMode>();

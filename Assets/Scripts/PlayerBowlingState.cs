@@ -51,8 +51,8 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         playercontroller.UpdateAnimator("shot", 0);
         playercontroller._ball.GetComponent<BallSound>().enabled = true;
         if(playercontroller._StrikeParticle.activeInHierarchy){
-            playercontroller._strikeEffectCounter++;
-              playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power * 1.3f));
+            playercontroller._strikeOFflineEffectCounter++;
+              playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power * 1.5f));
         }else{
               playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power));
         }
