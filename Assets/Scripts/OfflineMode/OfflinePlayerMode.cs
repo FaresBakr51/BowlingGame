@@ -26,7 +26,7 @@ public class OfflinePlayerMode : MonoBehaviour
 
     void Awake()
     {
-      PhotonNetwork.OfflineMode = true;
+    
       /* if(PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true){
 
           PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
@@ -70,6 +70,9 @@ public class OfflinePlayerMode : MonoBehaviour
         case "mrbill":
            player1 = _playersObj[1];
         break;
+        case "Barney":
+        player1 = _playersObj[3];
+        break;
       }
       foreach(GameObject obj in _player2Selector){
         obj.SetActive(true);
@@ -92,6 +95,9 @@ public class OfflinePlayerMode : MonoBehaviour
         case "mrbill":
            player2 = _playersObj[1];
         break;
+          case "Barney":
+        player2 = _playersObj[3];
+        break;
       }
        foreach(GameObject obj in _SelectionButtonsPlayer2){
         obj.GetComponent<Button>().interactable = true;
@@ -100,12 +106,15 @@ public class OfflinePlayerMode : MonoBehaviour
     }
     public void StartGame(){
       
-      _CurrentPlayers.Add(player1);
-      _CurrentPlayers.Add(player2);
+     
       _SelectorPane.SetActive(false);
-      SwitchControll();
-       Instantiate(player1,_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);
-       Instantiate(player2,_spawnPoints[1].transform.position,_spawnPoints[1].transform.rotation);
+     
+    GameObject playerNum1=   Instantiate(player1,_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);
+        GameObject playerNum2= Instantiate(player2,_spawnPoints[1].transform.position,_spawnPoints[1].transform.rotation);
+         _CurrentPlayers.Add(playerNum1);
+      _CurrentPlayers.Add(playerNum2);
+       SwitchControll();
+       
     }
     public void Back(){
       SceneManager.LoadScene(1);
