@@ -45,16 +45,17 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
 
            }else{
 
-          int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
-          if(index == -1){
+        //  int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
+        //  if(index == -1){
            RoomListing listing = Instantiate(_roomlisting,_content);
            if(listing !=null){
                listing.SetRoomInfo(info);
                _listings.Add(listing);
+          // }
+           }/* else{
            }
-           }else{
-           }
-           }
+           } */
        }
+    }
     }
 }

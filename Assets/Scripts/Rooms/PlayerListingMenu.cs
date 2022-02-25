@@ -91,11 +91,10 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
             if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers || PhotonNetwork.CurrentRoom.PlayerCount >=2){
             PhotonNetwork.CurrentRoom.IsOpen = false;
            // PhotonNetwork.CurrentRoom.IsVisible = false;
-           
+         var roomName = PhotonNetwork.CurrentRoom.Name;
+            roomName = PhotonNetwork.CurrentRoom.Name + ": (InGame)";
             PhotonNetwork.LoadLevel(Random.Range(2,4));
             }
-        }else{
-
         }
     }
   
