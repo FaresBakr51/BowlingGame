@@ -21,6 +21,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
               public GameObject[] _CharacterButtons;
      public void ActiveRoompanel(){
+
+       if(!PhotonNetwork.IsConnected)return;
         _offlinemode = false;
       _PickPlayerPanel.SetActive(true);
        _mainPanel.SetActive(false);
@@ -47,7 +49,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     }
     public void ShowCredits(){
 
-      SceneManager.LoadScene(0);
+      SceneManager.LoadScene(1);
     }
     public void Skip(){
 

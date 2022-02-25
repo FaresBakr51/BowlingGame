@@ -90,7 +90,8 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
         if(PhotonNetwork.IsMasterClient){
             if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers || PhotonNetwork.CurrentRoom.PlayerCount >=2){
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonNetwork.CurrentRoom.IsVisible = false;
+           // PhotonNetwork.CurrentRoom.IsVisible = false;
+           
             PhotonNetwork.LoadLevel(Random.Range(2,4));
             }
         }else{

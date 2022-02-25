@@ -465,7 +465,7 @@ public int _mycontroll;
     }
     public void QuitGame(){
 
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(0);
     }
     public void SoundOn(){
     
