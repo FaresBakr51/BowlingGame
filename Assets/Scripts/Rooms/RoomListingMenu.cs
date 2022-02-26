@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 public class RoomListingMenu : MonoBehaviourPunCallbacks
 {
 
@@ -14,6 +15,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
     private RoomsController _roomcontroll;
     [SerializeField] private Button _startbutt;
     [SerializeField] private MainMenuManager _menuManager;
+   
     public void FirstIniatlize(RoomsController _controll){
 
         _roomcontroll = _controll;
@@ -32,9 +34,23 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
          }
         }
     }
+   void Update(){
+         foreach(GameObject lists in GameObject.FindGameObjectsWithTag("listingroom")){
+            if(lists.GetComponent<RoomListing>().RoomInfo.IsOpen == false && !lists.GetComponent<RoomListing>()._inGame){
+               lists.GetComponentInChildren<TextMeshProUGUI>().text =  lists.GetComponentInChildren<TextMeshProUGUI>().text + " (InGame)";
+                lists.GetComponent<RoomListing>()._inGame = true;
+            }
+        }
+   }
+   
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    
     {
+      
        foreach(RoomInfo info in roomList){
+
+
+
            if(info.RemovedFromList){
                int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
                if(index != -1){
@@ -45,17 +61,18 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
 
            }else{
 
-        //  int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
-        //  if(index == -1){
-           RoomListing listing = Instantiate(_roomlisting,_content);
-           if(listing !=null){
-               listing.SetRoomInfo(info);
-               _listings.Add(listing);
-          // }
-           }/* else{
-           }
-           } */
-       }
+                int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
+               if(index == -1){
+                   RoomListing listing = Instantiate(_roomlisting,_content);
+                     if(listing !=null){
+                       listing.SetRoomInfo(info);
+                      _listings.Add(listing);
+                    }
+               }
+              }
+
+       
+      
     }
     }
 }

@@ -22,11 +22,16 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
               public GameObject[] _CharacterButtons;
      public void ActiveRoompanel(){
 
-       if(!PhotonNetwork.IsConnected)return;
+       if(!PhotonNetwork.IsConnected){
+         _mainPanel.SetActive(true);
+         
+        SetSelectedGameObject(_mainMenubuttns[0]);
+       }else{
         _offlinemode = false;
       _PickPlayerPanel.SetActive(true);
        _mainPanel.SetActive(false);
         SetSelectedGameObject(_mainMenubuttns[6]);
+       }
       
     }
     public void NextPic(){
@@ -92,6 +97,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
        PhotonNetwork.OfflineMode = false;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
          PhotonNetwork.ConnectUsingSettings();
+         PhotonNetwork.ConnectToBestCloudServer();
            _offlinemode = false;
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
@@ -102,6 +108,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
         PhotonNetwork.JoinLobby();
       }
+      
         PhotonNetwork.AutomaticallySyncScene = true;
         _playbutt.enabled = true;
         _compettbutt.enabled = true;
@@ -116,6 +123,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
        }
        SetSelectedGameObject(_mainMenubuttns[0]);
         CheckGameMode();
+        PlayerPrefs.Save();
    }
    public void playersmode(){
 
@@ -132,8 +140,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
      StartCoroutine(DisconnectJoinPractice());
      }else{
        
-     if(!PhotonNetwork.InLobby)return;
-     if(!PhotonNetwork.IsConnected)return;
+     if(!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected){
+
+       _mainPanel.SetActive(true);
+        SetSelectedGameObject(_mainMenubuttns[0]);
+     };
+   
         SetSelectedGameObject(_mainMenubuttns[2]);
         _roomsPanel.SetActive(true);
         _mainPanel.SetActive(false);

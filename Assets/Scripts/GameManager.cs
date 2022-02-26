@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
 
     private GameObject _leaderBoardobj;
-    private PhotonView _photonview;
+   
 
     public static GameManager instance;
 
@@ -31,12 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
     
-    private void Start(){
-       
-        _photonview = GetComponent<PhotonView>();
-
-    }
-   
+  
    public override void OnEnable()
     {
         base.OnEnable();

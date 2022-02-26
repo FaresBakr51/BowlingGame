@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class OfflinePlayerMode : MonoBehaviour
 {
   [SerializeField] private Transform[] _spawnPoints;
-  [SerializeField] private GameObject[] _playersObj;
    [SerializeField] private GameObject[] _Cameras;
     [SerializeField] private GameObject[] offlineModeobj;
  public GameObject[] _scoreBoard;
@@ -20,12 +19,12 @@ public class OfflinePlayerMode : MonoBehaviour
  public GameObject _player2Firstchar;
  public GameObject _SelectorPane;
  public GameObject _startButt;
- [SerializeField] private GameObject[] _player2Selector;
  [SerializeField] private GameObject[] _SelectionButtonsPlayer1;
  [SerializeField] private GameObject[] _SelectionButtonsPlayer2;
 
     void Awake()
     {
+      PhotonNetwork.OfflineMode = true;
     
       /* if(PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true){
 
@@ -34,7 +33,7 @@ public class OfflinePlayerMode : MonoBehaviour
     
          if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
            _SelectorPane.SetActive(true);
-               foreach(GameObject obj in _player2Selector){
+               foreach(GameObject obj in _SelectionButtonsPlayer2){
         obj.SetActive(false);
       }
            EventSystem.current.SetSelectedGameObject(_player1Firstchar);
@@ -57,24 +56,9 @@ public class OfflinePlayerMode : MonoBehaviour
 
     }
 
-    public void SelectCharacter1(string pl){
-
-      switch(pl){
-
-        case "paul":
-        player1 = _playersObj[0];
-        break;
-        case "izzy":
-           player1 = _playersObj[2];
-        break;
-        case "mrbill":
-           player1 = _playersObj[1];
-        break;
-        case "Barney":
-        player1 = _playersObj[3];
-        break;
-      }
-      foreach(GameObject obj in _player2Selector){
+    public void SelectCharacter1(GameObject pl){
+      player1 = pl;
+      foreach(GameObject obj in _SelectionButtonsPlayer2){
         obj.SetActive(true);
       }
        foreach(GameObject obj in _SelectionButtonsPlayer1){
@@ -82,23 +66,8 @@ public class OfflinePlayerMode : MonoBehaviour
       }
         EventSystem.current.SetSelectedGameObject(_player2Firstchar);
     }
-    public void SelectCharacter2(string pl){
-
-      switch(pl){
-
-        case "paul":
-        player2 = _playersObj[0];
-        break;
-        case "izzy":
-           player2 = _playersObj[2];
-        break;
-        case "mrbill":
-           player2 = _playersObj[1];
-        break;
-          case "Barney":
-        player2 = _playersObj[3];
-        break;
-      }
+    public void SelectCharacter2(GameObject pl2){
+      player2 = pl2;
        foreach(GameObject obj in _SelectionButtonsPlayer2){
         obj.GetComponent<Button>().interactable = true;
       }

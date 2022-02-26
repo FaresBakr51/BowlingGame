@@ -26,6 +26,7 @@ public class CreatRooms : MonoBehaviourPunCallbacks
         
         roomOptions.MaxPlayers = 6;
           PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname,roomOptions,TypedLobby.Default);
+          
         
     }
 
