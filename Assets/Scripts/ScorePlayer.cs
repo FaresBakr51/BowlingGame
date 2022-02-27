@@ -6,6 +6,7 @@ using System.Collections;
 
 public class ScorePlayer : MonoBehaviourPunCallbacks {
 
+	
 	public List<Text> scores_text = new List<Text>();
 	public List<Text> round_scores_text = new List<Text>();
 	public  int totalscre = 0;
@@ -14,6 +15,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	private int _currentframe;
 	private string _scoreStrn;
 	private int _counterStringFrames;
+	private bool _win;
 	void Start(){
 		_currentframe = 0;
 		if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
@@ -101,13 +103,22 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 		{
 			round_scores_text[i].text = frames[i].ToString();
 		
-		   totalscre  = frames[i];
+		  // totalscre  = frames[i];
 		  
 		  
 		}
-
+	
 	
 			
+	}
+	void Update(){
+
+		if(totalscre >= 300 && !_win){
+
+		    PlayerPrefs.SetInt("score",totalscre);
+		   _win = true;
+		}
+
 	}
 	private void UpdateFrameSound(){
 
@@ -122,31 +133,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			}
 		
 		}
-		//if(_scoreStrn.Length )
-		/* if(currentframes[_currentframe].text != "" && currentframes[_currentframe +1 ].text != ""){
-
-				_currentframe++;
-
-				if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
-			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
-			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
-				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[_currentframe]);
-			}
-		} */
-	/* 	for(int i =0; i < currentframes.Count; i++){
-
-			if(currentframes[i].text != "" && _currentframe == i){
-				_currentframe++;
-			if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
-			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
-			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
-				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[_currentframe]);
-			}
-
-			}
-		}
-		 */
-		
+	
 	}
 	public  string FormatRolls(List<int> rolls)
 	{

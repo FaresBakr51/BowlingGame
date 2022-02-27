@@ -1,25 +1,38 @@
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.Events;
+
+
 public class MainMenuManager : MonoBehaviourPunCallbacks
 {
-       public Button _playbutt;
+  
+   
+
+ 
+    public Button _playbutt;
     public Button _compettbutt;
-      public GameObject _roomsPanel;
-      [SerializeField] private GameObject _roomsPanelPlayers;
-       [SerializeField] private GameObject _mainPanel;
-      public GameObject[] _mainMenubuttns;
+    public GameObject _roomsPanel;
+    [SerializeField] private GameObject _roomsPanelPlayers;
+    [SerializeField] private GameObject _mainPanel;
+    [SerializeField] private GameObject _leaderBoardPanel;
+    public GameObject[] _mainMenubuttns;
     
-              public GameObject _PickPlayerPanel;
+    public GameObject _PickPlayerPanel;
 
-              private bool _offlinemode;
-              public GameObject[] _guidePic;
-              public GameObject _guidPanel;
-              public int _counter;
+    private bool _offlinemode;
+    public GameObject[] _guidePic;
+    public GameObject _guidPanel;
+    public int _counter;
 
-              public GameObject[] _CharacterButtons;
+    public GameObject[] _CharacterButtons;
+    [SerializeField] private GameObject[] _scoresBoard;
+
+
      public void ActiveRoompanel(){
 
        if(!PhotonNetwork.IsConnected){
@@ -46,23 +59,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
      
 
     }
-    public void ShowTut(){
-
-      _guidPanel.SetActive(true);
-      _mainPanel.SetActive(false);
-      SetSelectedGameObject(_mainMenubuttns[9]);
-    }
+   
     public void ShowCredits(){
 
       SceneManager.LoadScene(1);
     }
-    public void Skip(){
-
-      
-       _guidPanel.SetActive(false);
-        _mainPanel.SetActive(true);
-        SetSelectedGameObject(_mainMenubuttns[0]);
-    }
+ 
    
     public void ActivealreadyRoompanel(){
 
@@ -88,6 +90,10 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
           _PickPlayerPanel.SetActive(false);
         }
+        if(_leaderBoardPanel.activeInHierarchy){
+
+          _leaderBoardPanel.SetActive(false);
+        }
         _mainPanel.SetActive(true);
     }
 
@@ -97,7 +103,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
        PhotonNetwork.OfflineMode = false;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
          PhotonNetwork.ConnectUsingSettings();
-         PhotonNetwork.ConnectToBestCloudServer();
+        // PhotonNetwork.ConnectToBestCloudServer();
            _offlinemode = false;
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
@@ -112,6 +118,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         _playbutt.enabled = true;
         _compettbutt.enabled = true;
+/*   */
   
     }
  
@@ -186,11 +193,20 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         PhotonNetwork.OfflineMode = true;
           //  PhotonNetwork.LoadLevel(2);
         PhotonNetwork.LoadLevel(Random.Range(2,4));
+       
       
     }
 
  
    
-  
-    
+ /*  public  void LeaderboradSetPlayer(string playername){
+
+     photonView.RPC("RpcLeader",RpcTarget.All,playername);
+  }
+  [PunRPC]
+  private void RpcLeader(string playername){
+
+    _scoresBoard[0].GetComponentInChildren<TextMeshProUGUI>().text = playername;
+  } */
+
 }
