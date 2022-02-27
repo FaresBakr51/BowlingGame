@@ -24,7 +24,7 @@ public class OfflinePlayerMode : MonoBehaviour
 
     void Awake()
     {
-      PhotonNetwork.OfflineMode = true;
+    
     
       /* if(PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true){
 

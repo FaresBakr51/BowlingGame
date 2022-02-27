@@ -52,7 +52,7 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         playercontroller._ball.GetComponent<BallSound>().enabled = true;
         if(playercontroller._StrikeParticle.activeInHierarchy){
             playercontroller._strikeOFflineEffectCounter++;
-              playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power * 1.5f));
+              playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power * 1.2f));
         }else{
               playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power));
         }
