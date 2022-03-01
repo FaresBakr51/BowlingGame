@@ -36,12 +36,12 @@ public class LocalScoreRec {
 public class Globals : MonoBehaviour {
 
     // option & local score File Path
-    static string optionsFile = Application.persistentDataPath + "/Options.dat";
-    static string scoreFile   = Application.persistentDataPath + "/Score.dat";
+  /*   static string optionsFile = Application.persistentDataPath + "/Options.dat";
+    static string scoreFile   = Application.persistentDataPath + "/Score.dat"; */
 
     // global leaderboard url & your game id
     public static string serverURL = "http://score.iircade.com/ranking/ranking_test.php";
-    public static string game_id   = "MR_1";
+    public static string game_id   = "Mr_1";
 
     // options
     public static OptionRec Options = new OptionRec();
@@ -54,7 +54,7 @@ public class Globals : MonoBehaviour {
     //-----------------------------------
     // Load Options <- Options Menu
     //-----------------------------------
-    public static void LoadOptions() {
+  /*   public static void LoadOptions() {
         if (!File.Exists(optionsFile)) return;
 
         using (Stream stream = File.Open(optionsFile, FileMode.Open)) {
@@ -62,23 +62,23 @@ public class Globals : MonoBehaviour {
             Options = (OptionRec)binaryFormatter.Deserialize(stream);
             stream.Close();
         }
-    }
+    } */
 
     //-----------------------------------
     // Save Options <- Options Menu
     //-----------------------------------
-    public static void SaveOptions() {
+   /*  public static void SaveOptions() {
         using (Stream stream = File.Open(optionsFile, FileMode.Create)) {
             var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             binaryFormatter.Serialize(stream, Options);
             stream.Close();
         }
-    }
+    } */
 
     //-----------------------------------
     // Load Local Score <- High Score Menu
     //-----------------------------------
-    public static void LoadScore() {
+  /*   public static void LoadScore() {
         if (!File.Exists(scoreFile)) return;
 
         using (Stream stream = File.Open(scoreFile, FileMode.Open)) {
@@ -86,12 +86,12 @@ public class Globals : MonoBehaviour {
             mLocalScore = (List<LocalScoreRec>)binaryFormatter.Deserialize(stream);
             stream.Close();
         }
-    }
+    } */
 
     //-----------------------------------
     // Save Local Score <- Game Over
     //-----------------------------------
-    public static void SaveScore(LocalScoreRec mScore) {
+  /*   public static void SaveScore(LocalScoreRec mScore) {
         // find player minimum score
         LoadScore();
         mLocalScore = mLocalScore.FindAll(x => x.user.Equals(mScore.user)).OrderBy(x => x.score).ToList();
@@ -118,7 +118,7 @@ public class Globals : MonoBehaviour {
             binaryFormatter.Serialize(stream, mLocalScore);
             stream.Close();
         }
-    }
+    } */
 
     //-----------------------------------
     // Get MAC Address <- Game Over

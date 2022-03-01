@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine;
 using System.Collections;
-
+using UnityEngine.Networking;
 public class ScorePlayer : MonoBehaviourPunCallbacks {
 
 	
@@ -113,13 +113,37 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	}
 	void Update(){
 
-		if(totalscre >= 300 && !_win){
+		if(PhotonNetwork.OfflineMode == false){
 
-		    PlayerPrefs.SetInt("score",totalscre);
+		if(totalscre >= 300 && !_win){
+		 StartCoroutine(PostScore());  
 		   _win = true;
 		}
+	   }
 
 	}
+	  IEnumerator PostScore() {
+        // form data settings
+        // field order doesn't matter, but field names must be correct
+
+        WWWForm form = new WWWForm();
+        form.AddField("request",    "save");                // must use 'save' - lowercase
+        form.AddField("game",       Globals.game_id);       // game id
+        form.AddField("user",      PhotonNetwork.LocalPlayer.NickName);           // user name
+        form.AddField("score",     totalscre);          // game score
+     //   form.AddField("mac",        Globals.GetMacAddr());  // device MAC address
+
+        using (UnityWebRequest request = UnityWebRequest.Post(Globals.serverURL, form)) {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError) {
+                Debug.Log("Network Error");
+            }
+        }
+
+      
+    }
+
 	private void UpdateFrameSound(){
 
 		if(_scoreStrn.Length >= _counterStringFrames+2){

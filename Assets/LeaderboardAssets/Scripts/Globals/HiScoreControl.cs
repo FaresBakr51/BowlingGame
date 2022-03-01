@@ -27,10 +27,11 @@ public class HiScoreControl : MonoBehaviour {
 
     [SerializeField] RectTransform content;       // ScrollView - content
     [SerializeField] GameObject txtError;         // network error message
-    [SerializeField] Button btnLocal;             // Local/Global button
+   // [SerializeField] Button btnLocal;             // Local/Global button
 
-    [SerializeField] GameObject[] grideTitle;     // Local or Global  
-    [SerializeField] Sprite[] spriteOnOff;        // Sprites of btnLocal  
+    //[SerializeField] GameObject[] grideTitle;     // Local or Global  
+ //   [SerializeField] Sprite[] spriteOnOff;        // Sprites of btnLocal  
+    [SerializeField] private GameObject GloballScoreItem;
 
     bool isLocal = true;                          // current is local?  
     bool isNetworkError;                          // occurs network error to get global leaderboard from server?  
@@ -48,14 +49,23 @@ public class HiScoreControl : MonoBehaviour {
     void OnEnable() {
         if (mGlobalScore.Count == 0) {
             StartCoroutine(DownloadGlobalScore());
-            SetLocalScore();
+           // SetLocalScore();
         }
+    }
+    void Start(){
+      
+       StartCoroutine(SetGlobal());
+    }
+    IEnumerator SetGlobal(){
+
+        yield return new WaitForSeconds(1f);
+        SetGlobalScore();
     }
 
     //----------------------------
     //  Set Local Score <- OnEnable / OnButtonSubmit
     //----------------------------
-    private void SetLocalScore() {
+    /* private void SetLocalScore() {
 
         Globals.LoadScore();            // load local score from current device
         ClearContents();                // clear UI score elements
@@ -83,7 +93,7 @@ public class HiScoreControl : MonoBehaviour {
             item.transform.Find("TxtScore").GetComponent<Text>().text      = Globals.mLocalScore[i].score.ToString("#,0");
             item.transform.SetParent(content.transform, false);
         }
-    }
+    } */
 
     //----------------------------
     //  Set Global Score <- OnButtonSubmit
@@ -91,30 +101,34 @@ public class HiScoreControl : MonoBehaviour {
     void SetGlobalScore() {
 
         ClearContents();                        // clear UI score elements
-        txtError.SetActive(isNetworkError);     // display network error message
+//        txtError.SetActive(isNetworkError);     // display network error message
 
         // alternately repeat item's background color
-        Color[] color = new Color[] { new Color(0, 0, 0, 0.4f), new Color(0.2f, 0.2f, 0.2f, 0.4f) };
+     //   Color[] color = new Color[] { new Color(0, 0, 0, 0.4f), new Color(0.2f, 0.2f, 0.2f, 0.4f) };
 
         // when occurs network error, mGlobalScore is null, so skip after these statements
         int rank = 0;
+        int count = 0;
         foreach (GlobalScoreRec score in mGlobalScore) {
-            GameObject item = Instantiate(Resources.Load("GloballScoreItem")) as GameObject;
+            if(count <=9){
+            GameObject item = Instantiate(GloballScoreItem);
             item.name = "Score";
-
-            item.transform.Find("Image").GetComponent<Image>().color        = color[rank++ % 2];
+            rank ++;
+           // item.transform.Find("Image").GetComponent<Image>().color        = color[rank++ % 2];
             item.transform.Find("TxtRank").GetComponent<Text>().text        = rank.ToString();
             item.transform.Find("TxtDate").GetComponent<Text>().text        = score.date;
             item.transform.Find("TxtCountry").GetComponent<Text>().text     = score.country;
             item.transform.Find("TxtName").GetComponent<Text>().text        = score.user;
-            item.transform.Find("TxtLives").GetComponent<Text>().text       = score.lives.ToString("0");
+          //  item.transform.Find("TxtLives").GetComponent<Text>().text       = score.lives.ToString("0");
 
             // translate numeric data to string
-            item.transform.Find("TxtDifficulty").GetComponent<Text>().text  = strDiff[score.difficulty]; 
-            item.transform.Find("TxtMode").GetComponent<Text>().text        = strMode[score.mode]; 
+           // item.transform.Find("TxtDifficulty").GetComponent<Text>().text  = strDiff[score.difficulty]; 
+            //item.transform.Find("TxtMode").GetComponent<Text>().text        = strMode[score.mode]; 
             item.transform.Find("TxtScore").GetComponent<Text>().text       = score.score.ToString("#,0");
 
             item.transform.SetParent(content.transform, false);
+            count++;
+            }
         }
     }
 
@@ -165,10 +179,10 @@ public class HiScoreControl : MonoBehaviour {
                 score.date       = s[0];
                 score.country    = s[1];
                 score.user       = s[2];
-                score.lives      = int.Parse(s[3]);
+              //  score.lives      = int.Parse(s[3]);
                 score.score      = int.Parse(s[4]);
-                score.difficulty = int.Parse(s[5]);
-                score.mode       = int.Parse(s[6]);     // server field name is 'stage'
+                //score.difficulty = int.Parse(s[5]);
+                //score.mode       = int.Parse(s[6]);     // server field name is 'stage'
                 mGlobalScore.Add(score);
             }
         } catch (Exception e) {
@@ -181,27 +195,30 @@ public class HiScoreControl : MonoBehaviour {
     //----------------------------
     void ClearContents() {
         for (int i = content.childCount - 1; i >= 0; i--) {
+            if(content.GetChild(i).gameObject.name != "BackButt" && content.GetChild(i).gameObject.name != "Type"){
             Destroy(content.GetChild(i).gameObject);
+            }
         }
     }
 
     //----------------------------
     //  Local/Global Button Submit
     //----------------------------
-    public void OnButtonSubmit() {
+  /*   public void OnButtonSubmit() {
         // toggle local global
         isLocal = !isLocal;
 
         // set contents title
-        grideTitle[0].SetActive(isLocal);
-        grideTitle[1].SetActive(!isLocal);
+      /*   grideTitle[0].SetActive(isLocal);
+        grideTitle[1].SetActive(!isLocal); */
 
         // set button sprite
-        btnLocal.image.sprite = isLocal ? spriteOnOff[0] : spriteOnOff[1];
-
+      //  btnLocal.image.sprite = isLocal ? spriteOnOff[0] : spriteOnOff[1];
+      // SetGlobalScore();
+       /*
         if (isLocal)
-            SetLocalScore();
+         //   SetLocalScore();
         else
-            SetGlobalScore();
-    }
+            SetGlobalScore(); */
+   // }
 }

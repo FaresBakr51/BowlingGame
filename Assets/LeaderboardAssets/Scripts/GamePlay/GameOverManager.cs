@@ -78,7 +78,7 @@ public class GameOverManager : MonoBehaviour {
     //-----------------------------------
     void SaveScore() {
         mScore.user = txtInput.text;    // set user name
-        Globals.SaveScore(mScore);      // save local score to current device
+      //  Globals.SaveScore(mScore);      // save local score to current device
         StartCoroutine(PostScore());    // Send score to Global leader board(Ranking server)
     }
 

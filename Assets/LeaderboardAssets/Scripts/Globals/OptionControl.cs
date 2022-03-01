@@ -33,7 +33,7 @@ public class OptionControl : MonoBehaviour {
     // OnEnable
     //-----------------------------------
     void OnEnable() {
-        Globals.LoadOptions();
+      //  Globals.LoadOptions();
         SetOptions();
 
         btnCurrent = btnMusic;
@@ -63,10 +63,10 @@ public class OptionControl : MonoBehaviour {
     //-----------------------------------
     // OnDisable
     //-----------------------------------
-    void OnDisable() {
+ /*    void OnDisable() {
         // if close this panel, save options
         if (btnCurrent != null) Globals.SaveOptions();
-    }
+    } */
 
     //-----------------------------------
     // Set Option by load option's data
