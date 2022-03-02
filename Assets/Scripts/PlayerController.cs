@@ -197,7 +197,7 @@ public int _mycontroll;
     void Update()
     {
 
-        if(_myVoice.IsSpeaking){
+        if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
           
             _isspeakingButt.SetActive(true);
             _notSpeakingButt.SetActive(false);
