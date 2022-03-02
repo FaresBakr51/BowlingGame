@@ -41,7 +41,7 @@ public class Globals : MonoBehaviour {
 
     // global leaderboard url & your game id
     public static string serverURL = "http://score.iircade.com/ranking/ranking_test.php";
-    public static string game_id   = "Mr_1";
+    public static string game_id   = "BB_1";
 
     // options
     public static OptionRec Options = new OptionRec();

@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 using Photon.Pun;
-using Photon.Realtime;
-using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using Photon.Voice.PUN;
+using UnityEngine.Networking;
+
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -37,8 +36,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public int _roundscore;
     public ScorePlayer _scoreplayer;
     public AudioClip _movingclip;
-   // public TextMeshProUGUI _playername;
-    private List<int> rolls = new List<int>();
+       private List<int> rolls = new List<int>();
     public bool _gameend;
    public GameObject _leaderboardprefab;
     private GameObject _frametextobj;
@@ -72,8 +70,14 @@ public int _mycontroll;
     private bool _gamePaused;
     public int _strikeEffectCounter;
     public int _strikeOFflineEffectCounter ;
+   [SerializeField] private PhotonVoiceView _myVoice;
+    public GameObject _isspeakingButt;
+    public GameObject _notSpeakingButt;
+    public GameObject _myManager;
     private void Awake()
     {
+    
+        _myVoice = GetComponent<PhotonVoiceView>();
         _offlinemode = FindObjectOfType<OfflinePlayerMode>();
         _getMyname = GetComponent<GetNickname>();
         _powerSlider.gameObject.SetActive(false);
@@ -88,13 +92,10 @@ public int _mycontroll;
           _camera.GetComponent<Camera>().enabled = false;
           _camera.GetComponent<AudioListener>().enabled = false;
          GetComponent<PlayerController>().enabled = false;
-        //   Destroy(GetComponent<PlayerBowlingState>());
+      
         }
-      
-      
-        _canhit = true;
+         _canhit = true;
         _myxpos = transform.position.x;
-      //  GetReady();
     }
      public void UpdateSound(AudioClip clip){
 
@@ -130,6 +131,7 @@ public int _mycontroll;
         GameEventBus.UnSubscribe(GameEventType.leaderboard, CheckOtherHit);
         GameEventBus.UnSubscribe(GameEventType.waiting, Waitstate);
           _gameactions.Disable();
+       
     }
 
     void Start()
@@ -159,9 +161,6 @@ public int _mycontroll;
         _idleState = gameObject.AddComponent<PlayerIdleState>();
         _playerAnim = GetComponent<Animator>();
          GetReady();
-     
-
-        //  _myName = GetNickname.nickname;
     }
     private void CheckControlles(){
 
@@ -197,9 +196,20 @@ public int _mycontroll;
   
     void Update()
     {
-    
+
+        if(_myVoice.IsSpeaking){
+          
+            _isspeakingButt.SetActive(true);
+            _notSpeakingButt.SetActive(false);
+        }else{
+              _isspeakingButt.SetActive(false);
+            _notSpeakingButt.SetActive(true);
+        }
         if (_photonview.IsMine)
         {
+            
+            
+              
             if (_canhit == true)
             {
                 if(_hookcalclated ==false){
@@ -222,11 +232,18 @@ public int _mycontroll;
           
             }
 
+        }else{
+
+            if(_myManager == null){
+                PhotonNetwork.Destroy(_mypinsobj);
+                PhotonNetwork.Destroy(this.gameObject);
+              
+            }
         }
        
        
     }
-  
+   
     private void BowlState()
     {
        if(_gameend == false){
@@ -314,8 +331,6 @@ public int _mycontroll;
         }
          
         if(_ControllPower == false){
-
-             Debug.Log("moving maxmum");
               _slidertime += Time.deltaTime;
               _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.5f);
         }else{
@@ -444,6 +459,13 @@ public int _mycontroll;
         }
         else if (action == ActionMasterOld.Action.EndGame)
         {
+            if(PhotonNetwork.OfflineMode == false){
+
+		
+		 StartCoroutine(PostScore());  
+		 
+		
+	   }
             _gameend = true;
             throw new UnityException("Don't know how to handle end game yet");
         }
@@ -464,7 +486,9 @@ public int _mycontroll;
         _gamePaused = false;
     }
     public void QuitGame(){
-
+        if(PhotonNetwork.InRoom){
+        PhotonNetwork.LeaveRoom();
+        }
         PhotonNetwork.LoadLevel(0);
     }
     public void SoundOn(){
@@ -478,6 +502,28 @@ public int _mycontroll;
         AudioListener.volume = 0;
         EventSystem.current.SetSelectedGameObject(_soundOnOF[0]);
     }
+      IEnumerator PostScore() {
+        // form data settings
+        // field order doesn't matter, but field names must be correct
+
+        WWWForm form = new WWWForm();
+        form.AddField("request",    "save");                // must use 'save' - lowercase
+        form.AddField("game",       Globals.game_id);       // game id
+        form.AddField("user",      PhotonNetwork.LocalPlayer.NickName);           // user name
+        form.AddField("score",     _scoreplayer.totalscre);          // game score
+     //   form.AddField("mac",        Globals.GetMacAddr());  // device MAC address
+
+        using (UnityWebRequest request = UnityWebRequest.Post(Globals.serverURL, form)) {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError) {
+                Debug.Log("Network Error");
+            }
+        }
+
+      
+    }
+
 }
 
 public class ActionMasterOld

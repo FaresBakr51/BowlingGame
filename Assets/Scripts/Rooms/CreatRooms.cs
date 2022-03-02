@@ -25,7 +25,8 @@ public class CreatRooms : MonoBehaviourPunCallbacks
         RoomOptions roomOptions = new RoomOptions();
         
         roomOptions.MaxPlayers = 6;
-          PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname,roomOptions,TypedLobby.Default);
+        roomOptions.CleanupCacheOnLeave = false;
+          PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname + Random.Range(5,10000),roomOptions,TypedLobby.Default);
           
         
     }

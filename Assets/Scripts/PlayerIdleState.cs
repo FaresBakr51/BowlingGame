@@ -22,7 +22,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         this.transform.position = _mypos;
         IdleState();
-        Debug.Log("Idle State");
+     
     }
 
     private void IdleState()

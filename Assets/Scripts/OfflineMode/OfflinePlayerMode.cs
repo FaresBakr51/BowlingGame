@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -26,10 +25,7 @@ public class OfflinePlayerMode : MonoBehaviour
     {
     
     
-      /* if(PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true){
-
-          PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
-      } */
+     
     
          if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
            _SelectorPane.SetActive(true);
@@ -37,13 +33,6 @@ public class OfflinePlayerMode : MonoBehaviour
         obj.SetActive(false);
       }
            EventSystem.current.SetSelectedGameObject(_player1Firstchar);
-       
-         /*   GameObject player1 =   Instantiate(_playersObj[0],_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);
-            GameObject player2 =  Instantiate(_playersObj[1],_spawnPoints[1].transform.position,_spawnPoints[1].transform.rotation);
-            _CurrentPlayers.Add(player1);
-            _CurrentPlayers.Add(player2); */
-         
-             //SwitchControll();
         }else{
 
           foreach(GameObject obj in offlineModeobj ){

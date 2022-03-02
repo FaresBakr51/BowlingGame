@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
-using Photon.Pun;
 using UnityEngine.EventSystems;
 public class PlayerControllOFFlineMode : MonoBehaviour
 {
@@ -33,7 +30,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     public ScorePlayer _scoreplayer;
 
     public AudioClip _movingclip;
-   // public TextMeshProUGUI _playername;
+ 
     private List<int> rolls = new List<int>();
     public bool _gameend;
    
@@ -113,7 +110,7 @@ public int _mycontroll;
                 FirstControll();
             }else if(_mycontroll ==0){
                 _powerSlider.GetComponent<RectTransform>().anchoredPosition = new Vector2( _powerSlider.GetComponent<RectTransform>().anchoredPosition.x+720, _powerSlider.GetComponent<RectTransform>().anchoredPosition.y);
-                 //  _hookScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2( _hookScroll.GetComponent<RectTransform>().anchoredPosition.x+700, _hookScroll.GetComponent<RectTransform>().anchoredPosition.y);
+               
                      _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
                  _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
                 SecondControll();

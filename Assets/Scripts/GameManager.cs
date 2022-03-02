@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Realtime;
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
@@ -63,6 +64,6 @@ public class GameManager : MonoBehaviourPunCallbacks
      private void CreatPlayer(){
            PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
     } 
-
+  
 }
 
