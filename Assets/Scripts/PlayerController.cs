@@ -77,7 +77,7 @@ public int _mycontroll;
     private void Awake()
     {
     
-        _myVoice = GetComponent<PhotonVoiceView>();
+      //  _myVoice = GetComponent<PhotonVoiceView>();
         _offlinemode = FindObjectOfType<OfflinePlayerMode>();
         _getMyname = GetComponent<GetNickname>();
         _powerSlider.gameObject.SetActive(false);
@@ -197,14 +197,14 @@ public int _mycontroll;
     void Update()
     {
 
-        if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
+       /*  if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
           
             _isspeakingButt.SetActive(true);
             _notSpeakingButt.SetActive(false);
         }else{
               _isspeakingButt.SetActive(false);
             _notSpeakingButt.SetActive(true);
-        }
+        } */
         if (_photonview.IsMine)
         {
             

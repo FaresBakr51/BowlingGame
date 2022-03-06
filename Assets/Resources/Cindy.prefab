@@ -538,6 +538,7 @@ Transform:
   - {fileID: 8539717424395109130}
   - {fileID: 8539717424395158418}
   - {fileID: 8539717424395086842}
+  - {fileID: 8539717424957160833}
   m_Father: {fileID: 8539717424395062750}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -940,7 +941,6 @@ Transform:
   - {fileID: 8539717424395189758}
   - {fileID: 8539717424395068324}
   - {fileID: 8539717424395109540}
-  - {fileID: 8539717424957160833}
   m_Father: {fileID: 8539717424395060298}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2277,7 +2277,6 @@ GameObject:
   - component: {fileID: 8539717424395364471}
   - component: {fileID: 8539717424395364469}
   - component: {fileID: 8539717424395364468}
-  - component: {fileID: -8330603454364800093}
   m_Layer: 0
   m_Name: Cindy
   m_TagString: Player
@@ -2369,8 +2368,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ball: {fileID: 8539717424957160832}
-  _playerhand: {fileID: 8539717424395060432}
-  _BallConstantPos: {x: -0.09, y: 0.015, z: -0.13}
+  _playerhand: {fileID: 8539717424395069422}
+  _BallConstantPos: {x: 0.036, y: 0.002, z: 0.131}
   _power: 0
   _camera: {fileID: 8539717425481406379}
   _powerSlider: {fileID: 8539717425072828621}
@@ -2504,25 +2503,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
---- !u!114 &-8330603454364800093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8539717424395364466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logLevel: 1
-  ignoreGlobalLogLevel: 0
-  recorderInUse: {fileID: 0}
-  speakerInUse: {fileID: 7084735456570925333}
-  AutoCreateRecorderIfNotFound: 0
-  UsePrimaryRecorder: 1
-  SetupDebugSpeaker: 0
 --- !u!1 &8539717424395367354
 GameObject:
   m_ObjectHideFlags: 0
@@ -5152,11 +5132,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8539717424957160832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.073, y: -0, z: -0.117}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.036, y: 0.002, z: 0.131}
+  m_LocalScale: {x: 1.0000001, y: 1.0000004, z: 1.0000004}
   m_Children:
   - {fileID: 8539717426192310541}
-  m_Father: {fileID: 8539717424395060432}
+  m_Father: {fileID: 8539717424395069422}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8539717424957160856

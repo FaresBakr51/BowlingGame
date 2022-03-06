@@ -77,17 +77,18 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
       _myavatar.GetComponent<PlayerController>()._mytotal = totalscorePref;
      
         _myTextScore =  totalscorePref.GetComponentInChildren<Text>();
-    foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
+  /*   foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
 
-        if(obj.gameObject.name == "speaking"){
+      /*   if(obj.gameObject.name == "speaking"){
            
             _myavatar.GetComponent<PlayerController>()._isspeakingButt = obj.gameObject;
         }
         if(obj.name == "Notspeaking"){
            
              _myavatar.GetComponent<PlayerController>()._notSpeakingButt = obj.gameObject;
-        }
-    }
+        } */
+    
+  //  } 
      
         
         
