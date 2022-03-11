@@ -43,7 +43,6 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
     {
         if (_listings.Count > 0)
         {
-
             if (InGameRooms()!= -1)
             {
              
@@ -53,8 +52,6 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
             }
             if (AnyRankedRoom() != -1)
             {
-                
-            
                 Destroy(_listings[AnyRankedRoom()].gameObject);
                 _listings.RemoveAt(AnyRankedRoom());
             }
@@ -63,9 +60,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     
     {
-       
-        if (GameManager.instance._rankedMode) return;
-        
+        if (GameManager.instance._rankedMode) return; 
         foreach (RoomInfo info in roomList){
            
          
@@ -92,8 +87,6 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
                                 _listings.Add(listing);
                             }
                         }
-                       
-                       
                     }
                }
            } 

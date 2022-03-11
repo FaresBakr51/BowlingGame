@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -15,10 +14,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool _rankedMode;
     [SerializeField] public int _finshedPlayers;
     [SerializeField] private List<GameObject> _Players = new List<GameObject>();
-   // [SerializeField] private List<bool> _playersGameEnd = new List<bool>();
     [SerializeField] private List<int> _playerscores = new List<int>();
     private bool _rankedGameEnd;
-    //[SerializeField] private List<int> _playerCurrentSCores = new List<int>();
     private void Awake()
     {
       
@@ -126,6 +123,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
     }
+   
   
 }
 

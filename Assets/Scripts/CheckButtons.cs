@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
- using UnityEngine.EventSystems;
- using UnityEngine.UI;
- using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.Events;
 public class CheckButtons : MonoBehaviour
 {
 
@@ -18,8 +16,5 @@ public class CheckButtons : MonoBehaviour
         }
         
     }
-     public void ChangeFunction(UnityAction action ){
-    this.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
-     this.gameObject.GetComponent<Button>().onClick.AddListener(action);
-  }
+   
 }
