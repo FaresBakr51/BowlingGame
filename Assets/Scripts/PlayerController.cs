@@ -74,6 +74,9 @@ public int _mycontroll;
     public GameObject _isspeakingButt;
     public GameObject _notSpeakingButt;
     public GameObject _myManager;
+
+    [SerializeField] public GameObject _Winpanel;
+    [SerializeField] public GameObject _losePanel;
     private void Awake()
     {
     
@@ -197,6 +200,7 @@ public int _mycontroll;
     void Update()
     {
 
+
        /*  if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
           
             _isspeakingButt.SetActive(true);
@@ -207,9 +211,13 @@ public int _mycontroll;
         } */
         if (_photonview.IsMine)
         {
-            
-            
-              
+
+
+            if (_gameend)
+            {
+                GameManager.instance._finshedPlayers++;
+                _gameend = false;
+            }
             if (_canhit == true)
             {
                 if(_hookcalclated ==false){
@@ -466,6 +474,7 @@ public int _mycontroll;
 		 
 		
 	   }
+            GameManager.instance._finshedPlayers++;
             _gameend = true;
             throw new UnityException("Don't know how to handle end game yet");
         }

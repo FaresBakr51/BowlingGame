@@ -62,7 +62,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
   
     private void SetUpPlayer(){
         if(_pv.IsMine){
-            _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character"),_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
+            _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[_myplayer.ActorNumber].transform.position,Quaternion.Euler(0,180,0),0);
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
               _myavatar.GetComponent<PlayerController>()._myManager = this.gameObject;
               RpcSharetotalScore();

@@ -5,7 +5,6 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine.Events;
 
 
 public class MainMenuManager : MonoBehaviourPunCallbacks
@@ -31,9 +30,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     public GameObject[] _CharacterButtons;
     [SerializeField] private GameObject[] _scoresBoard;
+    [SerializeField] private GameObject _WAITINPanel;
+    public static int _totalRankedPoints;
 
-
-     public void ActiveRoompanel(){
+    [SerializeField] private TextMeshProUGUI _rankedpointTxt;
+    
+    public void ActiveRoompanel(){
 
        if(!PhotonNetwork.IsConnected){
          _mainPanel.SetActive(true);
@@ -43,7 +45,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         _offlinemode = false;
       _PickPlayerPanel.SetActive(true);
        _mainPanel.SetActive(false);
-        SetSelectedGameObject(_mainMenubuttns[6]);
+       // SetSelectedGameObject(_mainMenubuttns[6]);
        }
       
     }
@@ -56,16 +58,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         _mainPanel.SetActive(true);
         SetSelectedGameObject(_mainMenubuttns[0]);
      }
-     
-
     }
    
     public void ShowCredits(){
 
       SceneManager.LoadScene(1);
     }
- 
-   
     public void ActivealreadyRoompanel(){
 
       SetSelectedGameObject(_mainMenubuttns[2]);
@@ -82,7 +80,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     }
     public void Back(){
 
-        SetSelectedGameObject(_mainMenubuttns[0]);
+      
         if(_roomsPanel.activeInHierarchy){
           _roomsPanel.SetActive(false);
         }
@@ -94,22 +92,98 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
           _leaderBoardPanel.SetActive(false);
         }
+        if (_WAITINPanel.activeInHierarchy)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+            StartCoroutine(Leavroom());
+            _WAITINPanel.SetActive(false);
+        }
+          
+        SetSelectedGameObject(_mainMenubuttns[0]);
         _mainPanel.SetActive(true);
     }
-
-
-    void Start()
+    IEnumerator Leavroom()
     {
+
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
+        {
+            yield return null;
+        }
+        GameManager.instance._rankedMode = false;
+        PhotonNetwork.Reconnect();
+
+    }
+
+        void Start()
+    {
+        StartCoroutine(GetRankedPoints());
        PhotonNetwork.OfflineMode = false;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
          PhotonNetwork.ConnectUsingSettings();
-        // PhotonNetwork.ConnectToBestCloudServer();
-           _offlinemode = false;
+        _offlinemode = false;
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
       
     }
- public override void OnConnectedToMaster()
+    IEnumerator GetRankedPoints()
+    {
+        yield return new WaitForSeconds(1.5f);
+        _totalRankedPoints = PlayerPrefs.GetInt("rankedpoints", 0);
+        _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + ": " + _totalRankedPoints.ToString();
+    }
+    public void CreatRankedMatch()
+    {
+        if (!PhotonNetwork.InLobby) return;
+        if (PhotonNetwork.InRoom) return;
+        _WAITINPanel.SetActive(true);
+        GameManager.instance._rankedMode = true;
+
+        
+
+        PhotonNetwork.JoinRandomRoom(null,2);
+
+    }
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("failed to join");
+        CreatRoom();
+    }
+    public override void OnCreatedRoom()
+    {
+        Debug.Log("ranked match made");
+      
+    }
+    private void CreatRoom()
+    {
+       
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 2;
+        roomOptions.IsVisible = true;
+        roomOptions.IsOpen = true;
+       // roomOptions.CustomRoomProperties = rankprop;
+        PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
+      
+       // PhotonNetwork.JoinRandomOrCreateRoom(prop, 2, MatchmakingMode.FillRoom, null, null, null, roomOptions);
+       
+      
+    }
+  
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if (GameManager.instance._rankedMode)
+        {
+            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel(Random.Range(2, 4));
+            }
+        }
+    }
+    public override void OnConnectedToMaster()
     {
       if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
         PhotonNetwork.JoinLobby();
@@ -118,7 +192,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         _playbutt.enabled = true;
         _compettbutt.enabled = true;
-/*   */
   
     }
  
@@ -160,7 +233,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
    }
       public void JoinRoom()
     {
- SetSelectedGameObject(_mainMenubuttns[6]);
+   
       _offlinemode = true;
       _PickPlayerPanel.SetActive(true);
       _mainPanel.SetActive(false);
@@ -178,7 +251,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRoom(null);
           PhotonNetwork.CurrentRoom.IsOpen = false;
            PhotonNetwork.CurrentRoom.IsVisible = false;
-           // PhotonNetwork.LoadLevel(2);
             PhotonNetwork.LoadLevel(Random.Range(2,4));
       } 
     }
@@ -191,22 +263,9 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             yield return null;
         }
         PhotonNetwork.OfflineMode = true;
-          //  PhotonNetwork.LoadLevel(2);
         PhotonNetwork.LoadLevel(Random.Range(2,4));
        
       
     }
-
- 
-   
- /*  public  void LeaderboradSetPlayer(string playername){
-
-     photonView.RPC("RpcLeader",RpcTarget.All,playername);
-  }
-  [PunRPC]
-  private void RpcLeader(string playername){
-
-    _scoresBoard[0].GetComponentInChildren<TextMeshProUGUI>().text = playername;
-  } */
 
 }

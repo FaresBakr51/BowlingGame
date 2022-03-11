@@ -17,7 +17,7 @@ public class CreatRooms : MonoBehaviourPunCallbacks
 
 
     public void OnCreatRoom(){
-
+        if (GameManager.instance._rankedMode) return;
        if(!PhotonNetwork.IsConnected)
        return;
        if(!PhotonNetwork.InLobby)
@@ -34,7 +34,8 @@ public class CreatRooms : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
 
-        if(PhotonNetwork.OfflineMode == false){
+        if(!PhotonNetwork.OfflineMode && !GameManager.instance._rankedMode)
+        {
 
         Debug.Log("room created");
       _roomController.CurrentRoomCanavas.Show();

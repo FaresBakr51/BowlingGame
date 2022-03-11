@@ -19,7 +19,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
   
       public void JoinRoomButt(){
 
-          if(RoomInfo.IsOpen){
+          if(RoomInfo.IsOpen && PhotonNetwork.IsConnected){
         PhotonNetwork.JoinRoom(RoomInfo.Name);
           }
     }

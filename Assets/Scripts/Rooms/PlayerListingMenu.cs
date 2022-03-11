@@ -64,7 +64,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-       
+        if (GameManager.instance._rankedMode) return;
          AddPlayerListing(newPlayer);
          if(PhotonNetwork.IsMasterClient){
          if(PhotonNetwork.CurrentRoom.PlayerCount >=2){
@@ -79,7 +79,8 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-      int index = _listings.FindIndex(x => x.Player == otherPlayer);
+        if (GameManager.instance._rankedMode) return;
+        int index = _listings.FindIndex(x => x.Player == otherPlayer);
                if(index != -1){
 
                    Destroy(_listings[index].gameObject);
@@ -91,11 +92,6 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
         if(PhotonNetwork.IsMasterClient){
             if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers || PhotonNetwork.CurrentRoom.PlayerCount >=2){
             PhotonNetwork.CurrentRoom.IsOpen = false;
-           // PhotonNetwork.CurrentRoom.IsVisible = false;
-         
-        
-               Debug.Log("Ingame");
-           
             PhotonNetwork.LoadLevel(Random.Range(2,4));
             }
         }

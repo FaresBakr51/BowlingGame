@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
+
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
@@ -10,7 +12,13 @@ public class GameManager : MonoBehaviourPunCallbacks
    
 
     public static GameManager instance;
-
+    public bool _rankedMode;
+    [SerializeField] public int _finshedPlayers;
+    [SerializeField] private List<GameObject> _Players = new List<GameObject>();
+   // [SerializeField] private List<bool> _playersGameEnd = new List<bool>();
+    [SerializeField] private List<int> _playerscores = new List<int>();
+    private bool _rankedGameEnd;
+    //[SerializeField] private List<int> _playerCurrentSCores = new List<int>();
     private void Awake()
     {
       
@@ -31,9 +39,46 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
     }
+
+    private void Update()
+    {
+        if (_rankedMode)
+        {
+            if (_finshedPlayers >=2 && !_rankedGameEnd)
+            {
+                Finieshed();
+                _rankedGameEnd = true;
+            }
+           
     
-  
-   public override void OnEnable()
+        }
+        
+    }
+    private void Finieshed()
+    {
+        FindWinner(_Players[0].GetComponent<PlayerController>()._scoreplayer.totalscre, _Players[1].GetComponent<PlayerController>()._scoreplayer.totalscre);
+    }
+    public void FindWinner(int p1,int p2)
+    {
+        if(p1 > p2)
+        {
+
+            _Players[0].GetComponent<PlayerController>()._Winpanel.SetActive(true);
+            _Players[1].GetComponent<PlayerController>()._losePanel.SetActive(true);
+
+        }
+        else if(p2 > p1)
+        {
+            _Players[0].GetComponent<PlayerController>()._losePanel.SetActive(true);
+            _Players[1].GetComponent<PlayerController>()._Winpanel.SetActive(true);
+        }else if(p2 == p1)
+        {
+
+        }
+        
+
+    }
+    public override void OnEnable()
     {
         base.OnEnable();
         PhotonNetwork.AddCallbackTarget(this);
@@ -58,12 +103,29 @@ public class GameManager : MonoBehaviourPunCallbacks
             
            CreatPlayer();
             }
+            StartCoroutine(WaitAvatars());
         }
 
     }
      private void CreatPlayer(){
-           PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
+        GameObject avatar =    PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
+       
     } 
+
+    IEnumerator WaitAvatars()
+    {
+
+        yield return new WaitForSeconds(2f);
+        if (_rankedMode)
+        {
+
+          
+           foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                _Players.Add(player);
+            }
+        }
+    }
   
 }
 

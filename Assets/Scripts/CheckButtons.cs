@@ -10,11 +10,11 @@ public class CheckButtons : MonoBehaviour
     void Update()
     {
         if(EventSystem.current.currentSelectedGameObject == this.gameObject){
-            this.gameObject.transform.GetChild(1).GetComponent<Image>().enabled = true;
+            this.gameObject.transform.GetChild(0).GetComponent<Image>().enabled = true;
 
          
         }else{
-               this.gameObject.transform.GetChild(1).GetComponent<Image>().enabled = false; 
+               this.gameObject.transform.GetChild(0).GetComponent<Image>().enabled = false; 
         }
         
     }
