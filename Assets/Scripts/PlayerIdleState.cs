@@ -46,30 +46,38 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._camera.transform.position = _Cambos;
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
 
-        if(playerController._strikeOFflineEffectCounter >=1){
-
-            playerController._StrikeParticle.SetActive(false);
-            playerController._strikeOFflineEffectCounter = 0;
-            
-        }
-      if(playerController._gameend == true)
+      
+      if(playerController._gameend)
         {
             playerController._canhit = false;
             playerController.myleader.SetActive(true);
             playerController._GoHomebutt.SetActive(true);
-               EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
+            EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
         }
         else
         {
+           
             playerController._canhit = true;
         }
-       
+        if (playerController._readyLunch)
+        {
+            playerController._readyLunch = false;
+        }
+        if (playerController._myRocket.activeInHierarchy)
+        {
+            playerController._myRocket.SetActive(false);
+            playerController._ball.SetActive(true);
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+            playerController.UpdateAnimator("shot", 0);
+            playerController._camera.transform.position = _Cambos;
+        }
         playerController._roundscore = 0;
         playerController._ball.GetComponent<BallSound>()._hit = false;
         foreach (Transform pins in playerController._mypins)
         {
             pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }
+       
      
     }
 

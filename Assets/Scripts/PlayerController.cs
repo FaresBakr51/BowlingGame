@@ -6,7 +6,7 @@ using Photon.Pun;
 using UnityEngine.EventSystems;
 using Photon.Voice.PUN;
 using UnityEngine.Networking;
-
+using BigRookGames.Weapons;
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -66,17 +66,20 @@ public int _mycontroll;
      [SerializeField] private GameObject _pauseMenupanel;
     [SerializeField] private GameObject _pauseMenuFirstbutt;
       [SerializeField] private GameObject[] _soundOnOF;
-      public GameObject _StrikeParticle;
+    
     private bool _gamePaused;
-    public int _strikeEffectCounter;
-    public int _strikeOFflineEffectCounter ;
+   
    [SerializeField] private PhotonVoiceView _myVoice;
     public GameObject _isspeakingButt;
     public GameObject _notSpeakingButt;
     public GameObject _myManager;
 
-    [SerializeField] public GameObject _Winpanel;
+    [SerializeField] public GameObject _Winpanel; 
     [SerializeField] public GameObject _losePanel;
+    [SerializeField] public GameObject _myRocket;
+    public bool _usedRocket;
+    public bool _readyLunch;
+ 
     private void Awake()
     {
     
@@ -118,15 +121,36 @@ public int _mycontroll;
               
               };
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
-           _gameactions.ButtonActions.pause.performed += x =>{
-               if(!_gameend){
+        _gameactions.ButtonActions.pause.performed += x => {
+            if (!_gameend) {
                 _pauseMenupanel.SetActive(true);
                 _gamePaused = true;
-                 EventSystem.current.SetSelectedGameObject(_pauseMenuFirstbutt);
-               }
-           };
+                EventSystem.current.SetSelectedGameObject(_pauseMenuFirstbutt);
+            }
+        };
+        _gameactions.ButtonActions.Rocket.performed += r =>
+        {
+            if (_canhit)
+            {
+                if (!_usedRocket)
+                {
+                    UpdateAnimator("shot", 2);
+                    _myRocket?.SetActive(true);
+                    transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+                    _ball?.SetActive(false);
+                    StartCoroutine(readyLunch());
+                    
+
+                }
+            }
+        };
            
             _gameactions.Enable();
+    }
+    IEnumerator readyLunch()
+    {
+        yield return new WaitForSeconds(2);
+        _readyLunch = true;
     }
 
     public override void OnDisable()
@@ -172,7 +196,7 @@ public int _mycontroll;
              
              _gameactions.ButtonActions.powerupaction.performed += x => {
                   if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-                 if(_canhit == true){
+                 if(_canhit == true && _ball.activeInHierarchy){
                      if(_hookcalclated == true){
                           if(_calcPower == true){
                                GetPowerValue();
@@ -183,7 +207,8 @@ public int _mycontroll;
            };
           _gameactions.ButtonActions.driftbar.performed += y => {
                if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-              if(_canhit == true){
+              if(_canhit == true && _ball.activeInHierarchy)
+                  {
                   if(_hookcalclated == false){
                       GetDriftValue();
                     _hookcalclated = true;
@@ -220,6 +245,12 @@ public int _mycontroll;
             }
             if (_canhit == true)
             {
+                if (_readyLunch)
+                {
+                    _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                    Waitstate();
+                    _readyLunch = false;
+                }
                 if(_hookcalclated ==false){
 
                     UpdateHookSlider();

@@ -13,9 +13,15 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
             playercontroller = _playercontroller;
         }
         playercontroller._MyPlayCanavas.SetActive(false);
+        if (playercontroller._canhit)
+        {
+            playercontroller._canhit = false;
+        }
+        if (playercontroller._ball.activeInHierarchy) { 
         _followBall = true;
 
         _playercontroller._ball.GetComponent<BallSound>().UpdateSound(_playercontroller._movingclip);
+        }
         StartCoroutine(WaitHit());
     }
     private void Update()
