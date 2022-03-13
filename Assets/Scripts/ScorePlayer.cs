@@ -17,11 +17,11 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	private bool _win;
 	void Start(){
 		_currentframe = 0;
-		if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+		if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
 				_playercontroll = GetComponent<PlayerController>();
 			_playercontroll.UpdateSound(_playercontroll._FramesClips[0]);
 	
-		}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+		}else if(PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom){
 
 			_offlinemodeControll = GetComponent<PlayerControllOFFlineMode>();
 				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[0]);
@@ -40,25 +40,25 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			
 		   
 		}
-		Debug.Log(_scoreStrn.Length);
+		Debug.Log(_scoreStrn);
 	   StartCoroutine(waitFrameSound());
 
 		
 		if(_scoreStrn.EndsWith("X ")){
 					   	   	   
-		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
+		   if((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[0]);
 				StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
 			
 			
-			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+			}else if(PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom ){
 				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[0]);
 					StartCoroutine(WaitTxt(_offlinemodeControll._strikeTxt));
 			}
 
 		}else if(_scoreStrn.EndsWith("/")){
 					   	   	   
-		   if((PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true))){
+		   if((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom ))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
 			StartCoroutine(WaitTxt(_playercontroll._spareTxt));
 			
@@ -68,6 +68,20 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 				
 			}
 
+		}else if (_scoreStrn.EndsWith("-"))
+        {
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+			{
+				_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
+				StartCoroutine(WaitTxt(_playercontroll._gutterTxt));
+
+			}
+			else if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false)
+			{
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[1]);
+				StartCoroutine(WaitTxt(_offlinemodeControll._gutterTxt));
+
+			}
 		}
 
 		

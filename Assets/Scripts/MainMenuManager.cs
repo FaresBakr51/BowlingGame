@@ -16,7 +16,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public Button _playbutt;
     public Button _compettbutt;
     public GameObject _roomsPanel;
-    [SerializeField] private GameObject _roomsPanelPlayers;
+    
     [SerializeField] private GameObject _mainPanel;
     [SerializeField] private GameObject _leaderBoardPanel;
     public GameObject[] _mainMenubuttns;
@@ -29,11 +29,11 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public int _counter;
 
     public GameObject[] _CharacterButtons;
-    [SerializeField] private GameObject[] _scoresBoard;
+   
     [SerializeField] private GameObject _WAITINPanel;
     public static int _totalRankedPoints;
 
-    [SerializeField] private TextMeshProUGUI _rankedpointTxt;
+    [SerializeField] private Text _rankedpointTxt;
     
     public void ActiveRoompanel(){
 
@@ -98,6 +98,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.LeaveRoom();
             }
+            GameManager.instance._rankedMode = false;
             StartCoroutine(Leavroom());
             _WAITINPanel.SetActive(false);
         }
@@ -113,7 +114,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         {
             yield return null;
         }
-        GameManager.instance._rankedMode = false;
+       
         PhotonNetwork.Reconnect();
 
     }
@@ -133,29 +134,21 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(1.5f);
         _totalRankedPoints = PlayerPrefs.GetInt("rankedpoints", 0);
-        _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + ": " + _totalRankedPoints.ToString();
+        _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + " / " + _totalRankedPoints.ToString();
     }
     public void CreatRankedMatch()
     {
         if (!PhotonNetwork.InLobby) return;
         if (PhotonNetwork.InRoom) return;
-        _WAITINPanel.SetActive(true);
+      
         GameManager.instance._rankedMode = true;
-
-        
-
-        PhotonNetwork.JoinRandomRoom(null,2);
+      
 
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("failed to join");
         CreatRoom();
-    }
-    public override void OnCreatedRoom()
-    {
-        Debug.Log("ranked match made");
-      
     }
     private void CreatRoom()
     {
@@ -164,11 +157,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         roomOptions.MaxPlayers = 2;
         roomOptions.IsVisible = true;
         roomOptions.IsOpen = true;
-       // roomOptions.CustomRoomProperties = rankprop;
         PhotonNetwork.CreateRoom(null, roomOptions, TypedLobby.Default);
-      
-       // PhotonNetwork.JoinRandomOrCreateRoom(prop, 2, MatchmakingMode.FillRoom, null, null, null, roomOptions);
-       
       
     }
   
@@ -213,23 +202,35 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
    private void CheckGameMode(){
 
      _PickPlayerPanel.SetActive(false);
-     
-     if(_offlinemode == true){
+        if (!GameManager.instance._rankedMode)
+        {
+            if (_offlinemode == true)
+            {
 
-      PhotonNetwork.Disconnect();
-     StartCoroutine(DisconnectJoinPractice());
-     }else{
-       
-     if(!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected){
+                PhotonNetwork.Disconnect();
+                StartCoroutine(DisconnectJoinPractice());
+            }
+            else
+            {
 
-       _mainPanel.SetActive(true);
-        SetSelectedGameObject(_mainMenubuttns[0]);
-     };
-   
-        SetSelectedGameObject(_mainMenubuttns[2]);
-        _roomsPanel.SetActive(true);
-        _mainPanel.SetActive(false);
-     }
+                if (!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected)
+                {
+
+                    _mainPanel.SetActive(true);
+                    SetSelectedGameObject(_mainMenubuttns[0]);
+                };
+
+                SetSelectedGameObject(_mainMenubuttns[2]);
+                _roomsPanel.SetActive(true);
+                _mainPanel.SetActive(false);
+            }
+        }
+        else
+        {
+            _WAITINPanel.SetActive(true);
+            SetSelectedGameObject(_mainMenubuttns[11]);
+            PhotonNetwork.JoinRandomRoom(null, 2);
+        }
    }
       public void JoinRoom()
     {

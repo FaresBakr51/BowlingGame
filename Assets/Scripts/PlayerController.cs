@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public int _roundscore;
     public ScorePlayer _scoreplayer;
     public AudioClip _movingclip;
-       private List<int> rolls = new List<int>();
+    private List<int> rolls = new List<int>();
     public bool _gameend;
-   public GameObject _leaderboardprefab;
+    public GameObject _leaderboardprefab;
     private GameObject _frametextobj;
     private GameObject _framescoretextobj;
     private PhotonView _photonview;
@@ -46,36 +46,38 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private GameObject _golballeaderboradcanavas;
     public GameObject _mypinsobj;
     public GameObject _mytotal;
-   public GameObject _GoHomebutt;
-   public GameActions _gameactions;
-   public bool _powerval;
-   private bool _moveright;
-   private Vector3 _movingL;
+    public GameObject _GoHomebutt;
+    public GameActions _gameactions;
+    public bool _powerval;
+    private bool _moveright;
+    private Vector3 _movingL;
    
-   public bool _calcScore;
-   public bool _calcPower;
-private bool _ControllPower;
-private GetNickname _getMyname;
-private OfflinePlayerMode _offlinemode;
-public int _mycontroll;
-  public AudioSource _gameAudio;
+    public bool _calcScore;
+    public bool _calcPower;
+    private bool _ControllPower;
+   
+    public int _mycontroll;
+    public AudioSource _gameAudio;
     public AudioClip[] _gameClips;
-     public AudioClip[] _FramesClips;
-     public GameObject _strikeTxt;
-     public GameObject _spareTxt;
+    public AudioClip[] _FramesClips;
+    public GameObject _strikeTxt;
+    public GameObject _spareTxt;
+    public GameObject _gutterTxt;
      [SerializeField] private GameObject _pauseMenupanel;
-    [SerializeField] private GameObject _pauseMenuFirstbutt;
-      [SerializeField] private GameObject[] _soundOnOF;
+     [SerializeField] private GameObject _pauseMenuFirstbutt;
+     [SerializeField] private GameObject[] _soundOnOF;
     
     private bool _gamePaused;
    
-   [SerializeField] private PhotonVoiceView _myVoice;
+    [SerializeField] private PhotonVoiceView _myVoice;
     public GameObject _isspeakingButt;
     public GameObject _notSpeakingButt;
     public GameObject _myManager;
 
-    [SerializeField] public GameObject _Winpanel; 
-    [SerializeField] public GameObject _losePanel;
+  
+    [SerializeField] private GameObject _rankedPanel;
+    [SerializeField] private Text _panelText;
+ 
     [SerializeField] public GameObject _myRocket;
     public bool _usedRocket;
     public bool _readyLunch;
@@ -84,8 +86,7 @@ public int _mycontroll;
     {
     
       //  _myVoice = GetComponent<PhotonVoiceView>();
-        _offlinemode = FindObjectOfType<OfflinePlayerMode>();
-        _getMyname = GetComponent<GetNickname>();
+        
         _powerSlider.gameObject.SetActive(false);
         _hookScroll.gameObject.SetActive(false);
          _gameactions = new GameActions();
@@ -505,7 +506,10 @@ public int _mycontroll;
 		 
 		
 	   }
-            GameManager.instance._finshedPlayers++;
+            if (GameManager.instance._rankedMode)
+            {
+                GameManager.instance._finshedPlayers++;
+            }
             _gameend = true;
             throw new UnityException("Don't know how to handle end game yet");
         }
@@ -563,6 +567,32 @@ public int _mycontroll;
 
       
     }
+    public void ShowRankedResult(string state) 
+    {
+        _rankedPanel.SetActive(true);
+        switch (state)
+        {
+            case "win":
+                
+                _rankedPanel.GetComponentInChildren<Text>().text = "You Win !";
+                _panelText.text = "+2 ";
+                PlayerPrefs.SetInt("rankedpoints", (PlayerPrefs.GetInt("rankedpoints") +2) );
+                break;
+            case "lose":
+                _rankedPanel.GetComponentInChildren<Text>().text = "You Lose";
+                _panelText.text = "-1 ";
+                PlayerPrefs.SetInt("rankedpoints", (PlayerPrefs.GetInt("rankedpoints") -1));
+                break;
+            case "draw":
+                _rankedPanel.GetComponentInChildren<Text>().text = "Draw !!";
+                _panelText.text = "+1 ";
+                PlayerPrefs.SetInt("rankedpoints", (PlayerPrefs.GetInt("rankedpoints") + 1));
+                break;
+        }
+        PlayerPrefs.Save();
+
+    }
+
 
 }
 

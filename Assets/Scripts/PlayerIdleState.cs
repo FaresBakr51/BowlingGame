@@ -51,8 +51,12 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         {
             playerController._canhit = false;
             playerController.myleader.SetActive(true);
-            playerController._GoHomebutt.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
+            if (!GameManager.instance._rankedMode)
+            {
+                playerController._GoHomebutt.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
+            }
+           
         }
         else
         {

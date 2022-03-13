@@ -5,40 +5,40 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class PlayerControllOFFlineMode : MonoBehaviour
 {
-     public GameObject _ball;
-    public Transform _playerhand;
-    public Vector3 _BallConstantPos;
-    public float _power;
-    public GameObject _camera;
-    private Animator _playerAnim;
-    public Slider _powerSlider;
-    public Scrollbar _hookScroll;
-    public List<Transform> _mypins = new List<Transform>();
-    private  List<Vector3> _resetpins = new List<Vector3>();
-    private List<Quaternion> _resetpinsrot = new List<Quaternion>();
-    public float _speed;
-    public float _slidertime;
-    public float _scrolltime;
-    private Vector3 inputdir;
-    public GameObject _MyPlayCanavas;
-    private float _myxpos;
-    public bool _hookcalclated;
-    public float _driftvalue;
-    [SerializeField] private float _driftmaxvalu;
-    public bool _canhit;
-    public int _roundscore;
-    public ScorePlayer _scoreplayer;
+   public GameObject _ball;
+   public Transform _playerhand;
+   public Vector3 _BallConstantPos;
+   public float _power;
+   public GameObject _camera;
+   private Animator _playerAnim;
+   public Slider _powerSlider;
+   public Scrollbar _hookScroll;
+   public List<Transform> _mypins = new List<Transform>();
+   private  List<Vector3> _resetpins = new List<Vector3>();
+   private List<Quaternion> _resetpinsrot = new List<Quaternion>();
+   public float _speed;
+   public float _slidertime;
+   public float _scrolltime;
+   private Vector3 inputdir;
+   public GameObject _MyPlayCanavas;
+   private float _myxpos;
+   public bool _hookcalclated;
+   public float _driftvalue;
+   [SerializeField] private float _driftmaxvalu;
+   public bool _canhit;
+   public int _roundscore;
+   public ScorePlayer _scoreplayer;
 
-    public AudioClip _movingclip;
+   public AudioClip _movingclip;
  
-    private List<int> rolls = new List<int>();
-    public bool _gameend;
+   private List<int> rolls = new List<int>();
+   public bool _gameend;
    
-    private GameObject _frametextobj;
-    private GameObject _framescoretextobj;
+   private GameObject _frametextobj;
+   private GameObject _framescoretextobj;
    
-    public GameObject myleader;
-    public GameObject _mypinsobj;
+   public GameObject myleader;
+   public GameObject _mypinsobj;
 
    public GameObject _GoHomebutt;
    public GameActions _gameactions;
@@ -48,22 +48,24 @@ public class PlayerControllOFFlineMode : MonoBehaviour
    
    public bool _calcScore;
    public bool _calcPower;
-private bool _ControllPower;
-private GetNickname _getMyname;
-private OfflinePlayerMode _offlinemode;
-public int _mycontroll;
- private bool _goforword;
-  private bool _followBall;
+   private bool _ControllPower;
+   private GetNickname _getMyname;
+   private OfflinePlayerMode _offlinemode;
+   public int _mycontroll;
+   private bool _goforword;
+   private bool _followBall;
    private Vector3 _mypos;
-    private Vector3 _Cambos;
-    public AudioSource _gameAudio;
-    public AudioClip[] _gameClips;
-    public AudioClip[] _FramesClips;
+   private Vector3 _Cambos;
+   public AudioSource _gameAudio;
+   public AudioClip[] _gameClips;
+   public AudioClip[] _FramesClips;
 
-      public GameObject _strikeTxt;
-     public GameObject _spareTxt;
+    public GameObject _strikeTxt;
+    public GameObject _spareTxt;
+    public GameObject _gutterTxt;
 
-     
+
+
     void Awake()
     {
            _mypos = this.transform.position;

@@ -53,23 +53,29 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     private void Finieshed()
     {
-        FindWinner(_Players[0].GetComponent<PlayerController>()._scoreplayer.totalscre, _Players[1].GetComponent<PlayerController>()._scoreplayer.totalscre);
+        if (_Players.Count >= 2)
+        {
+            FindWinner(_Players[0].GetComponent<PlayerController>()._scoreplayer.totalscre, _Players[1].GetComponent<PlayerController>()._scoreplayer.totalscre);
+        }
     }
     public void FindWinner(int p1,int p2)
     {
         if(p1 > p2)
         {
 
-            _Players[0].GetComponent<PlayerController>()._Winpanel.SetActive(true);
-            _Players[1].GetComponent<PlayerController>()._losePanel.SetActive(true);
+            _Players[0].GetComponent<PlayerController>().ShowRankedResult("win");
+            _Players[1].GetComponent<PlayerController>().ShowRankedResult("lose");
 
         }
         else if(p2 > p1)
         {
-            _Players[0].GetComponent<PlayerController>()._losePanel.SetActive(true);
-            _Players[1].GetComponent<PlayerController>()._Winpanel.SetActive(true);
-        }else if(p2 == p1)
+            _Players[0].GetComponent<PlayerController>().ShowRankedResult("lose");
+            _Players[1].GetComponent<PlayerController>().ShowRankedResult("win");
+        }
+        else if(p2 == p1)
         {
+            _Players[0].GetComponent<PlayerController>().ShowRankedResult("draw");
+            _Players[1].GetComponent<PlayerController>().ShowRankedResult("draw");
 
         }
         

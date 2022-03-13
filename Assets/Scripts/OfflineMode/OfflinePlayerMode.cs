@@ -23,10 +23,10 @@ public class OfflinePlayerMode : MonoBehaviour
 
     void Awake()
     {
-    
-    
-     
-    
+
+
+
+      
          if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
            _SelectorPane.SetActive(true);
                foreach(GameObject obj in _SelectionButtonsPlayer2){
