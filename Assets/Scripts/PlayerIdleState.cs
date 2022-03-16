@@ -50,12 +50,20 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
       if(playerController._gameend)
         {
             playerController._canhit = false;
-            playerController.myleader.SetActive(true);
             if (!GameManager.instance._rankedMode)
             {
                 playerController._GoHomebutt.SetActive(true);
+                playerController.myleader.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
             }
+            else
+            {
+                playerController.CheckWinner();
+            }
+           
+        
+            
+           
            
         }
         else
@@ -65,10 +73,13 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         if (playerController._readyLunch)
         {
+            playerController._RocketOn.SetActive(false);
+            playerController._RocketOff.SetActive(true);
             playerController._readyLunch = false;
         }
         if (playerController._myRocket.activeInHierarchy)
         {
+            playerController._usingRock = false;
             playerController._myRocket.SetActive(false);
             playerController._ball.SetActive(true);
             transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);

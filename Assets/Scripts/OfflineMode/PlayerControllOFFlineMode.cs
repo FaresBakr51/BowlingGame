@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using BigRookGames.Weapons;
+
 public class PlayerControllOFFlineMode : MonoBehaviour
 {
    public GameObject _ball;
@@ -63,8 +65,12 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     public GameObject _strikeTxt;
     public GameObject _spareTxt;
     public GameObject _gutterTxt;
-
-
+    [SerializeField] public GameObject _myRocket;
+    [SerializeField] public GameObject _RocketOff;
+    [SerializeField] public GameObject _RocketOn;
+    public bool _usedRocket;
+    public bool _readyLunch;
+    private bool _usingRock;
 
     void Awake()
     {
@@ -149,6 +155,28 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         }
           }
           };
+
+        _gameactions.ButtonActions.Rocket2.performed += r =>
+        {
+            if (_canhit)
+            {
+                if (!_usedRocket)
+                {
+                    _usingRock = true;
+                    UpdateAnimator("shot", 2);
+                    _myRocket?.SetActive(true);
+                    transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+                    _ball?.SetActive(false);
+                    this.transform.position = _mypos;
+                    StartCoroutine(readyLunch());
+                }
+            }
+        };
+    }
+    IEnumerator readyLunch()
+    {
+        yield return new WaitForSeconds(2);
+        _readyLunch = true;
     }
     private void SecondControll(){
             _gameactions.ButtonActions.moving2.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
@@ -171,6 +199,22 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         }
           }
           };
+        _gameactions.ButtonActions.Rocket.performed += r =>
+        {
+            if (_canhit)
+            {
+                if (!_usedRocket)
+                {
+                    _usingRock = true;
+                    UpdateAnimator("shot", 2);
+                    _myRocket?.SetActive(true);
+                    transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+                    _ball?.SetActive(false);
+                    this.transform.position = _mypos;
+                    StartCoroutine(readyLunch());
+                }
+            }
+        };
     }
 
 private void GetReady()
@@ -242,27 +286,40 @@ private void GetReady()
             }
            
         }
-            if (_canhit == true)
+        if (_canhit == true)
+        {
+            if (_readyLunch)
             {
-                if(_hookcalclated ==false){
+                _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                WaitState();
+                _readyLunch = false;
+                
+            }
+            if (_hookcalclated == false)
+            {
 
-                    UpdateHookSlider();
-                }else{
-                       _hookScroll.gameObject.SetActive(false);
-                }
-                if(_hookcalclated == true && _powerval == false){
-                 
-                    UpdateGui();
-                }
-              
-                inputdir = new Vector3(_movingL.x ,0,0);
-               
-                 transform.Translate(inputdir * Time.deltaTime );
-                  Vector3 clampedPosition = transform.position;
+                UpdateHookSlider();
+            }
+            else
+            {
+                _hookScroll.gameObject.SetActive(false);
+            }
+            if (_hookcalclated == true && _powerval == false)
+            {
+
+                UpdateGui();
+            }
+            if (!_usingRock)
+            {
+                inputdir = new Vector3(_movingL.x, 0, 0);
+
+                transform.Translate(inputdir * Time.deltaTime);
+                Vector3 clampedPosition = transform.position;
                 clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
                 transform.position = clampedPosition;
-          
+                
             }
+        }
 
         
        
@@ -377,14 +434,19 @@ private void GetReady()
     private void WaitState(){
 
         _MyPlayCanavas.SetActive(false);
-        _followBall = true;
+        if (_ball.activeInHierarchy)
+        {
+            _followBall = true;
 
-        _ball.GetComponent<BallSound>().UpdateSound(_movingclip);
-        StartCoroutine(WaitHit());
+            _ball.GetComponent<BallSound>().UpdateSound(_movingclip);
+        }
+            StartCoroutine(WaitHit());
+
+        
     }
        IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(6.5f);
         ChechPins();
         
 
@@ -421,7 +483,9 @@ private void GetReady()
 
         Debug.Log("Idle State");
        this.transform.position = _mypos;
+
          StartCoroutine(WaitToReset());
+
     }
         IEnumerator WaitToReset()
     {
@@ -435,6 +499,7 @@ private void GetReady()
     }
      private void ResetCamAndpins()
     {
+        
         _powerval = false;
         _hookcalclated = false;
         _powerSlider.gameObject.SetActive(false);
@@ -460,7 +525,21 @@ private void GetReady()
         {
             _canhit = true;
         }
-       
+        if (_readyLunch)
+        {
+            _RocketOn.SetActive(false);
+            _RocketOff.SetActive(true);
+            _readyLunch = false;
+        }
+        if (_myRocket.activeInHierarchy)
+        {
+            _usingRock = false;
+            _myRocket.SetActive(false);
+            _ball.SetActive(true);
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+            UpdateAnimator("shot", 0);
+             _camera.transform.position = _Cambos;
+        }
         _roundscore = 0;
         _ball.GetComponent<BallSound>()._hit = false;
         foreach (Transform pins in _mypins)

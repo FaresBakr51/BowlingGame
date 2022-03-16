@@ -45,7 +45,7 @@ namespace BigRookGames.Weapons
             if (collision.gameObject.CompareTag("pin"))
             {
                 //collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 100, ForceMode.Impulse);
-                collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back, ForceMode.Impulse);
+                collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 2, ForceMode.Impulse);
                 Explode();
                 projectileMesh.enabled = false;
                 targetHit = true;

@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
+using System.Linq;
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (_finshedPlayers >=2 && !_rankedGameEnd)
             {
-                Finieshed();
+               // Finieshed();
                 _rankedGameEnd = true;
             }
            
@@ -51,36 +52,38 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         
     }
-    private void Finieshed()
-    {
-        if (_Players.Count >= 2)
-        {
-            FindWinner(_Players[0].GetComponent<PlayerController>()._scoreplayer.totalscre, _Players[1].GetComponent<PlayerController>()._scoreplayer.totalscre);
-        }
-    }
-    public void FindWinner(int p1,int p2)
-    {
-        if(p1 > p2)
-        {
+    //private void Finieshed()
+    //{
+    //    if (_Players.Count >= 2)
+    //    {
+    //        FindWinner(_playerscores[0], _playerscores[1]);
+    //    }
+    //}
+    //public void FindWinner(int p1,int p2)
+    //{
+    //    if (photonView.IsMine)
+    //    {
+    //        if (p1 > p2)
+    //        {
 
-            _Players[0].GetComponent<PlayerController>().ShowRankedResult("win");
-            _Players[1].GetComponent<PlayerController>().ShowRankedResult("lose");
+    //            _Players[0].GetComponent<PlayerController>().ShowRankedResult("win");
+    //            _Players[1].GetComponent<PlayerController>().ShowRankedResult("lose");
 
-        }
-        else if(p2 > p1)
-        {
-            _Players[0].GetComponent<PlayerController>().ShowRankedResult("lose");
-            _Players[1].GetComponent<PlayerController>().ShowRankedResult("win");
-        }
-        else if(p2 == p1)
-        {
-            _Players[0].GetComponent<PlayerController>().ShowRankedResult("draw");
-            _Players[1].GetComponent<PlayerController>().ShowRankedResult("draw");
+    //        }
+    //        else if (p2 > p1)
+    //        {
+    //            _Players[0].GetComponent<PlayerController>().ShowRankedResult("lose");
+    //            _Players[1].GetComponent<PlayerController>().ShowRankedResult("win");
+    //        }
+    //        else if (p2 == p1)
+    //        {
+    //            _Players[0].GetComponent<PlayerController>().ShowRankedResult("draw");
+    //            _Players[1].GetComponent<PlayerController>().ShowRankedResult("draw");
 
-        }
-        
+    //        }
 
-    }
+    //    }
+    //}
     public override void OnEnable()
     {
         base.OnEnable();
@@ -123,10 +126,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
 
           
-           foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+           foreach (GameObject player in GameObject.FindGameObjectsWithTag("totalplayerscore"))
             {
                 _Players.Add(player);
+                string scoretxt = player.GetComponentsInChildren<Text>().ToString();
+                int sc = 0;
+               var realscore=  int.TryParse(scoretxt, out sc);
+                _playerscores.Add(sc);
             }
+           
         }
     }
    

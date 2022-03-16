@@ -27,7 +27,7 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
     }
   void Update()
     {
-        if(PhotonNetwork.OfflineMode == false){
+        if(!PhotonNetwork.OfflineMode){
       if (!photonView.IsMine)
     {
        transform.position = Vector3.Lerp(transform.position, _netpos,  0.5f);

@@ -1,21 +1,24 @@
 using UnityEngine;
 
-public class CreatorJoinRoomCanavs : MonoBehaviour
-{
+
+    public class CreatorJoinRoomCanavs : MonoBehaviour
+    {
 
 
-   [SerializeField]
-    private CreatRooms _CreatRoommenu;
-    [SerializeField]
+        [SerializeField]
+        private CreatRooms _CreatRoommenu;
+        [SerializeField]
 
-    private RoomListingMenu _roomlistinmenu;
+        private RoomListingMenu _roomlistinmenu;
 
-    private RoomsController _roomController;
-    public void FirstIniatlize(RoomsController _controll){
-      
-        _roomController  = _controll;
-       _CreatRoommenu.FirstIniatlize(_controll);
-       _roomlistinmenu.FirstIniatlize(_controll);
-    
+        private RoomsController _roomController;
+        public void FirstIniatlize(RoomsController _controll)
+        {
+
+            _roomController = _controll;
+            _CreatRoommenu.FirstIniatlize(_controll);
+            _roomlistinmenu.FirstIniatlize(_controll);
+
+        }
     }
-}
+

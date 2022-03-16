@@ -16,14 +16,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     private GameManager _gameManager;
     private Player _myplayer;
     public GameObject _mytotalscore;
-  [SerializeField]  private GameObject totalscorePref;
-     public GameObject _myavatar;
-     [SerializeField] private Text _myTextScore;
-     [SerializeField] private int myscore;
-     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>();
-     
-     [SerializeField] private GameObject _speakingobj;
-     [SerializeField] private GameObject _notspeakingobj;
+    [SerializeField]  private GameObject totalscorePref;
+    public GameObject _myavatar;
+    [SerializeField] private Text _myTextScore;
+    [SerializeField] private int myscore;
+    [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>(); 
+    [SerializeField] private GameObject _speakingobj;
+    [SerializeField] private GameObject _notspeakingobj;
 
     void Awake(){
    
@@ -38,7 +37,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
         }
         _pv = GetComponent<PhotonView>();
         _gameManager = FindObjectOfType<GameManager>();
-      //  _Currentclient =1;
         GetSpawnPoints();
        
     }
@@ -102,14 +100,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
                 _myavatar.GetComponent<PlayerController>()._calcScore =false;
             }
             }else{
-                PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.Destroy(this.gameObject);
             }
-            
-        }
+
+    }
     }
     [PunRPC]
     private void RpcTest(string usedString){
-     if(PhotonNetwork.OfflineMode == true){
+     if(PhotonNetwork.OfflineMode){
           _totalScoretexts[0].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
      }else{
       

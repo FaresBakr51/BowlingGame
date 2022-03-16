@@ -36,7 +36,7 @@ namespace BigRookGames.Weapons
         // --- Timing ---
         [SerializeField] private float timeLastFired;
 
-
+        [SerializeField] private GameObject _projectilePrefab;
         private void Start()
         {
             if(source != null) source.clip = GunShotClip;
@@ -74,7 +74,15 @@ namespace BigRookGames.Weapons
         /// </summary>
         public void FireWeapon()
         {
-            var player = gameObject.GetComponentInParent<PlayerController>()._usedRocket = true;
+            if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+            {
+                var player = gameObject.GetComponentInParent<PlayerController>()._usedRocket = true;
+            }
+            else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+            {
+                var player = gameObject.GetComponentInParent<PlayerControllOFFlineMode>()._usedRocket = true;
+            }
+
             // --- Keep track of when the weapon is being fired ---
             timeLastFired = Time.time;
 
@@ -84,7 +92,15 @@ namespace BigRookGames.Weapons
             // --- Shoot Projectile Object ---
             if (projectilePrefab != null)
             {
-                GameObject newProjectile =  PhotonNetwork.Instantiate("projectilePrefab", muzzlePosition.transform.position, muzzlePosition.transform.rotation);
+                if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+                {
+                    GameObject newProjectile = PhotonNetwork.Instantiate("projectilePrefab", muzzlePosition.transform.position, muzzlePosition.transform.rotation);
+                }
+                else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+                {
+                    GameObject newProjectile = Instantiate(_projectilePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation);
+                }
+               
             }
 
             // --- Disable any gameobjects, if needed ---

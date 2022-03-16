@@ -72,13 +72,13 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
         {
 			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
 			{
-				_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
+				_playercontroll.UpdateSound(_playercontroll._gameClips[2]);
 				StartCoroutine(WaitTxt(_playercontroll._gutterTxt));
 
 			}
-			else if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false)
+			else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
 			{
-				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[1]);
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[2]);
 				StartCoroutine(WaitTxt(_offlinemodeControll._gutterTxt));
 
 			}

@@ -78,19 +78,23 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public void SetSelectedGameObject(GameObject selected){
     selected.GetComponent<Button>().Select();
     }
-    public void Back(){
+    public void Back() {
 
-      
-        if(_roomsPanel.activeInHierarchy){
-          _roomsPanel.SetActive(false);
+
+        if (_roomsPanel.activeInHierarchy) {
+            _roomsPanel.SetActive(false);
         }
-        if(_PickPlayerPanel.activeInHierarchy){
+        if (_PickPlayerPanel.activeInHierarchy) {
 
-          _PickPlayerPanel.SetActive(false);
+            _PickPlayerPanel.SetActive(false);
         }
-        if(_leaderBoardPanel.activeInHierarchy){
+        if (_leaderBoardPanel.activeInHierarchy) {
 
-          _leaderBoardPanel.SetActive(false);
+            _leaderBoardPanel.SetActive(false);
+        }
+        if (GameManager.instance._rankedMode)
+        {
+            GameManager.instance._rankedMode = false;
         }
         if (_WAITINPanel.activeInHierarchy)
         {
@@ -130,6 +134,10 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       SetSelectedGameObject(_mainMenubuttns[0]);
       
     }
+    private void Update()
+    {
+        Debug.Log(PhotonNetwork.NetworkClientState);
+    }
     IEnumerator GetRankedPoints()
     {
         yield return new WaitForSeconds(1.5f);
@@ -138,12 +146,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     }
     public void CreatRankedMatch()
     {
-        if (!PhotonNetwork.InLobby) return;
-        if (PhotonNetwork.InRoom) return;
-      
         GameManager.instance._rankedMode = true;
-      
-
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -190,9 +193,10 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
        foreach(GameObject obj in _CharacterButtons){
          obj.GetComponent<Button>().interactable = true;
        }
-       SetSelectedGameObject(_mainMenubuttns[0]);
-        CheckGameMode();
         PlayerPrefs.Save();
+        SetSelectedGameObject(_mainMenubuttns[0]);
+        CheckGameMode();
+       
    }
    public void playersmode(){
 
@@ -227,9 +231,19 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            _WAITINPanel.SetActive(true);
-            SetSelectedGameObject(_mainMenubuttns[11]);
-            PhotonNetwork.JoinRandomRoom(null, 2);
+            if (!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
+            {
+                _mainPanel.SetActive(true);
+                SetSelectedGameObject(_mainMenubuttns[0]);
+            }
+            else
+            {
+                _WAITINPanel.SetActive(true);
+                SetSelectedGameObject(_mainMenubuttns[11]);
+                PhotonNetwork.JoinRandomRoom(null, 2);
+            }
+     
+           
         }
    }
       public void JoinRoom()
@@ -257,7 +271,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     }
      IEnumerator Join2PMODE()
     {
-       
+        yield return new WaitForSeconds(1f);
       PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
         {

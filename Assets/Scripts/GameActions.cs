@@ -81,6 +81,14 @@ public class @GameActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Rocket2"",
+                    ""type"": ""Button"",
+                    ""id"": ""7d2d8f79-1a83-46f7-bd26-02b8d1d028c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -369,6 +377,17 @@ public class @GameActions : IInputActionCollection, IDisposable
                     ""action"": ""Rocket"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b01b842-9b00-4de4-b3e1-9964530f871d"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rocket2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -385,6 +404,7 @@ public class @GameActions : IInputActionCollection, IDisposable
         m_ButtonActions_moving2 = m_ButtonActions.FindAction("moving2", throwIfNotFound: true);
         m_ButtonActions_pause = m_ButtonActions.FindAction("pause", throwIfNotFound: true);
         m_ButtonActions_Rocket = m_ButtonActions.FindAction("Rocket", throwIfNotFound: true);
+        m_ButtonActions_Rocket2 = m_ButtonActions.FindAction("Rocket2", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -442,6 +462,7 @@ public class @GameActions : IInputActionCollection, IDisposable
     private readonly InputAction m_ButtonActions_moving2;
     private readonly InputAction m_ButtonActions_pause;
     private readonly InputAction m_ButtonActions_Rocket;
+    private readonly InputAction m_ButtonActions_Rocket2;
     public struct ButtonActionsActions
     {
         private @GameActions m_Wrapper;
@@ -454,6 +475,7 @@ public class @GameActions : IInputActionCollection, IDisposable
         public InputAction @moving2 => m_Wrapper.m_ButtonActions_moving2;
         public InputAction @pause => m_Wrapper.m_ButtonActions_pause;
         public InputAction @Rocket => m_Wrapper.m_ButtonActions_Rocket;
+        public InputAction @Rocket2 => m_Wrapper.m_ButtonActions_Rocket2;
         public InputActionMap Get() { return m_Wrapper.m_ButtonActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -487,6 +509,9 @@ public class @GameActions : IInputActionCollection, IDisposable
                 @Rocket.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnRocket;
                 @Rocket.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnRocket;
                 @Rocket.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnRocket;
+                @Rocket2.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnRocket2;
+                @Rocket2.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnRocket2;
+                @Rocket2.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnRocket2;
             }
             m_Wrapper.m_ButtonActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -515,6 +540,9 @@ public class @GameActions : IInputActionCollection, IDisposable
                 @Rocket.started += instance.OnRocket;
                 @Rocket.performed += instance.OnRocket;
                 @Rocket.canceled += instance.OnRocket;
+                @Rocket2.started += instance.OnRocket2;
+                @Rocket2.performed += instance.OnRocket2;
+                @Rocket2.canceled += instance.OnRocket2;
             }
         }
     }
@@ -529,5 +557,6 @@ public class @GameActions : IInputActionCollection, IDisposable
         void OnMoving2(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnRocket(InputAction.CallbackContext context);
+        void OnRocket2(InputAction.CallbackContext context);
     }
 }

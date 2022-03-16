@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using Photon.Voice.PUN;
 using UnityEngine.Networking;
 using BigRookGames.Weapons;
+using System.Linq;
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -79,14 +80,19 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private Text _panelText;
  
     [SerializeField] public GameObject _myRocket;
+    [SerializeField] public GameObject _RocketOff;
+    [SerializeField] public GameObject _RocketOn;
     public bool _usedRocket;
     public bool _readyLunch;
- 
+    [SerializeField] private List<GameObject> _rankedPlayers;
+    private bool _gameRankedFinished;
+    public bool _usingRock;
+    private Vector3 _mypos;
     private void Awake()
     {
-    
-      //  _myVoice = GetComponent<PhotonVoiceView>();
-        
+
+        //  _myVoice = GetComponent<PhotonVoiceView>();
+        _mypos = this.transform.position;
         _powerSlider.gameObject.SetActive(false);
         _hookScroll.gameObject.SetActive(false);
          _gameactions = new GameActions();
@@ -99,7 +105,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
           _camera.GetComponent<Camera>().enabled = false;
           _camera.GetComponent<AudioListener>().enabled = false;
          GetComponent<PlayerController>().enabled = false;
-      
+            Destroy(_MyPlayCanavas);
+
         }
          _canhit = true;
         _myxpos = transform.position.x;
@@ -135,6 +142,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             {
                 if (!_usedRocket)
                 {
+                    _usingRock = true;
+                    transform.position = _mypos;
                     UpdateAnimator("shot", 2);
                     _myRocket?.SetActive(true);
                     transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
@@ -168,20 +177,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         
         if (_photonview.IsMine)
         {
-           if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+           if(!PhotonNetwork.OfflineMode  || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
             myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
            }
           _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
+            var rankedpanelobj = myleader.GetComponentsInChildren<Transform>();
+            var rankedpanel = rankedpanelobj.FirstOrDefault(x => x.name == "RankedPanel");
+            _rankedPanel = rankedpanel.gameObject;
+            _panelText = rankedpanel.GetComponentInChildren<Text>();
+            _rankedPanel.SetActive(false);
            myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
             myleader.transform.parent = _golballeaderboradcanavas.transform;
             myleader.gameObject.SetActive(false);
             myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
             myleader.transform.GetComponent<RectTransform>().localScale = new Vector3(2, 2f, 2);
-            
-    
-        }
 
-        
+           
+        }
+       // StartCoroutine(TestRanked());
+
+
         _hookScroll.gameObject.SetActive(true);
         _playercontext = new PlayerStateContext(this);
         _BowlingState = gameObject.AddComponent<PlayerBowlingState>();
@@ -219,8 +234,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
           };
         
            }
+           
 
     }
+    //IEnumerator TestRanked()
+    //{
+    //    yield return new WaitForSeconds(10);
+    //    _gameend = true;
+    //}
     
   
     void Update()
@@ -238,11 +259,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         if (_photonview.IsMine)
         {
 
-
-            if (_gameend)
+            if (GameManager.instance._rankedMode)
             {
-                GameManager.instance._finshedPlayers++;
-                _gameend = false;
+                if (_gameend && !_gameRankedFinished)
+                {
+                    CheckWinner();
+                  
+                }
             }
             if (_canhit == true)
             {
@@ -251,6 +274,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     _myRocket?.GetComponent<GunfireController>().FireWeapon();
                     Waitstate();
                     _readyLunch = false;
+                   
                 }
                 if(_hookcalclated ==false){
 
@@ -262,22 +286,25 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                  
                     UpdateGui();
                 }
-              
-                inputdir = new Vector3(_movingL.x ,0,0);
-               
-                 transform.Translate(inputdir * Time.deltaTime );
-                  Vector3 clampedPosition = transform.position;
-                clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
-                transform.position = clampedPosition;
+                if (!_usingRock)
+                {
+                    inputdir = new Vector3(_movingL.x, 0, 0);
+
+                    transform.Translate(inputdir * Time.deltaTime);
+                    Vector3 clampedPosition = transform.position;
+                    clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
+                    transform.position = clampedPosition;
+                }
           
             }
 
         }else{
 
-            if(_myManager == null){
+            if (_myManager == null)
+            {
                 PhotonNetwork.Destroy(_mypinsobj);
                 PhotonNetwork.Destroy(this.gameObject);
-              
+
             }
         }
        
@@ -286,8 +313,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
    
     private void BowlState()
     {
-       if(_gameend == false){
-           Debug.Log("bowl state");
+       if(!_gameend){
         _playercontext.Transition(_BowlingState);
        }
     }
@@ -339,6 +365,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     IEnumerator waitReady()
     {
         yield return new WaitForSeconds(1f);
+        _rankedPlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
+        if (_rankedPlayers.Contains(this.gameObject))
+        {
+            _rankedPlayers.Remove(this.gameObject);
+        }
         foreach (Transform framtxt in _frametextobj.GetComponentInChildren<Transform>())
         {
             _scoreplayer.scores_text.Add(framtxt.gameObject.GetComponent<Text>());
@@ -499,26 +530,70 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         else if (action == ActionMasterOld.Action.EndGame)
         {
-            if(PhotonNetwork.OfflineMode == false){
 
-		
-		 StartCoroutine(PostScore());  
-		 
-		
-	   }
-            if (GameManager.instance._rankedMode)
-            {
-                GameManager.instance._finshedPlayers++;
-            }
-            _gameend = true;
+            GameFinished();
             throw new UnityException("Don't know how to handle end game yet");
         }
+    }
+    private void GameFinished()
+    {
+        if (!PhotonNetwork.OfflineMode)
+        {
+            StartCoroutine(PostScore());
+        }
+        _gameend = true;
+    }
+  
+    public void CheckWinner()
+    {
+        if (_photonview.IsMine)
+        {
+            if (_rankedPlayers.Count > 0)
+            {
+                Debug.Log("Winner is ..... ");
+                if (_rankedPlayers[0] != null)
+                {
+                    var findscore = _rankedPlayers[0].GetComponent<PlayerController>();
+                    Debug.Log(_scoreplayer.totalscre);
+                    Debug.Log(findscore._scoreplayer.totalscre);
+                    if (findscore._gameend)
+                    {
+                        if (_scoreplayer.totalscre > findscore._scoreplayer.totalscre)
+                        {
+                            Debug.Log("you winn !!");
+                            ShowRankedResult("win");
+                        }
+                        else if (_scoreplayer.totalscre < findscore._scoreplayer.totalscre)
+                        {
+                            Debug.Log("lose");
+                            ShowRankedResult("lose");
+                        }
+                        else if (_scoreplayer.totalscre == findscore._scoreplayer.totalscre)
+                        {
+                            Debug.Log("Draw");
+                            ShowRankedResult("draw");
+                        }
+                        _gameRankedFinished = true;
+                    }
+                }
+            }
+        }
+
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-      
-       
+        if (GameManager.instance._rankedMode)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(_gameend);
+            }
+            else
+            {
+                this._gameend = (bool)stream.ReceiveNext();
+            }
+        }
     }
     public void Resume(){
 
@@ -530,9 +605,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _gamePaused = false;
     }
     public void QuitGame(){
+
         if(PhotonNetwork.InRoom){
+            
         PhotonNetwork.LeaveRoom();
         }
+        
         PhotonNetwork.LoadLevel(0);
     }
     public void SoundOn(){
@@ -554,7 +632,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         form.AddField("request",    "save");                // must use 'save' - lowercase
         form.AddField("game",       Globals.game_id);       // game id
         form.AddField("user",      PhotonNetwork.LocalPlayer.NickName);           // user name
-        form.AddField("score",     _scoreplayer.totalscre);          // game score
+        form.AddField("gamescore",     _scoreplayer.totalscre);          // game score
+        form.AddField("score", PlayerPrefs.GetInt("rankedpoints"));
      //   form.AddField("mac",        Globals.GetMacAddr());  // device MAC address
 
         using (UnityWebRequest request = UnityWebRequest.Post(Globals.serverURL, form)) {
@@ -569,24 +648,33 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     public void ShowRankedResult(string state) 
     {
+
+         myleader.SetActive(true);
+        _GoHomebutt.SetActive(true);
         _rankedPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+        int latpoints = PlayerPrefs.GetInt("rankedpoints");
         switch (state)
         {
             case "win":
                 
                 _rankedPanel.GetComponentInChildren<Text>().text = "You Win !";
                 _panelText.text = "+2 ";
-                PlayerPrefs.SetInt("rankedpoints", (PlayerPrefs.GetInt("rankedpoints") +2) );
+             
+                PlayerPrefs.SetInt("rankedpoints", latpoints + 2);
                 break;
             case "lose":
                 _rankedPanel.GetComponentInChildren<Text>().text = "You Lose";
                 _panelText.text = "-1 ";
-                PlayerPrefs.SetInt("rankedpoints", (PlayerPrefs.GetInt("rankedpoints") -1));
+                if (latpoints > 0)
+                {
+                    PlayerPrefs.SetInt("rankedpoints", latpoints - 1);
+                }
                 break;
             case "draw":
                 _rankedPanel.GetComponentInChildren<Text>().text = "Draw !!";
                 _panelText.text = "+1 ";
-                PlayerPrefs.SetInt("rankedpoints", (PlayerPrefs.GetInt("rankedpoints") + 1));
+                PlayerPrefs.SetInt("rankedpoints", latpoints + 1);
                 break;
         }
         PlayerPrefs.Save();
