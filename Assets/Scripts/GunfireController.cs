@@ -74,14 +74,7 @@ namespace BigRookGames.Weapons
         /// </summary>
         public void FireWeapon()
         {
-            if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
-            {
-                var player = gameObject.GetComponentInParent<PlayerController>()._usedRocket = true;
-            }
-            else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
-            {
-                var player = gameObject.GetComponentInParent<PlayerControllOFFlineMode>()._usedRocket = true;
-            }
+          
 
             // --- Keep track of when the weapon is being fired ---
             timeLastFired = Time.time;

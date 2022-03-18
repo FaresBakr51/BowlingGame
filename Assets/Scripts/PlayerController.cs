@@ -77,7 +77,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
   
     [SerializeField] private GameObject _rankedPanel;
-    [SerializeField] private Text _panelText;
+    [SerializeField] private Text _rankedpointtxt;
+    [SerializeField] private Text _rankedstatetxt;
  
     [SerializeField] public GameObject _myRocket;
     [SerializeField] public GameObject _RocketOff;
@@ -142,6 +143,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             {
                 if (!_usedRocket)
                 {
+                    Debug.Log("pRESSED TRIANGLE");
                     _usingRock = true;
                     transform.position = _mypos;
                     UpdateAnimator("shot", 2);
@@ -149,7 +151,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
                     _ball?.SetActive(false);
                     StartCoroutine(readyLunch());
-                    
+                    _usedRocket = true;
 
                 }
             }
@@ -184,9 +186,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             var rankedpanelobj = myleader.GetComponentsInChildren<Transform>();
             var rankedpanel = rankedpanelobj.FirstOrDefault(x => x.name == "RankedPanel");
             _rankedPanel = rankedpanel.gameObject;
-            _panelText = rankedpanel.GetComponentInChildren<Text>();
+            var rankedpanobj = rankedpanel.GetComponentsInChildren<Transform>();
+            _rankedpointtxt = rankedpanelobj.FirstOrDefault(x => x.name == "rankedpoints").GetComponent<Text>();
+            _rankedstatetxt = rankedpanelobj.FirstOrDefault(x => x.name == "rankedstate").GetComponent<Text>();
             _rankedPanel.SetActive(false);
-           myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
+            myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
             myleader.transform.parent = _golballeaderboradcanavas.transform;
             myleader.gameObject.SetActive(false);
             myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
@@ -194,7 +198,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
            
         }
-       // StartCoroutine(TestRanked());
+     
 
 
         _hookScroll.gameObject.SetActive(true);
@@ -207,7 +211,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void CheckControlles(){
 
-           if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true)){
+           if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
 
              
              _gameactions.ButtonActions.powerupaction.performed += x => {
@@ -237,13 +241,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            
 
     }
-    //IEnumerator TestRanked()
-    //{
-    //    yield return new WaitForSeconds(10);
-    //    _gameend = true;
-    //}
-    
   
+
+
     void Update()
     {
 
@@ -548,8 +548,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         if (_photonview.IsMine)
         {
-            if (_rankedPlayers.Count > 0)
+            if (_rankedPlayers.Count > 0 && !_rankedPanel.activeInHierarchy)
             {
+                
                 Debug.Log("Winner is ..... ");
                 if (_rankedPlayers[0] != null)
                 {
@@ -573,6 +574,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                             Debug.Log("Draw");
                             ShowRankedResult("draw");
                         }
+                       
                         _gameRankedFinished = true;
                     }
                 }
@@ -588,10 +590,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             if (stream.IsWriting)
             {
                 stream.SendNext(_gameend);
+                stream.SendNext(_scoreplayer.totalscre);
             }
             else
             {
                 this._gameend = (bool)stream.ReceiveNext();
+                this._scoreplayer.totalscre = (int)stream.ReceiveNext();
             }
         }
     }
@@ -632,7 +636,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         form.AddField("request",    "save");                // must use 'save' - lowercase
         form.AddField("game",       Globals.game_id);       // game id
         form.AddField("user",      PhotonNetwork.LocalPlayer.NickName);           // user name
-        form.AddField("gamescore",     _scoreplayer.totalscre);          // game score
+      //  form.AddField("gamescore",     _scoreplayer.totalscre);          // game score
         form.AddField("score", PlayerPrefs.GetInt("rankedpoints"));
      //   form.AddField("mac",        Globals.GetMacAddr());  // device MAC address
 
@@ -648,7 +652,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     public void ShowRankedResult(string state) 
     {
-
+        if (_MyPlayCanavas.activeInHierarchy)
+        {
+            _MyPlayCanavas.SetActive(false);
+        }
          myleader.SetActive(true);
         _GoHomebutt.SetActive(true);
         _rankedPanel.SetActive(true);
@@ -657,28 +664,28 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         switch (state)
         {
             case "win":
-                
-                _rankedPanel.GetComponentInChildren<Text>().text = "You Win !";
-                _panelText.text = "+2 ";
+
+                _rankedstatetxt.text = "You Win !";
+                _rankedpointtxt.text = "+2 ";
              
                 PlayerPrefs.SetInt("rankedpoints", latpoints + 2);
                 break;
             case "lose":
-                _rankedPanel.GetComponentInChildren<Text>().text = "You Lose";
-                _panelText.text = "-1 ";
+                _rankedstatetxt.text = "You Lose";
+                _rankedpointtxt.text = "-1 ";
                 if (latpoints > 0)
                 {
                     PlayerPrefs.SetInt("rankedpoints", latpoints - 1);
                 }
                 break;
             case "draw":
-                _rankedPanel.GetComponentInChildren<Text>().text = "Draw !!";
-                _panelText.text = "+1 ";
+                _rankedstatetxt.text = "Draw !!";
+                _rankedpointtxt.text = "+1 ";
                 PlayerPrefs.SetInt("rankedpoints", latpoints + 1);
                 break;
         }
         PlayerPrefs.Save();
-
+        StartCoroutine(PostScore());
     }
 
 

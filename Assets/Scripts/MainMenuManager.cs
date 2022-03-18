@@ -4,7 +4,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 
 public class MainMenuManager : MonoBehaviourPunCallbacks
@@ -45,7 +44,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         _offlinemode = false;
       _PickPlayerPanel.SetActive(true);
        _mainPanel.SetActive(false);
-       // SetSelectedGameObject(_mainMenubuttns[6]);
        }
       
     }
@@ -134,10 +132,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       SetSelectedGameObject(_mainMenubuttns[0]);
       
     }
-    private void Update()
-    {
-        Debug.Log(PhotonNetwork.NetworkClientState);
-    }
+   
     IEnumerator GetRankedPoints()
     {
         yield return new WaitForSeconds(1.5f);
@@ -150,7 +145,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("failed to join");
+       
         CreatRoom();
     }
     private void CreatRoom()

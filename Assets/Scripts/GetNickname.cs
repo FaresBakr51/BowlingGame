@@ -35,8 +35,7 @@ public class GetNickname : MonoBehaviour {
     void Awake() {
      
         StartCoroutine(GetUserNickname());
-       // nickname = "fares";
-          //nickname = "fares" + Random.Range(0,5).ToString();
+      
         
     }
     void Start(){
@@ -78,7 +77,7 @@ public class GetNickname : MonoBehaviour {
          
             PhotonNetwork.LocalPlayer.NickName = nickname;
            //  _pv.Owner.NickName = nickname;
-            Debug.Log($"{device_id} : {nickname}");
+          
         }
     }
 

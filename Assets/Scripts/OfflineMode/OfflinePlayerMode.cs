@@ -75,7 +75,7 @@ public class OfflinePlayerMode : MonoBehaviour
        
     }
     public void Back(){
-      SceneManager.LoadScene(1);
+      SceneManager.LoadScene(0);
     }
     public void SwitchControll(){
         _CurrentPlayers[0].GetComponent<PlayerControllOFFlineMode>()._mycontroll = 0;

@@ -14,7 +14,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	private int _currentframe;
 	private string _scoreStrn;
 	private int _counterStringFrames;
-	private bool _win;
+	private int _StrikeInrow;
 	void Start(){
 		_currentframe = 0;
 		if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
@@ -40,35 +40,25 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			
 		   
 		}
-		Debug.Log(_scoreStrn);
-	   StartCoroutine(waitFrameSound());
-
-		
+	
+	  
 		if(_scoreStrn.EndsWith("X ")){
-					   	   	   
-		   if((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom))){
-			_playercontroll.UpdateSound(_playercontroll._gameClips[0]);
-				StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
-			
-			
-			}else if(PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom ){
-				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[0]);
-					StartCoroutine(WaitTxt(_offlinemodeControll._strikeTxt));
-			}
-
-		}else if(_scoreStrn.EndsWith("/")){
+			UpdateStrikeSound();
+		}
+		else if(_scoreStrn.EndsWith("/")){
 					   	   	   
 		   if((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom ))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
 			StartCoroutine(WaitTxt(_playercontroll._spareTxt));
 			
-			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+			}else if(PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom){
 				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[1]);
 					StartCoroutine(WaitTxt(_offlinemodeControll._spareTxt));
 				
 			}
-
-		}else if (_scoreStrn.EndsWith("-"))
+			_StrikeInrow = 0;
+		}
+		else if (_scoreStrn.EndsWith("-"))
         {
 			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
 			{
@@ -82,17 +72,19 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 				StartCoroutine(WaitTxt(_offlinemodeControll._gutterTxt));
 
 			}
+			_StrikeInrow = 0;
+        }
+        else
+        {
+			_StrikeInrow = 0;
 		}
-
-		
-		   
+		StartCoroutine(waitFrameSound());
 	}
 	IEnumerator waitFrameSound(){
 
 		yield return new WaitForSeconds(1.5f);
 			UpdateFrameSound();
 	}
-
 	 IEnumerator WaitTxt(GameObject obj){
 
          obj.SetActive(true);
@@ -106,10 +98,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 		for (int i = 0; i < frames.Count; i++)
 		{
 			round_scores_text[i].text = frames[i].ToString();
-		
 		   totalscre  = frames[i];
-		  
-		  
 		}
 	
 	
@@ -118,20 +107,92 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	
 	
 	private void UpdateFrameSound(){
-
-		if(_scoreStrn.Length >= _counterStringFrames+2){
+		
+		if (_scoreStrn.Length >= _counterStringFrames+2){
 
 			_counterStringFrames = _scoreStrn.Length;
 			_currentframe++;
-			if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == true)){
+			if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
 			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
-			}else if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+			}else if(PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom){
 				_offlinemodeControll.UpdateSound(_offlinemodeControll._FramesClips[_currentframe]);
 			}
 		
 		}
 	
 	}
+	private void UpdateStrikeSound()
+    {
+		_StrikeInrow ++;
+		if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+		{
+		
+			StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
+		}
+		else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+		{
+			StartCoroutine(WaitTxt(_offlinemodeControll._strikeTxt));
+		}
+		if (_StrikeInrow == 2)
+		{
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+			{
+				_playercontroll.UpdateSound(_playercontroll._gameClips[3]);
+			}
+			else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+			{
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[3]);
+			}
+		}
+		else if (_StrikeInrow == 3)
+		{
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+			{
+				_playercontroll.UpdateSound(_playercontroll._gameClips[4]);
+			}
+			else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+			{
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[4]);
+			}
+		}
+		else if (_StrikeInrow == 4)
+		{
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+			{
+				_playercontroll.UpdateSound(_playercontroll._gameClips[5]);
+			}
+			else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+			{
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[5]);
+			}
+		}
+		else if (_StrikeInrow == 5)
+		{
+
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+			{
+				_playercontroll.UpdateSound(_playercontroll._gameClips[6]);
+			}
+			else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+			{
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[6]);
+			}
+        }
+        else
+        {
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
+			{
+				_playercontroll.UpdateSound(_playercontroll._gameClips[0]);
+			}
+			else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+			{
+				_offlinemodeControll.UpdateSound(_offlinemodeControll._gameClips[0]);
+			}
+		}
+		
+			
+        
+    }
 	public  string FormatRolls(List<int> rolls)
 	{
 		string output = "";

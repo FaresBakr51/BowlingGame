@@ -115,13 +115,16 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                _hookScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2( _hookScroll.GetComponent<RectTransform>().anchoredPosition.x-720, _hookScroll.GetComponent<RectTransform>().anchoredPosition.y);
                 _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x-350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
                  _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x-350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
-                FirstControll();
+            _gutterTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_gutterTxt.GetComponent<RectTransform>().anchoredPosition.x - 350, _gutterTxt.GetComponent<RectTransform>().anchoredPosition.y);
+            _RocketOff.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOff.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOff.GetComponent<RectTransform>().anchoredPosition.y);
+            _RocketOn.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOn.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOn.GetComponent<RectTransform>().anchoredPosition.y);
+            FirstControll();
             }else if(_mycontroll ==0){
-                _powerSlider.GetComponent<RectTransform>().anchoredPosition = new Vector2( _powerSlider.GetComponent<RectTransform>().anchoredPosition.x+720, _powerSlider.GetComponent<RectTransform>().anchoredPosition.y);
-               
-                     _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
-                 _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
-                SecondControll();
+             _powerSlider.GetComponent<RectTransform>().anchoredPosition = new Vector2( _powerSlider.GetComponent<RectTransform>().anchoredPosition.x+720, _powerSlider.GetComponent<RectTransform>().anchoredPosition.y);
+              _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
+             _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
+            _gutterTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_gutterTxt.GetComponent<RectTransform>().anchoredPosition.x + 350, _gutterTxt.GetComponent<RectTransform>().anchoredPosition.y);
+            SecondControll();
             }
             
         
@@ -162,6 +165,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
             {
                 if (!_usedRocket)
                 {
+                    Debug.Log("pRESSED TRIANGLE");
                     _usingRock = true;
                     UpdateAnimator("shot", 2);
                     _myRocket?.SetActive(true);
@@ -169,6 +173,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                     _ball?.SetActive(false);
                     this.transform.position = _mypos;
                     StartCoroutine(readyLunch());
+                    _usedRocket = true;
                 }
             }
         };
@@ -212,6 +217,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                     _ball?.SetActive(false);
                     this.transform.position = _mypos;
                     StartCoroutine(readyLunch());
+                    _usedRocket = true;
                 }
             }
         };
@@ -267,13 +273,13 @@ private void GetReady()
     void Update()
     {
     
-        if(_goforword == true)
+        if(_goforword)
         {
             transform.position = new Vector3(transform.position.x, 0, transform.position.z);
             this.transform.Translate(Vector3.forward * Time.deltaTime *_speed);
             
         }
-         if (_followBall == true)
+         if (_followBall)
         {
            
             if (_camera.transform.position.z >= _mypinsobj.transform.position.z +10)
@@ -286,14 +292,16 @@ private void GetReady()
             }
            
         }
-        if (_canhit == true)
+        if (_canhit)
         {
             if (_readyLunch)
             {
+              
+                Debug.Log("Wait State");
                 _myRocket?.GetComponent<GunfireController>().FireWeapon();
                 WaitState();
                 _readyLunch = false;
-                
+
             }
             if (_hookcalclated == false)
             {
@@ -312,7 +320,6 @@ private void GetReady()
             if (!_usingRock)
             {
                 inputdir = new Vector3(_movingL.x, 0, 0);
-
                 transform.Translate(inputdir * Time.deltaTime);
                 Vector3 clampedPosition = transform.position;
                 clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
@@ -432,7 +439,7 @@ private void GetReady()
       
     }
     private void WaitState(){
-
+        
         _MyPlayCanavas.SetActive(false);
         if (_ball.activeInHierarchy)
         {
@@ -525,14 +532,11 @@ private void GetReady()
         {
             _canhit = true;
         }
-        if (_readyLunch)
+       
+        if (_myRocket.activeInHierarchy)
         {
             _RocketOn.SetActive(false);
             _RocketOff.SetActive(true);
-            _readyLunch = false;
-        }
-        if (_myRocket.activeInHierarchy)
-        {
             _usingRock = false;
             _myRocket.SetActive(false);
             _ball.SetActive(true);
