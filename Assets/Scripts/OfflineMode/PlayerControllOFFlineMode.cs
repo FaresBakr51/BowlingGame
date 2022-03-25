@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using BigRookGames.Weapons;
-
+using System.Linq;
 public class PlayerControllOFFlineMode : MonoBehaviour
 {
    public GameObject _ball;
@@ -71,6 +71,11 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     public bool _usedRocket;
     public bool _readyLunch;
     private bool _usingRock;
+    [SerializeField] private List<GameObject> _offlinePlayers;
+    private bool _gameFinished;
+
+    [SerializeField] private GameObject _pauseMenupanel;
+
 
     void Awake()
     {
@@ -94,10 +99,12 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     {
             CheckControlles();  
          _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
+        _GoHomebutt.SetActive(false);
         _hookScroll.gameObject.SetActive(true);
         _playerAnim = GetComponent<Animator>();
          GetReady();
          _Cambos = _camera.transform.position;
+
     }
 
     public  void OnDisable()
@@ -107,23 +114,25 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     }
     private void CheckControlles(){
 
-         
-     
-         
-            if(_mycontroll == 1){
+
+
+
+        _pauseMenupanel = _offlinemode._pauseMenupanel;
+        if (_mycontroll == 1){
            
                _hookScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2( _hookScroll.GetComponent<RectTransform>().anchoredPosition.x-720, _hookScroll.GetComponent<RectTransform>().anchoredPosition.y);
                 _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x-350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
                  _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x-350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
             _gutterTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_gutterTxt.GetComponent<RectTransform>().anchoredPosition.x - 350, _gutterTxt.GetComponent<RectTransform>().anchoredPosition.y);
-            _RocketOff.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOff.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOff.GetComponent<RectTransform>().anchoredPosition.y);
-            _RocketOn.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOn.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOn.GetComponent<RectTransform>().anchoredPosition.y);
+           
             FirstControll();
             }else if(_mycontroll ==0){
              _powerSlider.GetComponent<RectTransform>().anchoredPosition = new Vector2( _powerSlider.GetComponent<RectTransform>().anchoredPosition.x+720, _powerSlider.GetComponent<RectTransform>().anchoredPosition.y);
               _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
              _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
             _gutterTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_gutterTxt.GetComponent<RectTransform>().anchoredPosition.x + 350, _gutterTxt.GetComponent<RectTransform>().anchoredPosition.y);
+            _RocketOff.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOff.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOff.GetComponent<RectTransform>().anchoredPosition.y);
+            _RocketOn.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOn.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOn.GetComponent<RectTransform>().anchoredPosition.y);
             SecondControll();
             }
             
@@ -142,21 +151,32 @@ public class PlayerControllOFFlineMode : MonoBehaviour
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
 
             _gameactions.ButtonActions.powerupaction.performed += x => {
-                 if(_canhit == true){
-            if(_hookcalclated == true){
-            if(_calcPower == true){
-               GetPowerValue();
-            }
-            }
-                 }
+                if (!_offlinemode._gamePaused && !_pauseMenupanel.activeInHierarchy)
+                {
+                    if (_canhit == true && _ball.activeInHierarchy)
+                    {
+                        if (_hookcalclated == true)
+                        {
+                            if (_calcPower == true)
+                            {
+                                GetPowerValue();
+                            }
+                        }
+                    }
+                }
            };
           _gameactions.ButtonActions.driftbar.performed += y => {
-              if(_canhit == true){
-         if(_hookcalclated == false){          
-             GetDriftValue();
-             _hookcalclated = true;
-        }
-          }
+              if (!_offlinemode._gamePaused && !_pauseMenupanel.activeInHierarchy)
+              {
+                  if (_canhit == true && _ball.activeInHierarchy)
+                  {
+                      if (_hookcalclated == false)
+                      {
+                          GetDriftValue();
+                          _hookcalclated = true;
+                      }
+                  }
+              }
           };
 
         _gameactions.ButtonActions.Rocket2.performed += r =>
@@ -165,16 +185,27 @@ public class PlayerControllOFFlineMode : MonoBehaviour
             {
                 if (!_usedRocket)
                 {
-                    Debug.Log("pRESSED TRIANGLE");
-                    _usingRock = true;
-                    UpdateAnimator("shot", 2);
-                    _myRocket?.SetActive(true);
-                    transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
-                    _ball?.SetActive(false);
-                    this.transform.position = _mypos;
-                    StartCoroutine(readyLunch());
-                    _usedRocket = true;
+                    if (!_offlinemode._gamePaused)
+                    {
+                        _usingRock = true;
+                        UpdateAnimator("shot", 2);
+                        _myRocket?.SetActive(true);
+                        transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+                        _ball?.SetActive(false);
+                        this.transform.position = _mypos;
+                        StartCoroutine(readyLunch());
+                        _usedRocket = true;
+                    }
                 }
+            }
+        };
+
+        _gameactions.ButtonActions.pause.performed += x => {
+            if (!_gameend&& !_usingRock)
+            {
+                _pauseMenupanel.SetActive(true);
+                _offlinemode._gamePaused = true;
+                EventSystem.current.SetSelectedGameObject(_offlinemode.pausefirstbutt);
             }
         };
     }
@@ -182,27 +213,46 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         _readyLunch = true;
+        yield return new WaitForSeconds(1.5f);
+        foreach (Transform pin in _mypins)
+        {
+            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90,180));
+          
+        }
+
     }
     private void SecondControll(){
             _gameactions.ButtonActions.moving2.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
            _gameactions.ButtonActions.moving2.canceled += cntxt => _movingL =Vector2.zero;
 
             _gameactions.ButtonActions.powerupaction2.performed += x => {
-                 if(_canhit == true){
-            if(_hookcalclated == true){
-            if(_calcPower == true){
-               GetPowerValue();
-            }
-            }
-                 }
+                if (!_offlinemode._gamePaused && !_pauseMenupanel.activeInHierarchy)
+                {
+                    if (_canhit == true && _ball.activeInHierarchy)
+                    {
+                        if (_hookcalclated == true)
+                        {
+                            if (_calcPower == true)
+                            {
+                                GetPowerValue();
+                            }
+                        }
+                    }
+                }
            };
           _gameactions.ButtonActions.driftbar2.performed += y => {
-              if(_canhit == true){
-         if(_hookcalclated == false){          
-             GetDriftValue();
-             _hookcalclated = true;
-        }
-          }
+              if (!_offlinemode._gamePaused && !_pauseMenupanel.activeInHierarchy)
+              {
+                  if (_canhit == true && _ball.activeInHierarchy)
+                  {
+                      if (_hookcalclated == false)
+                      {
+                          GetDriftValue();
+                          _hookcalclated = true;
+                      }
+                  }
+              }
+              
           };
         _gameactions.ButtonActions.Rocket.performed += r =>
         {
@@ -210,14 +260,17 @@ public class PlayerControllOFFlineMode : MonoBehaviour
             {
                 if (!_usedRocket)
                 {
-                    _usingRock = true;
-                    UpdateAnimator("shot", 2);
-                    _myRocket?.SetActive(true);
-                    transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
-                    _ball?.SetActive(false);
-                    this.transform.position = _mypos;
-                    StartCoroutine(readyLunch());
-                    _usedRocket = true;
+                    if (!_offlinemode._gamePaused)
+                    {
+                        _usingRock = true;
+                        UpdateAnimator("shot", 2);
+                        _myRocket?.SetActive(true);
+                        transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+                        _ball?.SetActive(false);
+                        this.transform.position = _mypos;
+                        StartCoroutine(readyLunch());
+                        _usedRocket = true;
+                    }
                 }
             }
         };
@@ -258,6 +311,11 @@ private void GetReady()
       IEnumerator waitReady()
     {
         yield return new WaitForSeconds(1f);
+        _offlinePlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
+        if (_offlinePlayers.Contains(this.gameObject))
+        {
+            _offlinePlayers.Remove(this.gameObject);
+        }
         foreach (Transform framtxt in _frametextobj.GetComponentInChildren<Transform>())
         {
             _scoreplayer.scores_text.Add(framtxt.gameObject.GetComponent<Text>());
@@ -292,12 +350,25 @@ private void GetReady()
             }
            
         }
+        if (_gameend)
+        {
+            if (_offlinePlayers.Count > 0)
+            {
+                var findscore = _offlinePlayers[0].GetComponent<PlayerControllOFFlineMode>();
+                if (findscore._gameend && !_gameFinished)
+                {
+                    _GoHomebutt.SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+                    _gameFinished = true;
+                }
+            }
+        }
         if (_canhit)
         {
             if (_readyLunch)
             {
               
-                Debug.Log("Wait State");
+               
                 _myRocket?.GetComponent<GunfireController>().FireWeapon();
                 WaitState();
                 _readyLunch = false;
@@ -319,12 +390,13 @@ private void GetReady()
             }
             if (!_usingRock)
             {
-                inputdir = new Vector3(_movingL.x, 0, 0);
+                if (!_offlinemode._gamePaused) {
+                    inputdir = new Vector3(_movingL.x, 0, 0);
                 transform.Translate(inputdir * Time.deltaTime);
                 Vector3 clampedPosition = transform.position;
                 clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
                 transform.position = clampedPosition;
-                
+                  }
             }
         }
 
@@ -351,9 +423,9 @@ private void GetReady()
            
         }
          
-        if(_ControllPower == false){
+        if(!_ControllPower){
 
-             Debug.Log("moving maxmum");
+             
               _slidertime += Time.deltaTime;
               _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.5f);
         }else{
@@ -453,7 +525,7 @@ private void GetReady()
     }
        IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(6.5f);
+        yield return new WaitForSeconds(7f);
         ChechPins();
         
 
@@ -488,7 +560,7 @@ private void GetReady()
     }
     private void IdleState(){
 
-        Debug.Log("Idle State");
+       
        this.transform.position = _mypos;
 
          StartCoroutine(WaitToReset());
@@ -521,12 +593,15 @@ private void GetReady()
         _hookScroll.value = 0.5f;
         _camera.transform.position = _Cambos;
         _ball.transform.localPosition = _BallConstantPos;
-      if(_gameend == true)
+      if(_gameend)
         {
             _canhit = false;
             myleader.SetActive(true);
-            _GoHomebutt.SetActive(true);
-               EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+          
+            if (_scoreplayer.totalscre >= 300)
+            {
+                UpdateSound(_gameClips[7]);
+            }
         }
         else
         {
@@ -535,6 +610,7 @@ private void GetReady()
        
         if (_myRocket.activeInHierarchy)
         {
+            
             _RocketOn.SetActive(false);
             _RocketOff.SetActive(true);
             _usingRock = false;
@@ -551,9 +627,9 @@ private void GetReady()
             pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }
     }
-     
- 
-      private void AddToLeaderBoard()
+
+   
+    private void AddToLeaderBoard()
     {
         Bowl(_roundscore);
     }

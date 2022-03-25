@@ -55,7 +55,7 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         
       
         playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(-playercontroller._driftvalue, 0, 0));
-      
+       
         GameEventBus.Publish(GameEventType.waiting);
     }
 

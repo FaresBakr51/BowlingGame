@@ -90,9 +90,13 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     }
     public void Onclick_StartGame(){
         if(PhotonNetwork.IsMasterClient){
-            if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers || PhotonNetwork.CurrentRoom.PlayerCount >=2){
+            if(PhotonNetwork.CurrentRoom.PlayerCount > 6){
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonNetwork.LoadLevel(Random.Range(2,4));
+            PhotonNetwork.LoadLevel(2);
+            }else if(PhotonNetwork.CurrentRoom.PlayerCount <= 6)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                PhotonNetwork.LoadLevel(Random.Range(2, 5));
             }
         }
     }

@@ -49,6 +49,10 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
       
       if(playerController._gameend)
         {
+            if(playerController._scoreplayer.totalscre >= 300)
+            {
+                playerController.UpdateSound(playerController._gameClips[7]);
+            }
             playerController._canhit = false;
             if (playerController._MyPlayCanavas.activeInHierarchy)
             {
@@ -74,12 +78,12 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
        
         if (playerController._myRocket.activeInHierarchy)
         {
-            
+        
             playerController._RocketOn.SetActive(false);
             playerController._RocketOff.SetActive(true);
             playerController._usingRock = false;
-            playerController._myRocket.SetActive(false);
-            playerController._ball.SetActive(true);
+            playerController.RunRpc();           
+           
             transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
             playerController.UpdateAnimator("shot", 0);
             playerController._camera.transform.position = _Cambos;
@@ -93,6 +97,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
        
      
     }
+   
 
     IEnumerator WaitToReset()
     {

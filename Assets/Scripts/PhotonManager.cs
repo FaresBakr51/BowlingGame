@@ -73,7 +73,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 
        totalscorePref = PhotonNetwork.Instantiate("_mytotalscoreprefab",_mytotalscore.transform.position,Quaternion.identity,0);
       _myavatar.GetComponent<PlayerController>()._mytotal = totalscorePref;
-     
         _myTextScore =  totalscorePref.GetComponentInChildren<Text>();
   /*   foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
 
@@ -100,7 +99,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
                 _myavatar.GetComponent<PlayerController>()._calcScore =false;
             }
             }else{
-            PhotonNetwork.Destroy(this.gameObject);
+                 
+                PhotonNetwork.Destroy(this.gameObject);
             }
 
     }
@@ -110,8 +110,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
      if(PhotonNetwork.OfflineMode){
           _totalScoretexts[0].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
      }else{
-      
-           _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
+            if (_totalScoretexts != null)
+            {
+                _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
+            }
      }
     }
     private void GetSpawnPoints(){

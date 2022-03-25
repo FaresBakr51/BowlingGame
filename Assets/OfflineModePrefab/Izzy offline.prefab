@@ -814,7 +814,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cfcf8a98f27a6e849836d442405c62ca, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cc83ef3c0036d164590ae96a9d859e3a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1146,8 +1146,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702537854111655}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -1401,8 +1401,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702538088236533}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -1752,8 +1752,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702538505442960}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -1940,8 +1940,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702538864249686}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2053,8 +2053,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702538908515552}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2158,7 +2158,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 2400
-  m_MaxValue: 3100
+  m_MaxValue: 2800
   m_WholeNumbers: 0
   m_Value: 2400
   m_OnValueChanged:
@@ -2255,8 +2255,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702539201321464}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2368,8 +2368,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702539272525463}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2607,8 +2607,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702539364957143}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2720,8 +2720,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702539542226405}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2936,8 +2936,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127702539762256298}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 5
+  m_Mass: 0.3
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2954,10 +2954,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.062450837
-  m_Height: 0.38065895
+  m_Radius: 0.07
+  m_Height: 0.4032503
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.015, z: 0}
 --- !u!1 &6127702539867029934
 GameObject:
   m_ObjectHideFlags: 0
@@ -6149,6 +6149,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6e549443f4ade534e9d233a4b5bf9acc, type: 3}
   - {fileID: 8300000, guid: 2991517e009884a47b80e42fbb810ea0, type: 3}
   - {fileID: 8300000, guid: 873aa2c5fbbfac142b6bb4e25af834d8, type: 3}
+  - {fileID: 8300000, guid: 99c2c9f612168db4591fb7c36e444c9c, type: 3}
   _FramesClips:
   - {fileID: 8300000, guid: 3860b6a5824eb1b48b3ce07d305fa78f, type: 3}
   - {fileID: 8300000, guid: d9026ee249cd3a549807630781a10e7d, type: 3}
@@ -6169,6 +6170,8 @@ MonoBehaviour:
   _RocketOn: {fileID: 4044145565837928580}
   _usedRocket: 0
   _readyLunch: 0
+  _offlinePlayers: []
+  _pauseMenupanel: {fileID: 0}
 --- !u!114 &6728201057152896728
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,7 +25,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     private bool _offlinemode;
     public GameObject[] _guidePic;
     public GameObject _guidPanel;
-    public int _counter;
 
     public GameObject[] _CharacterButtons;
    
@@ -47,16 +46,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
        }
       
     }
-    public void NextPic(){
-     if(_counter != 3){
-       _counter++;
-      _guidePic[_counter].SetActive(true);
-     }else{
-       _guidPanel.SetActive(false);
-        _mainPanel.SetActive(true);
-        SetSelectedGameObject(_mainMenubuttns[0]);
-     }
-    }
+ 
+    
    
     public void ShowCredits(){
 
@@ -166,7 +157,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
             if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.LoadLevel(Random.Range(2, 4));
+                PhotonNetwork.LoadLevel(Random.Range(2, 5));
             }
         }
     }
@@ -261,8 +252,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRoom(null);
           PhotonNetwork.CurrentRoom.IsOpen = false;
            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(Random.Range(2,4));
-      } 
+            PhotonNetwork.LoadLevel(Random.Range(2, 5));
+        } 
     }
      IEnumerator Join2PMODE()
     {
@@ -273,9 +264,9 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             yield return null;
         }
         PhotonNetwork.OfflineMode = true;
-        PhotonNetwork.LoadLevel(Random.Range(2,4));
-       
-      
+        PhotonNetwork.LoadLevel(Random.Range(2, 5));
+
+
     }
 
 }

@@ -45,13 +45,13 @@ namespace BigRookGames.Weapons
             if (collision.gameObject.CompareTag("pin"))
             {
                 //collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 100, ForceMode.Impulse);
-                collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 3, ForceMode.Impulse);
+                //collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 3, ForceMode.Impulse);
                 Explode();
                 projectileMesh.enabled = false;
                 targetHit = true;
                 inFlightAudioSource.Stop();
                 disableOnHit.Stop();
-                Debug.Log("pin");
+                
             }
             // --- return if not enabled because OnCollision is still called if compoenent is disabled ---
             if (!enabled) return;

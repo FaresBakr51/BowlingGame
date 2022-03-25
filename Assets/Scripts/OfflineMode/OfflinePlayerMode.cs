@@ -5,6 +5,8 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 public class OfflinePlayerMode : MonoBehaviour
 {
   [SerializeField] private Transform[] _spawnPoints;
@@ -20,14 +22,19 @@ public class OfflinePlayerMode : MonoBehaviour
  public GameObject _startButt;
  [SerializeField] private GameObject[] _SelectionButtonsPlayer1;
  [SerializeField] private GameObject[] _SelectionButtonsPlayer2;
-
+    [SerializeField] private GameObject[] _soundOnOF;
+     public GameObject _pauseMenupanel;
+    public GameObject pausefirstbutt;
+    public bool _gamePaused;
+    public InputSystemUIInputModule[] _mine;
+    public EventSystem[] _events;
     void Awake()
     {
 
-
-
       
-         if(PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
+
+
+        if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
            _SelectorPane.SetActive(true);
                foreach(GameObject obj in _SelectionButtonsPlayer2){
         obj.SetActive(false);
@@ -46,25 +53,31 @@ public class OfflinePlayerMode : MonoBehaviour
     }
 
     public void SelectCharacter1(GameObject pl){
-      player1 = pl;
-      foreach(GameObject obj in _SelectionButtonsPlayer2){
+       
+        _mine[0].enabled = false;
+        _events[0].enabled = false;
+        _events[1].enabled = true;
+        _mine[1].enabled = true;
+        player2 = pl;
+        foreach (GameObject obj in _SelectionButtonsPlayer2){
         obj.SetActive(true);
       }
        foreach(GameObject obj in _SelectionButtonsPlayer1){
-        obj.GetComponent<Button>().interactable = true;
+        obj.GetComponent<Button>().interactable = false;
       }
         EventSystem.current.SetSelectedGameObject(_player2Firstchar);
     }
     public void SelectCharacter2(GameObject pl2){
-      player2 = pl2;
+       
+     player1 = pl2;
        foreach(GameObject obj in _SelectionButtonsPlayer2){
-        obj.GetComponent<Button>().interactable = true;
+        obj.GetComponent<Button>().interactable = false;
       }
-        EventSystem.current.SetSelectedGameObject(_startButt);
+        StartGame();
     }
     public void StartGame(){
-      
-     
+
+       
       _SelectorPane.SetActive(false);
      
     GameObject playerNum1=   Instantiate(player1,_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);
@@ -72,7 +85,11 @@ public class OfflinePlayerMode : MonoBehaviour
          _CurrentPlayers.Add(playerNum1);
       _CurrentPlayers.Add(playerNum2);
        SwitchControll();
+        _mine[0].enabled = true;
+        _events[0].enabled = true;
        
+        _mine[1].enabled = false;
+        _events[1].enabled = false;
     }
     public void Back(){
       SceneManager.LoadScene(0);
@@ -85,6 +102,36 @@ public class OfflinePlayerMode : MonoBehaviour
              _CurrentPlayers[0].GetComponent<PlayerControllOFFlineMode>()._camera = _Cameras[1];
                _CurrentPlayers[1].GetComponent<PlayerControllOFFlineMode>()._camera = _Cameras[0]; 
     }
+    public void Resume()
+    {
 
-  
+        _pauseMenupanel.SetActive(false);
+        StartCoroutine(WaitPause());
+    }
+    IEnumerator WaitPause()
+    {
+        yield return new WaitForSeconds(1);
+        _gamePaused = false;
+    }
+    public void QuitGame()
+    {
+
+        SceneManager.LoadScene(0);
+
+
+    }
+    public void SoundOn()
+    {
+
+        AudioListener.volume = 1;
+        EventSystem.current.SetSelectedGameObject(_soundOnOF[1]);
+
+    }
+    public void Soundoff()
+    {
+
+        AudioListener.volume = 0;
+        EventSystem.current.SetSelectedGameObject(_soundOnOF[0]);
+    }
+
 }
