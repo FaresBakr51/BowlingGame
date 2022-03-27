@@ -1,11 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using System.Collections.Generic;
+using System.Linq;
 public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playercontroller;
     private bool _followBall;
-    
     public void Handle(PlayerController _playercontroller)
     {
         if (!playercontroller)
@@ -42,17 +43,20 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
     }
     IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(8f);
         ChechPins();
         
 
     }
     private void ChechPins()
     {
-       for(int i = 0; i < playercontroller._mypins.Count; i++)
+
+      
+
+        for (int i = 0; i < playercontroller._mypins.Count; i++)
         {
-            
-            if(Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f)
+
+            if (playercontroller._mypins[i].transform.up.y < 0.95f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.y) > 5f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.x) > 5f)//Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f)
             {
                 if (playercontroller._mypins[i].gameObject.activeInHierarchy == true)
                 {

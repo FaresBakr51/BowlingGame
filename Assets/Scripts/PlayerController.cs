@@ -310,24 +310,32 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 {
                     if (_rankedPlayers[0] == null)
                     {
-                        _gameend = true;
-                        ShowRankedResult("win");
-                        _checkIfthereOther = false;
-
+                        if (!_gameend)
+                        {
+                            _gameend = true;
+                            ShowRankedResult("win");
+                            _checkIfthereOther = false;
+                        }
                     }
                 }
-                if (_gameend)
+              
+            }
+            if (_gameend)
+            {
+                if (_MyPlayCanavas.activeInHierarchy)
                 {
-                    if (_MyPlayCanavas.activeInHierarchy)
-                    {
-                        _MyPlayCanavas.SetActive(false);
-                    }
- 
-                    _GoHomebutt.SetActive(true);
-                   myleader.SetActive(true);
-                   EventSystem.current.SetSelectedGameObject(_GoHomebutt);
-                    
+                    _MyPlayCanavas.SetActive(false);
                 }
+                if (!_GoHomebutt.activeInHierarchy)
+                {
+                    _GoHomebutt.SetActive(true);
+                }
+                if (!myleader.activeInHierarchy)
+                {
+                    myleader.SetActive(true);
+                }
+                    EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+
             }
             if (_canhit == true)
             {
@@ -405,14 +413,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
             {
+               
+                _mypins.Add(obj);
                 _resetpins.Add(obj.transform.position);
                 _resetpinsrot.Add(obj.transform.rotation);
-            }
-
-            foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
-            {
-              
-                _mypins.Add(obj);
             }
 
             StartCoroutine(waitReady());
@@ -610,7 +614,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             if (_rankedPlayers.Count > 0 && !_rankedPanel.activeInHierarchy)
             {
-                
+               
               
                 if (_rankedPlayers[0] != null)
                 {

@@ -12,10 +12,11 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _startButt;
     [SerializeField] private GameObject _currentroompanel;
     [SerializeField] private GameObject _WaitingPlayerMass;
-    
+    private bool _gameLoading;
     public override void OnEnable()
     {
         base.OnEnable();
+      
         GetCurrentRoomPlayer();
     }
     public override void OnDisable()
@@ -31,7 +32,10 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
         _controller = controll;
 
     }
-  
+    private void Start()
+    {
+        _gameLoading = false;
+    }
     private void GetCurrentRoomPlayer(){
         if(!PhotonNetwork.IsConnected)
         return;
@@ -89,7 +93,8 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
                 
     }
     public void Onclick_StartGame(){
-        if(PhotonNetwork.IsMasterClient){
+        if(PhotonNetwork.IsMasterClient && !_gameLoading)
+        {
             if(PhotonNetwork.CurrentRoom.PlayerCount > 6){
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.LoadLevel(2);
@@ -98,6 +103,8 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.LoadLevel(Random.Range(2, 5));
             }
+
+            _gameLoading = true;
         }
     }
   

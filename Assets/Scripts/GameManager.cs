@@ -13,10 +13,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public static GameManager instance;
     public bool _rankedMode;
-    [SerializeField] public int _finshedPlayers;
-    [SerializeField] private List<GameObject> _Players = new List<GameObject>();
-    [SerializeField] private List<int> _playerscores = new List<int>();
-    private bool _rankedGameEnd;
     private void Awake()
     {
       
@@ -38,20 +34,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-    private void Update()
-    {
-        if (_rankedMode)
-        {
-            if (_finshedPlayers >=2 && !_rankedGameEnd)
-            {
-               // Finieshed();
-                _rankedGameEnd = true;
-            }
-           
-    
-        }
-        
-    }
+
     //private void Finieshed()
     //{
     //    if (_Players.Count >= 2)
@@ -103,13 +86,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3")
         {
-            if(PhotonNetwork.OfflineMode == false || (PhotonNetwork.OfflineMode == true &&PhotonNetwork.InRoom == true)){
-
-
-            
+            if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
            CreatPlayer();
             }
-            StartCoroutine(WaitAvatars());
+          
         }
 
     }
@@ -118,25 +98,7 @@ public class GameManager : MonoBehaviourPunCallbacks
        
     } 
 
-    IEnumerator WaitAvatars()
-    {
-
-        yield return new WaitForSeconds(2f);
-        if (_rankedMode)
-        {
-
-          
-           foreach (GameObject player in GameObject.FindGameObjectsWithTag("totalplayerscore"))
-            {
-                _Players.Add(player);
-                string scoretxt = player.GetComponentsInChildren<Text>().ToString();
-                int sc = 0;
-               var realscore=  int.TryParse(scoretxt, out sc);
-                _playerscores.Add(sc);
-            }
-           
-        }
-    }
+  
    
   
 }

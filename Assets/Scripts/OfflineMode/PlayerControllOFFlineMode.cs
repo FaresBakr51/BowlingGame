@@ -525,7 +525,7 @@ private void GetReady()
     }
        IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(8f);
         ChechPins();
         
 
