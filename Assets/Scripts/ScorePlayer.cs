@@ -12,7 +12,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	public  int totalscre = 0;
 	private PlayerController _playercontroll;
 	private PlayerControllOFFlineMode _offlinemodeControll;
-	private int _currentframe;
+	public int _currentframe;
 	private string _scoreStrn;
 	private int _counterStringFrames;
 	private int _StrikeInrow;

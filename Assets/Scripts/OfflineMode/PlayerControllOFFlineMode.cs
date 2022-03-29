@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using BigRookGames.Weapons;
 using System.Linq;
+using UnityEngine.SceneManagement;
+
 public class PlayerControllOFFlineMode : MonoBehaviour
 {
    public GameObject _ball;
@@ -26,8 +28,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
    private float _myxpos;
    public bool _hookcalclated;
    public float _driftvalue;
-   [SerializeField] private float _driftmaxvalu;
-   public bool _canhit;
+    [SerializeField] private float _driftMaxval;
+    public bool _canhit;
    public int _roundscore;
    public ScorePlayer _scoreplayer;
 
@@ -41,8 +43,9 @@ public class PlayerControllOFFlineMode : MonoBehaviour
    
    public GameObject myleader;
    public GameObject _mypinsobj;
+ 
 
-   public GameObject _GoHomebutt;
+    public GameObject _GoHomebutt;
    public GameActions _gameactions;
    public bool _powerval;
    private bool _moveright;
@@ -88,6 +91,10 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         _hookScroll.gameObject.SetActive(false);
          _gameactions = new GameActions();
         _mypinsobj.transform.parent = null;
+        if (SceneManager.GetActiveScene().name == "Map3")
+        {
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.6f);
+        }
     }
       public  void OnEnable()
     {
@@ -472,20 +479,76 @@ private void GetReady()
     }
     private void GetDriftValue()
     {
-        if (_hookScroll.value < 0.45f)
+        //if (_hookScroll.value < 0.45f)//1,2,3,4///30///120
+        //{
+        //    float driftval = ((_hookScroll.value * 10) * -_driftmaxvaluleft);
+        //    _driftvalue = driftval;
+        //}
+        //if (_hookScroll.value > 0.45f)//4,5,6,7,8/////15///120
+        //{
+        //    float driftval = ((_hookScroll.value * 10) * _driftmaxvaluright);
+        //    _driftvalue = driftval;
+        //}
+        //if (_hookScroll.value == 0.45f)
+        //{
+        //    _driftvalue = 0;
+        //}
+        if (_hookScroll.value == 0.45f)
         {
-            float driftval = (-_hookScroll.value * _driftmaxvalu);
-            _driftvalue = driftval;
+            _driftvalue = 0;
         }
-        if (_hookScroll.value >= 0.45f)
+        else
         {
-            float driftval = (_hookScroll.value * _driftmaxvalu);
-            _driftvalue = driftval;
+            float driftval = (Mathf.Round(_hookScroll.value * 10));
+            Debug.Log(driftval);
+            GetDrifRealVal(driftval);
         }
-         
-           _hookScroll.gameObject.SetActive(false);
+
+        _hookScroll.gameObject.SetActive(false);
            _powerSlider.gameObject.SetActive(true);
            StartCoroutine(ActivePowerShot());
+    }
+    private void GetDrifRealVal(float val)
+    {
+
+        switch (val)
+        {
+            case 0:
+                _driftvalue = (_driftMaxval * -1);
+                break;
+            case 1:
+                _driftvalue = (_driftMaxval * -1);//ex : -100
+                break;
+            case 2:
+                _driftvalue = (_driftMaxval * -1) + 20;//ex -80
+                break;
+            case 3:
+                _driftvalue = (_driftMaxval * -1) + 40;
+                break;
+            case 4:
+                _driftvalue = (_driftMaxval * -1) + 60;
+                break;
+            case 5:
+                _driftvalue = 0;
+                break;
+            case 6:
+                _driftvalue = _driftMaxval - 60;
+                break;
+            case 7:
+                _driftvalue = _driftMaxval - 40;
+                break;
+            case 8:
+                _driftvalue = _driftMaxval - 20;
+                break;
+            case 9:
+                _driftvalue = _driftMaxval;
+                break;
+            case 10:
+                _driftvalue = _driftMaxval;
+                break;
+
+
+        }
     }
     public void ShotBall()
     {
@@ -535,7 +598,7 @@ private void GetReady()
        for(int i = 0; i < _mypins.Count; i++)
         {
             
-            if(Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.z) > 5f)
+            if(_mypins[i].transform.up.y < 0.85f || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.z) > 5f || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.x) > 5f)
             {
                 if (_mypins[i].gameObject.activeInHierarchy == true)
                 {
@@ -624,7 +687,10 @@ private void GetReady()
         _ball.GetComponent<BallSound>()._hit = false;
         foreach (Transform pins in _mypins)
         {
-            pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            if (pins.name != "PinSetter")
+            {
+                pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            }
         }
     }
 
@@ -663,21 +729,25 @@ public void Bowl(int pinFall)
     }
  private void ResetPins()
     {
-     
-            for (int y = 0; y < _resetpins.Count; y++)
+        for (int y = 0; y < _resetpins.Count; y++)
+        {
+            if (_mypins[y].gameObject.activeInHierarchy == false)
             {
-                if (_mypins[y].gameObject.activeInHierarchy == false)
-                {
-                    _mypins[y].gameObject.SetActive(true);
-                }
+                _mypins[y].gameObject.SetActive(true);
+            }
+            if (_mypins[y].name != "PinSetter")
+            {
                 _mypins[y + 1 - 1].gameObject.GetComponent<Rigidbody>().isKinematic = true;
                 _mypins[y + 1 - 1].transform.position = _resetpins[y + 1 - 1];
                 _mypins[y + 1 - 1].transform.rotation = _resetpinsrot[y + 1 - 1];
-
             }
-        
+
+        }
+
+
     }
- public void PerformAction(ActionMasterOld.Action action)
+
+    public void PerformAction(ActionMasterOld.Action action)
     {
          if (action == ActionMasterOld.Action.EndTurn)
         {

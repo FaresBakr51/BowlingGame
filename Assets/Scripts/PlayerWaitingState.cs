@@ -56,7 +56,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
         for (int i = 0; i < playercontroller._mypins.Count; i++)
         {
 
-            if (playercontroller._mypins[i].transform.up.y < 0.95f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.y) > 5f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.x) > 5f)//Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f)
+            if (playercontroller._mypins[i].transform.up.y < 0.85f || Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f|| Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.x) > 5f)//Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f)
             {
                 if (playercontroller._mypins[i].gameObject.activeInHierarchy == true)
                 {

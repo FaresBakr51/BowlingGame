@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using TMPro;
 
 public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -18,6 +19,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _mytotalscore;
     [SerializeField]  private GameObject totalscorePref;
     public GameObject _myavatar;
+    private PlayerController _myAvatarController;
     [SerializeField] private int myscore;
     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>(); 
     [SerializeField] private GameObject _speakingobj;
@@ -70,9 +72,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
         if(_pv.IsMine){
             
             _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[_pv.Owner.ActorNumber-1].transform.position,Quaternion.Euler(0,180,0),0);
-            
+            _myAvatarController = _myavatar.GetComponent<PlayerController>();
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
-              _myavatar.GetComponent<PlayerController>()._myManager = this.gameObject;
+            _myAvatarController._myManager = this.gameObject;
         
              RpcSharetotalScore();
        
@@ -127,7 +129,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     private void RpcSharetotalScore(){
 
        totalscorePref = PhotonNetwork.Instantiate("_mytotalscoreprefab",_mytotalscore.transform.position,Quaternion.identity,0);
-      _myavatar.GetComponent<PlayerController>()._mytotal = totalscorePref;
+        _myAvatarController._mytotal = totalscorePref;
    
   /*   foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
 
@@ -148,11 +150,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     void Update(){
         if(_pv.IsMine){
             if(_myavatar !=null){
-            if( _myavatar.GetComponent<PlayerController>()._calcScore ==true){
-                myscore = _myavatar.GetComponent<PlayerController>()._scoreplayer.totalscre;
-                  photonView.RPC("RpcShareScore", RpcTarget.All,myscore.ToString());
-                
-                _myavatar.GetComponent<PlayerController>()._calcScore =false;
+            if(_myAvatarController._calcScore ==true){
+                myscore = _myAvatarController._scoreplayer.totalscre;
+                  photonView.RPC("RpcShareScore", RpcTarget.All,myscore.ToString(),_myAvatarController._scoreplayer._currentframe);
+                    _myAvatarController._calcScore =false;
             }
             }else{
                  
@@ -162,7 +163,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     }
     }
     [PunRPC]
-    private void RpcShareScore(string usedString){
+    private void RpcShareScore(string usedString, int framenumb){
 
         Debug.Log("score shared");
         //if(PhotonNetwork.OfflineMode){
@@ -181,7 +182,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
        
         if (_totalScoretexts[_pv.Owner.ActorNumber - 1].gameObject == null) return;
            _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-          
+        _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb +1).ToString();
 
         //if (_pv.IsMine)
         //{

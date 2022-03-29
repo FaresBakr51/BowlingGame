@@ -92,7 +92,10 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._ball.GetComponent<BallSound>()._hit = false;
         foreach (Transform pins in playerController._mypins)
         {
-            pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            if (pins.name != "PinSetter")
+            {
+                pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            }
         }
        
      

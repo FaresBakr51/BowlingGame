@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private float _myxpos;
     public bool _hookcalclated;
     public float _driftvalue;
-    [SerializeField] private float _driftmaxvalu;
+    [SerializeField] private float _driftMaxval;
     public bool _canhit;
     public int _roundscore;
     public ScorePlayer _scoreplayer;
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject myleader;
     private GameObject _golballeaderboradcanavas;
     public GameObject _mypinsobj;
+  
     public GameObject _mytotal;
     public GameObject _GoHomebutt;
     public GameActions _gameactions;
@@ -89,6 +90,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public bool _usedRocket;
     public bool _readyLunch;
     [SerializeField] private List<GameObject> _rankedPlayers;
+  
     private bool _gameRankedFinished;
     public bool _usingRock;
     private Vector3 _mypos;
@@ -103,6 +105,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          _gameactions = new GameActions();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
+        if(SceneManager.GetActiveScene().name == "Map3")
+        {
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z -0.6f);
+        }
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
           _scoreplayer = GetComponent<ScorePlayer>();
         if (!_photonview.IsMine)
@@ -285,7 +291,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     void Update()
     {
-
+       
 
        /*  if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
           
@@ -489,10 +495,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private void UpdateHookSlider()
     {
          if(_moveright == false){
-           
-             _scrolltime = 0; 
+          
+            _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.3f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.18f);
             
             if(_hookScroll.value >= 0.9){
                 _moveright = true;
@@ -500,7 +506,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          }else{
         _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.3f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.18f);//0.3
 
             if(_hookScroll.value <= 0.1f){
 
@@ -512,20 +518,82 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void GetDriftValue()
     {
-        if (_hookScroll.value < 0.45f)
+
+     
+      //  _driftvalue = driftval;
+        //if (_hookScroll.value < 0.45f)//1,2,3,4///30///120
+        //{
+        //    float driftval = (Mathf.Round(_hookScroll.value * 10));
+        //    //float driftval = ((Mathf.Round(_hookScroll.value * 100) / 100.0f) * - 10 * _driftmaxvaluleft);
+        //    //Debug.Log((Mathf.Round(_hookScroll.value * 10)));
+        //    //Debug.Log(driftval);
+        //    _driftvalue = driftval;
+        //}
+        //if (_hookScroll.value > 0.45f)//4,5,6,7,8/////15///120
+        //{
+           
+        //    //float driftval = ((Mathf.Round(_hookScroll.value * 100) / 100.0f) * 10 * _driftmaxvaluright);
+        //    //Debug.Log((Mathf.Round(_hookScroll.value * 10)));
+        //    //Debug.Log(driftval);
+        //   // _driftvalue = driftval;
+
+        //}
+        if(_hookScroll.value == 0.45f)
         {
-            float driftval = (-_hookScroll.value * _driftmaxvalu);
-            _driftvalue = driftval;
+            _driftvalue = 0;
         }
-        if (_hookScroll.value >= 0.45f)
+        else
         {
-            float driftval = (_hookScroll.value * _driftmaxvalu);
-            _driftvalue = driftval;
+            float driftval = (Mathf.Round(_hookScroll.value * 10));
+            Debug.Log(driftval);
+            GetDrifRealVal(driftval);
         }
-         
+           _hookcalclated = true;
            _hookScroll.gameObject.SetActive(false);
            _powerSlider.gameObject.SetActive(true);
            StartCoroutine(ActivePowerShot());
+    }
+    private void GetDrifRealVal(float val)
+    {
+        
+        switch (val)
+        {
+            case 0:
+                _driftvalue = (_driftMaxval * -1);
+                break;
+            case 1:
+                _driftvalue = (_driftMaxval * -1);//ex : -100
+                break;
+            case 2:
+                _driftvalue = (_driftMaxval * -1)+ 20;//ex -80
+                break;
+             case 3:
+                _driftvalue = (_driftMaxval * -1) + 40;
+                break;
+            case 4:
+                _driftvalue = (_driftMaxval * -1) + 60;
+                break;
+            case 5:
+                _driftvalue =0;
+                break;
+            case 6:
+                _driftvalue = _driftMaxval  - 60;
+                break;
+            case 7:
+                _driftvalue = _driftMaxval - 40;
+                break;
+            case 8:
+                _driftvalue = _driftMaxval - 20;
+                break;
+            case 9:
+                _driftvalue = _driftMaxval ;
+                break;
+            case 10:
+                _driftvalue = _driftMaxval;
+                break;
+
+
+        }
     }
     private void CheckOtherHit()
     {
@@ -541,20 +609,34 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void ResetPins()
     {
-     
-            for (int y = 0; y < _resetpins.Count; y++)
+    
+        if (_photonview.IsMine)
+        {
+            photonView.RPC("ResetPinsRunCounter", RpcTarget.All);
+        }
+      
+        
+    }
+    [PunRPC]
+    private void ResetPinsRunCounter()
+    {
+        for (int y = 0; y < _resetpins.Count; y++)
+        {
+            if (_mypins[y].gameObject.activeInHierarchy == false)
             {
-                if (_mypins[y].gameObject.activeInHierarchy == false)
-                {
-                    _mypins[y].gameObject.SetActive(true);
-                }
+                _mypins[y].gameObject.SetActive(true);
+            }
+            if (_mypins[y].name != "PinSetter")
+            {
                 _mypins[y + 1 - 1].gameObject.GetComponent<Rigidbody>().isKinematic = true;
                 _mypins[y + 1 - 1].transform.position = _resetpins[y + 1 - 1];
                 _mypins[y + 1 - 1].transform.rotation = _resetpinsrot[y + 1 - 1];
-
             }
-        
+
+        }
     }
+    
+   
     public void Bowl(int pinFall)
     {
         try
