@@ -50,11 +50,10 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         _goforword = false;
         playercontroller.UpdateAnimator("shot", 0);
         playercontroller._ball.GetComponent<BallSound>().enabled = true;
-      
-              playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -playercontroller._power));
-        
-      
-        playercontroller._ball.GetComponent<Rigidbody>().AddForce(new Vector3(-playercontroller._driftvalue, 0, 0));
+        var rig = playercontroller._ball.GetComponent<Rigidbody>();
+        rig.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rig.AddForce(new Vector3(0, 0, -playercontroller._power),ForceMode.Impulse);
+        rig.AddForce(new Vector3(-playercontroller._driftvalue, 0, 0),ForceMode.Force);
        
         GameEventBus.Publish(GameEventType.waiting);
     }

@@ -459,7 +459,7 @@ private void GetReady()
            
              _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.3f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.18f);
             
             if(_hookScroll.value >= 0.9){
                 _moveright = true;
@@ -467,7 +467,7 @@ private void GetReady()
          }else{
         _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.3f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.18f);
 
             if(_hookScroll.value <= 0.1f){
 
@@ -568,9 +568,11 @@ private void GetReady()
         _goforword = false;
        UpdateAnimator("shot", 0);
         _ball.GetComponent<BallSound>().enabled = true;
-        _ball.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0,-_power));
-        _ball.GetComponent<Rigidbody>().AddForce(new Vector3(-_driftvalue, 0, 0));
-       WaitState();
+        var rig = _ball.GetComponent<Rigidbody>();
+        rig.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rig.AddForce(new Vector3(0, 0, -_power), ForceMode.Impulse);
+        rig.AddForce(new Vector3(-_driftvalue, 0, 0), ForceMode.Force);
+        WaitState();
       
     }
     private void WaitState(){
@@ -598,7 +600,7 @@ private void GetReady()
        for(int i = 0; i < _mypins.Count; i++)
         {
             
-            if(_mypins[i].transform.up.y < 0.85f || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.z) > 5f || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.x) > 5f)
+            if(_mypins[i].transform.up.y < 0.85f)// || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.z) > 5f || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.x) > 5f)
             {
                 if (_mypins[i].gameObject.activeInHierarchy == true)
                 {

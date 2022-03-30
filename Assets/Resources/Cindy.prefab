@@ -2917,7 +2917,7 @@ MonoBehaviour:
   _MyPlayCanavas: {fileID: 8539717424908926127}
   _hookcalclated: 0
   _driftvalue: 0
-  _driftMaxval: 100
+  _driftMaxval: 350
   _canhit: 0
   _roundscore: 0
   _scoreplayer: {fileID: 8539717424395364470}
@@ -5515,14 +5515,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8539717424957160832}
   serializedVersion: 2
-  m_Mass: 3
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!82 &8539717424957160836
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5831,10 +5831,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 8539717424632757883}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
-  m_MinValue: 2200
-  m_MaxValue: 3000
+  m_MinValue: 230
+  m_MaxValue: 350
   m_WholeNumbers: 0
-  m_Value: 2400
+  m_Value: 230
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -12160,6 +12160,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8539717424395101266}
     m_Modifications:
+    - target: {fileID: 1184200995558425140, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200995723672850, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200995839478386, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200996022965817, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200996046776976, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200996144503555, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200996509630680, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200996996485496, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200997166233560, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200997256259467, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184200997479140608, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1184200997479140610, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
       propertyPath: m_RootOrder
       value: 7

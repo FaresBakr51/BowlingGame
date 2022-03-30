@@ -12,10 +12,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 
 
     [SerializeField] private List<GameObject> _spawnPoints = new List<GameObject>();
-    Player[] _players;
+  //  Player[] _players;
     private PhotonView _pv;
     private GameManager _gameManager;
-    private Player _myplayer;
+   
     public GameObject _mytotalscore;
     [SerializeField]  private GameObject totalscorePref;
     public GameObject _myavatar;
@@ -24,26 +24,26 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>(); 
     [SerializeField] private GameObject _speakingobj;
     [SerializeField] private GameObject _notspeakingobj;
-    public static int localPlayerIndex;
-    private int _totalindex;
+  
+    private int _myFrame;
     public override void OnEnable()
     {
         _pv = GetComponent<PhotonView>();
-        _players = PhotonNetwork.PlayerList;
-        for (int i = 0; i < _players.Length; i++)
-        {
+       // _players = PhotonNetwork.PlayerList;
+        //for (int i = 0; i < _players.Length; i++)
+        //{
 
-            if (_players[i].IsLocal)
-            {
+        //    if (_players[i].IsLocal)
+        //    {
 
-                _myplayer = _players[i];
-            }
-        }
+        //        _myplayer = _players[i];
+        //    }
+        //}
        
       
         _gameManager = FindObjectOfType<GameManager>();
          GetSpawnPoints();
-        GetMyPoint();
+      
     }
 
 
@@ -82,49 +82,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
      
     }
 
-    private void GetMyPoint()
-    {
-        if (_pv.IsMine)
-        {
-          
-                Debug.Log(_pv.Owner.ActorNumber);
-                if (_myplayer.ActorNumber == 1)
-                {
-                    localPlayerIndex = 0;
-                }
-                else if (_myplayer.ActorNumber == 2)
-                {
-                    localPlayerIndex = 1;
-                }
-                else if (_myplayer.ActorNumber == 3)
-                {
-                    localPlayerIndex = 2;
-                }
-                else if (_myplayer.ActorNumber == 4)
-                {
-                    localPlayerIndex = 3;
-                }
-                else if (_myplayer.ActorNumber == 5)
-                {
-                    localPlayerIndex = 4;
-                }
-                else if (_myplayer.ActorNumber == 6)
-                {
-                    localPlayerIndex = 5;
-                }
-                else if (_myplayer.ActorNumber == 7)
-                {
-                    localPlayerIndex = 6;
-                }
-                else if (_myplayer.ActorNumber == 8)
-                {
-                    localPlayerIndex = 7;
-                }
-            
-        }
-
-
-    }
+   
    
     private void RpcSharetotalScore(){
 
@@ -182,7 +140,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
        
         if (_totalScoretexts[_pv.Owner.ActorNumber - 1].gameObject == null) return;
            _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb +1).ToString();
+        if (framenumb <= 9)
+        {
+            _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
+        }
 
         //if (_pv.IsMine)
         //{
