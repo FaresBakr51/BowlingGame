@@ -5,6 +5,13 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+
+public struct GameModes
+{
+
+   public static bool _rankedMode;
+   public static bool _battleRoyale;
+}
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
@@ -12,10 +19,10 @@ public class GameManager : MonoBehaviourPunCallbacks
    
 
     public static GameManager instance;
-    public bool _rankedMode;
+  //  public bool _rankedMode;
     private void Awake()
     {
-      
+        
         if (GameManager.instance == null)
         {
            
@@ -35,38 +42,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
-    //private void Finieshed()
-    //{
-    //    if (_Players.Count >= 2)
-    //    {
-    //        FindWinner(_playerscores[0], _playerscores[1]);
-    //    }
-    //}
-    //public void FindWinner(int p1,int p2)
-    //{
-    //    if (photonView.IsMine)
-    //    {
-    //        if (p1 > p2)
-    //        {
-
-    //            _Players[0].GetComponent<PlayerController>().ShowRankedResult("win");
-    //            _Players[1].GetComponent<PlayerController>().ShowRankedResult("lose");
-
-    //        }
-    //        else if (p2 > p1)
-    //        {
-    //            _Players[0].GetComponent<PlayerController>().ShowRankedResult("lose");
-    //            _Players[1].GetComponent<PlayerController>().ShowRankedResult("win");
-    //        }
-    //        else if (p2 == p1)
-    //        {
-    //            _Players[0].GetComponent<PlayerController>().ShowRankedResult("draw");
-    //            _Players[1].GetComponent<PlayerController>().ShowRankedResult("draw");
-
-    //        }
-
-    //    }
-    //}
+ 
     public override void OnEnable()
     {
         base.OnEnable();
@@ -84,7 +60,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void OnSceneLoadingFinished(Scene lvl, LoadSceneMode mode)
     {
 
-        if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3")
+        if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3" || lvl.name == "Map4")
         {
             if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
            CreatPlayer();

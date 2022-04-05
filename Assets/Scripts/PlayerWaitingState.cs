@@ -6,8 +6,11 @@ using System.Linq;
 public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playercontroller;
-    private bool _followBall;
-    public void Handle(PlayerController _playercontroller)
+    private void Awake()
+    {
+        playercontroller = GetComponent<PlayerController>();
+    }
+        public void Handle(PlayerController _playercontroller)
     {
         if (!playercontroller)
         {
@@ -19,7 +22,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
             playercontroller._canhit = false;
         }
         if (playercontroller._ball.activeInHierarchy) { 
-        _followBall = true;
+        playercontroller._followBall = true;
 
         _playercontroller._ball.GetComponent<BallSound>().UpdateSound(_playercontroller._movingclip);
         }
@@ -27,7 +30,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
     }
     private void Update()
     {
-        if (_followBall == true)
+        if (playercontroller._followBall)
         {
            
             if (playercontroller._camera.transform.position.z >= playercontroller._mypinsobj.transform.position.z +10)
@@ -36,27 +39,28 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
             }
             else
             {
-                _followBall = false;
+                playercontroller._followBall = false;
             }
            
         }
     }
     IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(8f);
-        ChechPins();
+        yield return new WaitForSeconds(5f);
+       StartCoroutine(ChechPins());
         
 
     }
-    private void ChechPins()
+    private IEnumerator  ChechPins()
     {
 
-      
 
+       
+        yield return new WaitForSeconds(4f);
         for (int i = 0; i < playercontroller._mypins.Count; i++)
         {
 
-            if (playercontroller._mypins[i].transform.up.y < 0.85f )//|| Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f|| Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.x) > 5f)//Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f)
+            if (playercontroller._mypins[i].transform.up.y < 0.9f)//|| playercontroller._resetpins[i].x != playercontroller._mypins[i].transform.localPosition.x)// Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f
             {
                 if (playercontroller._mypins[i].gameObject.activeInHierarchy == true)
                 {
@@ -66,6 +70,12 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
             }
             else
             {
+                if (playercontroller._mypins[i].gameObject.activeInHierarchy == true)
+                {
+                    playercontroller._mypins[i].gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                    playercontroller._leftpins.Add(playercontroller._mypins[i]);
+                    playercontroller._mypins[i].gameObject.SetActive(false);
+                }
             }
         }
 

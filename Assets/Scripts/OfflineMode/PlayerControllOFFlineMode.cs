@@ -19,7 +19,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
    public Scrollbar _hookScroll;
    public List<Transform> _mypins = new List<Transform>();
    private  List<Vector3> _resetpins = new List<Vector3>();
-   private List<Quaternion> _resetpinsrot = new List<Quaternion>();
+    [SerializeField] public List<Transform> _leftpins = new List<Transform>();
+    private List<Quaternion> _resetpinsrot = new List<Quaternion>();
    public float _speed;
    public float _slidertime;
    public float _scrolltime;
@@ -299,16 +300,12 @@ private void GetReady()
                     _framescoretextobj = obj.gameObject;
                 }
             }
-            foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
-            {
-                _resetpins.Add(obj.transform.position);
-                _resetpinsrot.Add(obj.transform.rotation);
-            }
-
+          
             foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
             {
               
                 _mypins.Add(obj);
+            _resetpinsrot.Add(obj.transform.rotation);
             }
 
             StartCoroutine(waitReady());
@@ -317,7 +314,24 @@ private void GetReady()
     }
       IEnumerator waitReady()
     {
+        ResetPins();
+        foreach (Transform pins in _mypins)
+        {
+            if (pins.name != "PinSetter")
+            {
+                pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+
+            }
+        }
         yield return new WaitForSeconds(1f);
+        foreach (Transform pins in _mypins)
+        {
+            if (pins.name != "PinSetter")
+            {
+                _resetpins.Add(pins.localPosition);
+
+            }
+        }
         _offlinePlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
         if (_offlinePlayers.Contains(this.gameObject))
         {
@@ -434,11 +448,11 @@ private void GetReady()
 
              
               _slidertime += Time.deltaTime;
-              _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.5f);
+              _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.3f);
         }else{
          
               _slidertime += Time.deltaTime;
-             _powerSlider.value = Mathf.Lerp(_powerSlider.maxValue, _powerSlider.minValue, _slidertime / 0.5f);
+             _powerSlider.value = Mathf.Lerp(_powerSlider.maxValue, _powerSlider.minValue, _slidertime / 0.3f);
         }
         
          
@@ -459,7 +473,7 @@ private void GetReady()
            
              _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.18f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.168f);
             
             if(_hookScroll.value >= 0.9){
                 _moveright = true;
@@ -467,7 +481,7 @@ private void GetReady()
          }else{
         _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.18f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.168f);
 
             if(_hookScroll.value <= 0.1f){
 
@@ -590,17 +604,19 @@ private void GetReady()
     }
        IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(8f);
-        ChechPins();
+        yield return new WaitForSeconds(5f);
+        StartCoroutine(ChechPins());
         
 
     }
-      private void ChechPins()
+      private IEnumerator ChechPins()
     {
-       for(int i = 0; i < _mypins.Count; i++)
+
+        yield return new WaitForSeconds(4f);
+        for (int i = 0; i < _mypins.Count; i++)
         {
-            
-            if(_mypins[i].transform.up.y < 0.85f)// || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.z) > 5f || Mathf.Abs(_mypins[i].transform.rotation.eulerAngles.x) > 5f)
+
+            if (_mypins[i].transform.up.y < 0.9f)//|| playercontroller._resetpins[i].x != playercontroller._mypins[i].transform.localPosition.x)// Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f
             {
                 if (_mypins[i].gameObject.activeInHierarchy == true)
                 {
@@ -610,6 +626,12 @@ private void GetReady()
             }
             else
             {
+                if (_mypins[i].gameObject.activeInHierarchy == true)
+                {
+                    _mypins[i].gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                    _leftpins.Add(_mypins[i]);
+                    _mypins[i].gameObject.SetActive(false);
+                }
             }
         }
 
@@ -626,7 +648,7 @@ private void GetReady()
     private void IdleState(){
 
        
-       this.transform.position = _mypos;
+     
 
          StartCoroutine(WaitToReset());
 
@@ -634,7 +656,22 @@ private void GetReady()
         IEnumerator WaitToReset()
     {
         yield return new WaitForSeconds(1.5f);
+
         myleader.SetActive(true);
+      
+        if (_leftpins.Count > 0)
+        {
+            foreach (Transform leftpin in _leftpins)
+            {
+                leftpin.transform.rotation = Quaternion.identity;
+                if (leftpin.gameObject.GetComponent<Rigidbody>().isKinematic)
+                {
+                    leftpin.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                leftpin.gameObject.SetActive(true);
+                leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
+            }
+        }
         yield return new WaitForSeconds(3f);
         myleader.SetActive(false);
         _MyPlayCanavas.SetActive(true);
@@ -687,11 +724,16 @@ private void GetReady()
         }
         _roundscore = 0;
         _ball.GetComponent<BallSound>()._hit = false;
+        this.transform.position = _mypos;
+        _camera.transform.position = _Cambos;
+   
+      
         foreach (Transform pins in _mypins)
         {
             if (pins.name != "PinSetter")
             {
                 pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            //    pins.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             }
         }
     }
@@ -739,13 +781,14 @@ public void Bowl(int pinFall)
             }
             if (_mypins[y].name != "PinSetter")
             {
+                _mypins[y].gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Discrete;
                 _mypins[y + 1 - 1].gameObject.GetComponent<Rigidbody>().isKinematic = true;
-                _mypins[y + 1 - 1].transform.position = _resetpins[y + 1 - 1];
+                _mypins[y + 1 - 1].transform.localPosition = _resetpins[y + 1 - 1];
                 _mypins[y + 1 - 1].transform.rotation = _resetpinsrot[y + 1 - 1];
             }
 
         }
-
+        _leftpins.Clear();
 
     }
 

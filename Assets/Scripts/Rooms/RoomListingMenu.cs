@@ -23,7 +23,8 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
-        if(!PhotonNetwork.OfflineMode && !GameManager.instance._rankedMode){
+        if(!PhotonNetwork.OfflineMode && !GameModes._rankedMode)
+        {
          _roomcontroll.CurrentRoomCanavas.Show();
          _content.DestroyChildren();
          _listings.Clear();
@@ -42,11 +43,14 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
     {
         if (_listings.Count > 0)
         {
-            if (InGameRooms()!= -1)
+            if (InGameRooms()!= -1 )
             {
-             
-                _listings[InGameRooms()].GetComponentInChildren<TextMeshProUGUI>().text = _listings[InGameRooms()].GetComponentInChildren<TextMeshProUGUI>().text + " (InGame)";
-                _listings[InGameRooms()]._inGame = true;
+                if (!_listings[InGameRooms()]._inGame)
+                {
+                    _listings[InGameRooms()].GetComponentInChildren<TextMeshProUGUI>().text = _listings[InGameRooms()].GetComponentInChildren<TextMeshProUGUI>().text + " (InGame)";
+                    _listings[InGameRooms()].GetComponent<RawImage>().color = Color.red;
+                    _listings[InGameRooms()]._inGame = true;
+                }
 
             }
             if (AnyRankedRoom() != -1)
@@ -54,12 +58,22 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
                 Destroy(_listings[AnyRankedRoom()].gameObject);
                 _listings.RemoveAt(AnyRankedRoom());
             }
+            if(AnyBattleRooms() != -1)
+            {
+                if (!_listings[AnyBattleRooms()]._inGame)
+                {
+                    _listings[AnyBattleRooms()].GetComponentInChildren<TextMeshProUGUI>().text = _listings[AnyBattleRooms()].GetComponentInChildren<TextMeshProUGUI>().text + " (RoyaleMode)";
+                    _listings[AnyBattleRooms()].GetComponent<RawImage>().color = Color.green;
+                    _listings[AnyBattleRooms()]._inGame = true;
+                }
+
+            }
         }
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     
     {
-        if (GameManager.instance._rankedMode) return; 
+        if (GameModes._rankedMode) return; 
         foreach (RoomInfo info in roomList){
            
          
@@ -76,7 +90,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
 
                 int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
                if(index == -1){
-                    if (!GameManager.instance._rankedMode)
+                    if (!GameModes._rankedMode)
                     {
 
                         RoomListing listing = Instantiate(_roomlisting, _content);                    
@@ -102,8 +116,13 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
     }
     int InGameRooms()
     {
-        int ingame = _listings.FindIndex(t => !t.RoomInfo.IsOpen && !t._inGame);
+        int ingame = _listings.FindIndex(t => !t.RoomInfo.IsOpen && !t._inGame && t.RoomInfo.MaxPlayers != 15);
         return ingame;
     }
-    
+    int AnyBattleRooms()
+    {
+        int hasbattle = _listings.FindIndex(t => t.RoomInfo.MaxPlayers == 15);
+        return hasbattle;
+    }
+
 }

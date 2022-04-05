@@ -12,9 +12,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 
 
     [SerializeField] private List<GameObject> _spawnPoints = new List<GameObject>();
-  //  Player[] _players;
     private PhotonView _pv;
-    private GameManager _gameManager;
    
     public GameObject _mytotalscore;
     [SerializeField]  private GameObject totalscorePref;
@@ -24,24 +22,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>(); 
     [SerializeField] private GameObject _speakingobj;
     [SerializeField] private GameObject _notspeakingobj;
-  
-    private int _myFrame;
+    private bool _startCounter;
     public override void OnEnable()
     {
         _pv = GetComponent<PhotonView>();
-       // _players = PhotonNetwork.PlayerList;
-        //for (int i = 0; i < _players.Length; i++)
-        //{
-
-        //    if (_players[i].IsLocal)
-        //    {
-
-        //        _myplayer = _players[i];
-        //    }
-        //}
-       
-      
-        _gameManager = FindObjectOfType<GameManager>();
          GetSpawnPoints();
       
     }
@@ -88,95 +72,82 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 
        totalscorePref = PhotonNetwork.Instantiate("_mytotalscoreprefab",_mytotalscore.transform.position,Quaternion.identity,0);
         _myAvatarController._mytotal = totalscorePref;
-   
-  /*   foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
 
-      /*   if(obj.gameObject.name == "speaking"){
-           
-            _myavatar.GetComponent<PlayerController>()._isspeakingButt = obj.gameObject;
-        }
-        if(obj.name == "Notspeaking"){
-           
-             _myavatar.GetComponent<PlayerController>()._notSpeakingButt = obj.gameObject;
-        } */
-    
-  //  } 
-     
-        
-        
+        /*   foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
+
+            /*   if(obj.gameObject.name == "speaking"){
+
+                  _myavatar.GetComponent<PlayerController>()._isspeakingButt = obj.gameObject;
+              }
+              if(obj.name == "Notspeaking"){
+
+                   _myavatar.GetComponent<PlayerController>()._notSpeakingButt = obj.gameObject;
+              } */
+
+        //  } 
+        StartCoroutine(ShareName());
+
+
+    }
+    IEnumerator ShareName()
+    {
+        yield return new WaitForSeconds(2f);
+        photonView.RPC("RpcShareName", RpcTarget.All);
+        _startCounter = true;
     }
     void Update(){
         if(_pv.IsMine){
             if(_myavatar !=null){
-            if(_myAvatarController._calcScore ==true){
-                myscore = _myAvatarController._scoreplayer.totalscre;
-                  photonView.RPC("RpcShareScore", RpcTarget.All,myscore.ToString(),_myAvatarController._scoreplayer._currentframe);
-                    _myAvatarController._calcScore =false;
-            }
+                if (GameModes._battleRoyale)
+                {
+                    if (_myAvatarController._canhit)
+                    {
+                        if (_myAvatarController._timerAfk >= 0 && _startCounter)
+                        {
+                            
+                            _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = ((int)_myAvatarController._timerAfk).ToString();
+                            
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (_myAvatarController._calcScore)
+                    {
+                        myscore = _myAvatarController._scoreplayer.totalscre;
+                        if (!GameModes._battleRoyale)
+                        {
+                            photonView.RPC("RpcShareScore", RpcTarget.All, myscore.ToString(), _myAvatarController._scoreplayer._currentframe);
+                        }
+                        _myAvatarController._calcScore = false;
+                    }
+                }
             }else{
                  
                 PhotonNetwork.Destroy(this.gameObject);
             }
+            
 
     }
     }
+   
     [PunRPC]
     private void RpcShareScore(string usedString, int framenumb){
 
-        Debug.Log("score shared");
-        //if(PhotonNetwork.OfflineMode){
-        //     _totalScoretexts[0].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //}else{
 
-        //if (_totalScoretexts[localPlayerIndex].gameObject != null)
-        //{
-        //  _totalScoretexts[localPlayerIndex].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //  totalscorePref.GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        // }
-        //if (!GameManager.instance._rankedMode) {
-        //if (!GameManager.instance._rankedMode)
-        //{
-
-       
-        if (_totalScoretexts[_pv.Owner.ActorNumber - 1].gameObject == null) return;
-           _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
+        if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
+           _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
         if (framenumb <= 9)
         {
-            _totalScoretexts[_pv.Owner.ActorNumber - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
+            _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
         }
-
-        //if (_pv.IsMine)
-        //{
-        //    _totalScoretexts[_myplayer.ActorNumber - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //}
-        //else
-        //{
-        //    _totalScoretexts[localPlayerIndex++].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //}
-        //  }
-        //else
-        //{
-        //    if (_pv.IsMine)
-        //    {
-        //        _totalScoretexts[0].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //    }
-        //    else
-        //    {
-        //        _totalScoretexts[1].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //    }
-        //}
-        //if (_totalScoretexts[localPlayerIndex].gameObject != null)
-        //{
-        //    totalscorePref.GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //    _totalScoretexts[localPlayerIndex].GetComponentInChildren<Text>().text = _pv.Owner.NickName + ": " + usedString;
-        //}
-
-        //else
-        //{
-
-
-        //}
-
+    }
+    [PunRPC]
+    private void RpcShareName()
+    {
+        if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
+        _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName;
     }
 
 
@@ -189,7 +160,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-
+       
      
     }
    

@@ -22,7 +22,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public Slider _powerSlider;
     public Scrollbar _hookScroll;
     public List<Transform> _mypins = new List<Transform>();
-    private  List<Vector3> _resetpins = new List<Vector3>();
+    [SerializeField] public  List<Vector3> _resetpins = new List<Vector3>();
+    [SerializeField] public List<Transform> _leftpins = new List<Transform>();
+
     private List<Quaternion> _resetpinsrot = new List<Quaternion>();
     public float _speed;
     private PlayerStateContext _playercontext;
@@ -48,7 +50,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject myleader;
     private GameObject _golballeaderboradcanavas;
     public GameObject _mypinsobj;
-  
+    public bool _followBall;
     public GameObject _mytotal;
     public GameObject _GoHomebutt;
     public GameActions _gameactions;
@@ -89,12 +91,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] public GameObject _RocketOn;
     public bool _usedRocket;
     public bool _readyLunch;
-    [SerializeField] private List<GameObject> _rankedPlayers;
+    [SerializeField] private List<GameObject> _modePlayers;
   
     private bool _gameRankedFinished;
     public bool _usingRock;
     private Vector3 _mypos;
-   
+    public float _timerAfk;
     private void Awake()
     {
 
@@ -105,9 +107,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          _gameactions = new GameActions();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
-        if(SceneManager.GetActiveScene().name == "Map3")
+        if(SceneManager.GetActiveScene().name == "Map4")
         {
-            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z -0.6f);
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z -0.7f);
         }
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
           _scoreplayer = GetComponent<ScorePlayer>();
@@ -149,7 +151,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         };
         _gameactions.ButtonActions.Rocket2.performed += r =>
         {
-            if (_canhit)
+            if (_canhit && !GameModes._battleRoyale)
             {
                 if (!_usedRocket)
                 {
@@ -222,7 +224,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         
         if (_photonview.IsMine)
         {
-           if(!PhotonNetwork.OfflineMode  || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
+            _timerAfk = 10;
+           if (!PhotonNetwork.OfflineMode  || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
             myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
            }
           _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
@@ -261,9 +264,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
              
              _gameactions.ButtonActions.powerupaction.performed += x => {
                   if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-                 if(_canhit == true && _ball.activeInHierarchy){
-                     if(_hookcalclated == true){
-                          if(_calcPower == true){
+                 if(_canhit && _ball.activeInHierarchy){
+                     if(_hookcalclated){
+                          if(_calcPower){
                                GetPowerValue();
                            }
                      }
@@ -272,7 +275,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            };
           _gameactions.ButtonActions.driftbar.performed += y => {
                if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-              if(_canhit == true && _ball.activeInHierarchy)
+              if(_canhit && _ball.activeInHierarchy)
                   {
                   if(_hookcalclated == false){
                       GetDriftValue();
@@ -304,7 +307,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         if (_photonview.IsMine)
         {
 
-            if (GameManager.instance._rankedMode)
+            if (GameModes._rankedMode)
             {
                 if (_gameend && !_gameRankedFinished)
                 {
@@ -312,9 +315,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                   
                 }
                 
-                else if (_rankedPlayers.Count > 0 && _checkIfthereOther)
+                else if (_modePlayers.Count > 0 && _checkIfthereOther)
                 {
-                    if (_rankedPlayers[0] == null)
+                    if (_modePlayers[0] == null)
                     {
                         if (!_gameend)
                         {
@@ -325,6 +328,23 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     }
                 }
               
+            }
+            if (GameModes._battleRoyale)
+            {
+                if (_modePlayers.Count > 0 && _checkIfthereOther)
+                {
+                    
+                    if (IamTheOnlyOne())
+                    {
+                        if (!_gameend)
+                        {
+                            _gameend = true;
+                            ShowRankedResult("win2");
+                            _checkIfthereOther = false;
+                        }
+                    }
+                }
+
             }
             if (_gameend)
             {
@@ -343,8 +363,22 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     EventSystem.current.SetSelectedGameObject(_GoHomebutt);
 
             }
-            if (_canhit == true)
+            if (_canhit)
             {
+                if (GameModes._battleRoyale)
+                {
+                    _timerAfk -= Time.deltaTime;
+                    if (_timerAfk <= 0 && _checkIfthereOther)
+                    {
+
+                        if (!_gameend)
+                        {
+                            _gameend = true;
+                            ShowRankedResult("timeout");
+                            _checkIfthereOther = false;
+                        }
+                    }
+                }
                 if (_readyLunch)
                 {
                     _myRocket?.GetComponent<GunfireController>().FireWeapon();
@@ -352,13 +386,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     _readyLunch = false;
                    
                 }
-                if(_hookcalclated ==false){
+                if(!_hookcalclated){
 
                     UpdateHookSlider();
                 }else{
                        _hookScroll.gameObject.SetActive(false);
                 }
-                if(_hookcalclated == true && _powerval == false){
+                if(_hookcalclated  && !_powerval){
                  
                     UpdateGui();
                 }
@@ -367,7 +401,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     if (!_gamePaused)
                     {
                         inputdir = new Vector3(_movingL.x, 0, 0);
-
                         transform.Translate(inputdir * Time.deltaTime);
                         Vector3 clampedPosition = transform.position;
                         clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
@@ -382,7 +415,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
        
        
     }
-   
+   private bool IamTheOnlyOne()
+    {
+
+        var checkPlayers = _modePlayers.All(x => x.gameObject == null);
+        return checkPlayers;
+    }
     private void BowlState()
     {
        if(!_gameend){
@@ -420,8 +458,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
             {
                
-                _mypins.Add(obj);
-                _resetpins.Add(obj.transform.position);
+                _mypins.Add(obj);           
                 _resetpinsrot.Add(obj.transform.rotation);
             }
 
@@ -432,12 +469,33 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
  
     IEnumerator waitReady()
     {
-        yield return new WaitForSeconds(1f);
-        _rankedPlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
-        if (_rankedPlayers.Contains(this.gameObject))
+        ResetPins();
+        foreach (Transform pins in _mypins)
         {
-            _rankedPlayers.Remove(this.gameObject);
+            if (pins.name != "PinSetter")
+            {
+                pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                
+            }
         }
+        yield return new WaitForSeconds(1f);
+        foreach (Transform pins in _mypins)
+        {
+            if (pins.name != "PinSetter")
+            {
+                _resetpins.Add(pins.localPosition);
+
+            }
+        }
+        if (GameModes._rankedMode || GameModes._battleRoyale)
+        {
+            _modePlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
+            if (_modePlayers.Contains(this.gameObject))
+            {
+                _modePlayers.Remove(this.gameObject);
+            }
+        }
+        
 
         foreach (Transform framtxt in _frametextobj.GetComponentInChildren<Transform>())
         {
@@ -473,11 +531,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          
         if(_ControllPower == false){
               _slidertime += Time.deltaTime;
-              _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.5f);
+              _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.3f);
         }else{
          
               _slidertime += Time.deltaTime;
-             _powerSlider.value = Mathf.Lerp(_powerSlider.maxValue, _powerSlider.minValue, _slidertime / 0.5f);
+             _powerSlider.value = Mathf.Lerp(_powerSlider.maxValue, _powerSlider.minValue, _slidertime / 0.3f);
         }
         
          
@@ -498,7 +556,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
           
             _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime /0.18f);
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.168f);
             
             if(_hookScroll.value >= 0.9){
                 _moveright = true;
@@ -506,7 +564,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          }else{
         _scrolltime = 0; 
             _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime /0.18f);//0.3
+            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.168f);//0.3
 
             if(_hookScroll.value <= 0.1f){
 
@@ -516,6 +574,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          }
 
     }
+  
     private void GetDriftValue()
     {
 
@@ -628,12 +687,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (_mypins[y].name != "PinSetter")
             {
+                _mypins[y].gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Discrete;
                 _mypins[y + 1 - 1].gameObject.GetComponent<Rigidbody>().isKinematic = true;
-                _mypins[y + 1 - 1].transform.position = _resetpins[y + 1 - 1];
+                _mypins[y + 1 - 1].transform.localPosition = _resetpins[y + 1 - 1];
                 _mypins[y + 1 - 1].transform.rotation = _resetpinsrot[y + 1 - 1];
             }
 
         }
+        _leftpins.Clear();
     }
     
    
@@ -694,13 +755,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         if (_photonview.IsMine)
         {
-            if (_rankedPlayers.Count > 0 && !_rankedPanel.activeInHierarchy)
+            if (_modePlayers.Count > 0 && !_rankedPanel.activeInHierarchy)
             {
                
               
-                if (_rankedPlayers[0] != null)
+                if (_modePlayers[0] != null)
                 {
-                    var findscore = _rankedPlayers[0].GetComponent<PlayerController>();
+                    var findscore = _modePlayers[0].GetComponent<PlayerController>();
                     if (findscore._gameend)
                     {
                         _waitOtherPlayer.SetActive(false);
@@ -734,21 +795,24 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (GameManager.instance._rankedMode)
+        if (GameModes._rankedMode)
         {
             if (stream.IsWriting)
             {
+               
+              
                
                 stream.SendNext(_gameend);
                 stream.SendNext(_scoreplayer.totalscre);
             }
             else
             {
-               
+              
                 this._gameend = (bool)stream.ReceiveNext();
                 this._scoreplayer.totalscre = (int)stream.ReceiveNext();
             }
         }
+ 
     }
     public void Resume(){
 
@@ -816,10 +880,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             _MyPlayCanavas.SetActive(false);
         }
-         myleader.SetActive(true);
-        _GoHomebutt.SetActive(true);
-        _rankedPanel.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+        
+          myleader.SetActive(true);
+          _GoHomebutt.SetActive(true);
+          _rankedPanel.SetActive(true);
+          EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+        
         int latpoints = PlayerPrefs.GetInt("rankedpoints");
         switch (state)
         {
@@ -841,9 +907,32 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 _rankedpointtxt.text = "+1 ";
                 PlayerPrefs.SetInt("rankedpoints", latpoints + 1);
                 break;
+            case "win2":
+                _rankedstatetxt.text = "You Win !";
+                _rankedpointtxt.text = "+10 ";
+                PlayerPrefs.SetInt("rankedpoints", latpoints + 10);
+                break;
+            case  "lose2":
+                _rankedstatetxt.text = "You Lose";
+                _rankedpointtxt.text = "0";
+                StartCoroutine(waitExit());
+
+                break;
+            case "timeout":
+                _rankedstatetxt.text = "Time Out";
+                _rankedpointtxt.text = "0 ";
+                StartCoroutine(waitExit());
+                break;
+
         }
+        
         PlayerPrefs.Save();
         StartCoroutine(PostScore());
+    }
+    IEnumerator waitExit()
+    {
+        yield return new WaitForSeconds(5);
+        StartCoroutine(wait());
     }
     private void OnApplicationQuit()
     {
@@ -851,7 +940,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void LeavePanetly()
     {
-        if (GameManager.instance._rankedMode)
+        if (GameModes._rankedMode)
         {
            
             if (!_gameend )

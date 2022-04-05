@@ -17,7 +17,7 @@ public class CreatRooms : MonoBehaviourPunCallbacks
 
 
     public void OnCreatRoom(){
-        if (GameManager.instance._rankedMode) return;
+        if (GameModes._rankedMode) return;
        if(!PhotonNetwork.IsConnected)
        return;
        if(!PhotonNetwork.InLobby)
@@ -27,18 +27,31 @@ public class CreatRooms : MonoBehaviourPunCallbacks
         roomOptions.MaxPlayers = 8;
         roomOptions.CleanupCacheOnLeave = false;
           PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname,roomOptions,TypedLobby.Default);
-          
+      
         
+    }
+    public void OnCreatBattleMode()
+    {
+        
+        GameModes._battleRoyale = true;
+        if (!PhotonNetwork.IsConnected)
+            return;
+        if (!PhotonNetwork.InLobby)
+            return;
+        if (GameModes._battleRoyale)
+        {
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = 15;
+            PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname, roomOptions, TypedLobby.Default);
+        }
     }
 
     public override void OnCreatedRoom()
     {
 
-        if(!PhotonNetwork.OfflineMode && !GameManager.instance._rankedMode)
+        if(!PhotonNetwork.OfflineMode && !GameModes._rankedMode)
         {
-
-        Debug.Log("room created");
-      _roomController.CurrentRoomCanavas.Show();
+          _roomController.CurrentRoomCanavas.Show();
         }
     }
 

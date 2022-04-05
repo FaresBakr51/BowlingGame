@@ -5,10 +5,6 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
 {
     private PlayerController playercontroller;
     private bool _goforword;
-    private PhotonView _pv;
-    void Awake(){
-        _pv = GetComponent<PhotonView>();
-    }
     public void Handle(PlayerController _playercontroller)
     {
         if (!playercontroller)
@@ -16,7 +12,9 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
             playercontroller = _playercontroller;
         }
         playercontroller._canhit = false;
-        
+        playercontroller._timerAfk = 10;
+
+
         RpcShotBall();
     }
     

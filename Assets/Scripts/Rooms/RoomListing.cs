@@ -20,6 +20,11 @@ public class RoomListing : MonoBehaviourPunCallbacks
       public void JoinRoomButt(){
 
           if(RoomInfo.IsOpen && PhotonNetwork.IsConnected){
+
+            if (RoomInfo.MaxPlayers == 15)
+            {
+                GameModes._battleRoyale = true;
+            }
         PhotonNetwork.JoinRoom(RoomInfo.Name);
           }
     }

@@ -20,7 +20,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         {
             playerController = _playercontroller;
         }
-        this.transform.position = _mypos;
+     
         IdleState();
      
     }
@@ -31,6 +31,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
     }
     private void ResetCamAndpins()
     {
+        playerController._followBall = false;
         playerController._powerval = false;
         playerController._hookcalclated = false;
         playerController._powerSlider.gameObject.SetActive(false);
@@ -43,7 +44,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._scrolltime = 0;
         playerController._powerSlider.value = 0;
         playerController._hookScroll.value = 0.5f;
-        playerController._camera.transform.position = _Cambos;
+      
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
 
       
@@ -58,12 +59,14 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             {
                playerController._MyPlayCanavas.SetActive(false);
             }
-            if (!GameManager.instance._rankedMode)
+
+            if (!GameModes._rankedMode)
             {
                 playerController._GoHomebutt.SetActive(true);
                 playerController.myleader.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
             }
+           
             else
             {
                 playerController.CheckWinner();
@@ -72,7 +75,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         else
         {
-           
+            playerController._timerAfk = 10;
             playerController._canhit = true;
         }
        
@@ -88,29 +91,57 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             playerController.UpdateAnimator("shot", 0);
             playerController._camera.transform.position = _Cambos;
         }
+
         playerController._roundscore = 0;
         playerController._ball.GetComponent<BallSound>()._hit = false;
+        this.transform.position = _mypos;
+        playerController._camera.transform.position = _Cambos;
+       
         foreach (Transform pins in playerController._mypins)
         {
             if (pins.name != "PinSetter")
             {
                 pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+             //   pins.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             }
         }
-       
-     
+      
+
+
     }
-   
+  
 
     IEnumerator WaitToReset()
     {
-        yield return new WaitForSeconds(1.5f);
-        playerController.myleader.SetActive(true);
-        // GameManager.instance.RequestLeaderBoard();
-        yield return new WaitForSeconds(3f);
-        playerController.myleader.SetActive(false);
-        playerController._MyPlayCanavas.SetActive(true);
-        ResetCamAndpins();
+
+        if (!GameModes._battleRoyale)
+        {
+            yield return new WaitForSeconds(1.5f);
+
+            playerController.myleader.SetActive(true);
+            if (playerController._leftpins.Count > 0)
+            {
+                foreach (Transform leftpin in playerController._leftpins)
+                {
+                    leftpin.transform.rotation = Quaternion.identity;
+                    if (leftpin.gameObject.GetComponent<Rigidbody>().isKinematic)
+                    {
+                        leftpin.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                    }
+                    leftpin.gameObject.SetActive(true);
+                    leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
+                }
+            }
+            yield return new WaitForSeconds(3f);
+            playerController.myleader.SetActive(false);
+            playerController._MyPlayCanavas.SetActive(true);
+            ResetCamAndpins();
+        }
+        else
+        {
+            yield return new WaitForSeconds(1.5f);
+            ResetCamAndpins();
+        }
        
     }
 }

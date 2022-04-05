@@ -7,6 +7,10 @@ public class LeaveRoomMenu : MonoBehaviour
    [SerializeField] private GameObject _currentroompanel;
    public MainMenuManager _menuManager;
    public void Onclick_Leavroom(){
+        if (GameModes._battleRoyale)
+        {
+            GameModes._battleRoyale = false;
+        }
        PhotonNetwork.LeaveRoom(true);
        _controller.CurrentRoomCanavas.Hide();
        _menuManager.ActivealreadyRoompanel();

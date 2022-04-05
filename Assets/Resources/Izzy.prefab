@@ -2684,10 +2684,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 6127702538462875536}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
-  m_MinValue: 230
-  m_MaxValue: 350
+  m_MinValue: 225
+  m_MaxValue: 340
   m_WholeNumbers: 0
-  m_Value: 230
+  m_Value: 225
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -6261,6 +6261,7 @@ MonoBehaviour:
   _powerSlider: {fileID: 6127702538982518499}
   _hookScroll: {fileID: 6127702539272884996}
   _mypins: []
+  _resetpins: []
   _speed: 0.5
   _slidertime: 0
   _scrolltime: 0
@@ -6298,7 +6299,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7493df52ada11f74b9e567790e331bce, type: 3}
   - {fileID: 8300000, guid: bbd19636b678caa4d80330864a0cf087, type: 3}
   - {fileID: 8300000, guid: 8426a2ce8e5e8c2498beea40eaf8b7fc, type: 3}
-  - {fileID: 8300000, guid: 157b6d8d156ffa04982374cd8c81c47a, type: 3}
+  - {fileID: 8300000, guid: b90a2b081a9c52b4a965d084ba189042, type: 3}
   - {fileID: 8300000, guid: abfd699cf73e44f4ea91168eb13dfe31, type: 3}
   - {fileID: 8300000, guid: 81fc5b41ea208d947aa4de9e60d532f4, type: 3}
   - {fileID: 8300000, guid: e18aefde8e18564439d8769df4c088f1, type: 3}
@@ -6325,8 +6326,9 @@ MonoBehaviour:
   _RocketOn: {fileID: 913360932}
   _usedRocket: 0
   _readyLunch: 0
-  _rankedPlayers: []
+  _modePlayers: []
   _usingRock: 0
+  _timerAfk: 0
 --- !u!114 &6728201057152896728
 MonoBehaviour:
   m_ObjectHideFlags: 0

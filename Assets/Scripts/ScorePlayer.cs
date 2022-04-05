@@ -41,8 +41,15 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			
 		   
 		}
-	
-	  
+
+        if (GameModes._battleRoyale)
+        {
+			if(!_scoreStrn.EndsWith("X "))
+            {
+				_playercontroll._gameend = true;
+				_playercontroll.ShowRankedResult("lose2");
+            }
+        }
 		if(_scoreStrn.EndsWith("X ")){
 			UpdateStrikeSound();
 		}

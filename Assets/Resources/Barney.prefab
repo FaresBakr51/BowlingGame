@@ -2871,6 +2871,8 @@ MonoBehaviour:
   _powerSlider: {fileID: 2084988667444169635}
   _hookScroll: {fileID: 2084988665526788795}
   _mypins: []
+  _resetpins: []
+  _leftpins: []
   _speed: 0.5
   _slidertime: 0
   _scrolltime: 0
@@ -2886,6 +2888,7 @@ MonoBehaviour:
   _leaderboardprefab: {fileID: 1234403425327534529, guid: 0a677aff29c220040901c911c2b86d66, type: 3}
   myleader: {fileID: 0}
   _mypinsobj: {fileID: 2084988666288440622}
+  _followBall: 0
   _mytotal: {fileID: 0}
   _GoHomebutt: {fileID: 0}
   _powerval: 0
@@ -2908,7 +2911,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7493df52ada11f74b9e567790e331bce, type: 3}
   - {fileID: 8300000, guid: bbd19636b678caa4d80330864a0cf087, type: 3}
   - {fileID: 8300000, guid: 8426a2ce8e5e8c2498beea40eaf8b7fc, type: 3}
-  - {fileID: 8300000, guid: 157b6d8d156ffa04982374cd8c81c47a, type: 3}
+  - {fileID: 8300000, guid: b90a2b081a9c52b4a965d084ba189042, type: 3}
   - {fileID: 8300000, guid: abfd699cf73e44f4ea91168eb13dfe31, type: 3}
   - {fileID: 8300000, guid: 81fc5b41ea208d947aa4de9e60d532f4, type: 3}
   - {fileID: 8300000, guid: e18aefde8e18564439d8769df4c088f1, type: 3}
@@ -2935,8 +2938,9 @@ MonoBehaviour:
   _RocketOn: {fileID: 1454152461}
   _usedRocket: 0
   _readyLunch: 0
-  _rankedPlayers: []
+  _modePlayers: []
   _usingRock: 0
+  _timerAfk: 0
 --- !u!114 &2084988666566685629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4643,10 +4647,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 2084988666559241118}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
-  m_MinValue: 230
-  m_MaxValue: 350
+  m_MinValue: 225
+  m_MaxValue: 340
   m_WholeNumbers: 0
-  m_Value: 230
+  m_Value: 225
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5566,50 +5570,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2084988666488655580}
     m_Modifications:
-    - target: {fileID: 1184200995558425140, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200995723672850, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200995839478386, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200996022965817, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200996046776976, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200996144503555, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200996509630680, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200996996485496, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200997166233560, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200997256259467, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184200997479140608, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
-      propertyPath: sceneViewId
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1184200997479140610, guid: f766e06ed7ff9ee47a8103975de5eaf7, type: 3}
       propertyPath: m_RootOrder
       value: 2

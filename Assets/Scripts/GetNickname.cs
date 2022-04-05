@@ -61,6 +61,7 @@ public class GetNickname : MonoBehaviour {
     IEnumerator GetUserNickname() {
         GetDeviceID();
 
+        yield return new WaitForSeconds(2f);
         // Form Data Settings
         WWWForm form = new WWWForm();
         form.AddField("request", "get");

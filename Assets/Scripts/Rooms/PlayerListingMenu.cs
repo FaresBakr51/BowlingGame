@@ -68,7 +68,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (GameManager.instance._rankedMode) return;
+        if (GameModes._rankedMode) return;
          AddPlayerListing(newPlayer);
          if(PhotonNetwork.IsMasterClient){
          if(PhotonNetwork.CurrentRoom.PlayerCount >=2){
@@ -83,7 +83,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (GameManager.instance._rankedMode) return;
+        if (GameModes._rankedMode) return;
         int index = _listings.FindIndex(x => x.Player == otherPlayer);
                if(index != -1){
 
@@ -93,17 +93,31 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
                 
     }
     public void Onclick_StartGame(){
-        if(PhotonNetwork.IsMasterClient && !_gameLoading)
+        if (!GameModes._battleRoyale)
         {
-            if(PhotonNetwork.CurrentRoom.PlayerCount > 6){
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonNetwork.LoadLevel(2);
-            }else if(PhotonNetwork.CurrentRoom.PlayerCount <= 6)
+            if (PhotonNetwork.IsMasterClient && !_gameLoading)
+            {
+                if (PhotonNetwork.CurrentRoom.PlayerCount > 6)
+                {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                    PhotonNetwork.LoadLevel(2);
+                }
+                else if (PhotonNetwork.CurrentRoom.PlayerCount <= 6)
+                {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                    PhotonNetwork.LoadLevel(Random.Range(2, 4));
+                }
+
+                _gameLoading = true;
+            }
+        }
+        else
+        {
+            if (PhotonNetwork.IsMasterClient && !_gameLoading && PhotonNetwork.CurrentRoom.PlayerCount >= 3)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                PhotonNetwork.LoadLevel(Random.Range(2, 5));
+                PhotonNetwork.LoadLevel(5);
             }
-
             _gameLoading = true;
         }
     }

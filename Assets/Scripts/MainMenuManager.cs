@@ -81,9 +81,9 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
             _leaderBoardPanel.SetActive(false);
         }
-        if (GameManager.instance._rankedMode)
+        if (GameModes._rankedMode)
         {
-            GameManager.instance._rankedMode = false;
+            GameModes._rankedMode = false;
         }
         if (_WAITINPanel.activeInHierarchy)
         {
@@ -91,7 +91,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.LeaveRoom();
             }
-            GameManager.instance._rankedMode = false;
+            GameModes._rankedMode = false;
             StartCoroutine(Leavroom());
             _WAITINPanel.SetActive(false);
         }
@@ -114,6 +114,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
         void Start()
     {
+        GameModes._rankedMode = false;
+        GameModes._battleRoyale = false;
         StartCoroutine(GetRankedPoints());
        PhotonNetwork.OfflineMode = false;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
@@ -126,13 +128,13 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
    
     IEnumerator GetRankedPoints()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
         _totalRankedPoints = PlayerPrefs.GetInt("rankedpoints", 0);
         _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + " / " + _totalRankedPoints.ToString();
     }
     public void CreatRankedMatch()
     {
-        GameManager.instance._rankedMode = true;
+        GameModes._rankedMode = true;
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -152,12 +154,12 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
   
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (GameManager.instance._rankedMode)
+        if (GameModes._rankedMode)
         {
             Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
             if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.LoadLevel(Random.Range(2, 5));
+                PhotonNetwork.LoadLevel(Random.Range(2, 4));
             }
         }
     }
@@ -192,7 +194,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
    private void CheckGameMode(){
 
      _PickPlayerPanel.SetActive(false);
-        if (!GameManager.instance._rankedMode)
+        if (!GameModes._rankedMode)
         {
             if (_offlinemode == true)
             {
@@ -252,7 +254,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRoom(null);
           PhotonNetwork.CurrentRoom.IsOpen = false;
            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(Random.Range(2, 5));
+            PhotonNetwork.LoadLevel(Random.Range(2, 4));
         } 
     }
      IEnumerator Join2PMODE()
@@ -264,7 +266,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             yield return null;
         }
         PhotonNetwork.OfflineMode = true;
-        PhotonNetwork.LoadLevel(Random.Range(2, 5));
+        PhotonNetwork.LoadLevel(Random.Range(2, 4));
 
 
     }

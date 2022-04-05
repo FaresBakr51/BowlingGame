@@ -9693,6 +9693,8 @@ MonoBehaviour:
   _powerSlider: {fileID: 5390521928498094749}
   _hookScroll: {fileID: 5390521929352909785}
   _mypins: []
+  _resetpins: []
+  _leftpins: []
   _speed: 0.5
   _slidertime: 0
   _scrolltime: 0
@@ -9708,6 +9710,7 @@ MonoBehaviour:
   _leaderboardprefab: {fileID: 1234403425327534529, guid: 0a677aff29c220040901c911c2b86d66, type: 3}
   myleader: {fileID: 0}
   _mypinsobj: {fileID: 6545546643952120329}
+  _followBall: 0
   _mytotal: {fileID: 0}
   _GoHomebutt: {fileID: 0}
   _powerval: 0
@@ -9730,7 +9733,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7493df52ada11f74b9e567790e331bce, type: 3}
   - {fileID: 8300000, guid: bbd19636b678caa4d80330864a0cf087, type: 3}
   - {fileID: 8300000, guid: 8426a2ce8e5e8c2498beea40eaf8b7fc, type: 3}
-  - {fileID: 8300000, guid: 157b6d8d156ffa04982374cd8c81c47a, type: 3}
+  - {fileID: 8300000, guid: b90a2b081a9c52b4a965d084ba189042, type: 3}
   - {fileID: 8300000, guid: abfd699cf73e44f4ea91168eb13dfe31, type: 3}
   - {fileID: 8300000, guid: 81fc5b41ea208d947aa4de9e60d532f4, type: 3}
   - {fileID: 8300000, guid: e18aefde8e18564439d8769df4c088f1, type: 3}
@@ -9757,8 +9760,9 @@ MonoBehaviour:
   _RocketOn: {fileID: 618212946}
   _usedRocket: 0
   _readyLunch: 0
-  _rankedPlayers: []
+  _modePlayers: []
   _usingRock: 0
+  _timerAfk: 0
 --- !u!114 &5390521927711420151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11808,10 +11812,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 5390521927762554963}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
-  m_MinValue: 230
-  m_MaxValue: 350
+  m_MinValue: 225
+  m_MaxValue: 340
   m_WholeNumbers: 0
-  m_Value: 230
+  m_Value: 225
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -12520,6 +12524,7 @@ GameObject:
   - component: {fileID: 6545546643193720445}
   - component: {fileID: 6545546643193720434}
   - component: {fileID: 6545546643193720435}
+  - component: {fileID: 6923780665770917945}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -12599,8 +12604,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546643193720433}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -12676,6 +12681,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6923780665770917945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546643193720433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546643952120329
 GameObject:
   m_ObjectHideFlags: 0
@@ -12773,6 +12790,7 @@ GameObject:
   - component: {fileID: 6545546644009719936}
   - component: {fileID: 6545546644009719937}
   - component: {fileID: 6545546644009719942}
+  - component: {fileID: 3331015746139084634}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -12852,8 +12870,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644009719940}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -12929,6 +12947,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &3331015746139084634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644009719940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546644164561105
 GameObject:
   m_ObjectHideFlags: 0
@@ -12945,6 +12975,7 @@ GameObject:
   - component: {fileID: 6545546644164561117}
   - component: {fileID: 6545546644164561106}
   - component: {fileID: 6545546644164561107}
+  - component: {fileID: 954461107135069278}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -13024,8 +13055,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644164561105}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -13101,6 +13132,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &954461107135069278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644164561105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546644370270518
 GameObject:
   m_ObjectHideFlags: 0
@@ -13117,6 +13160,7 @@ GameObject:
   - component: {fileID: 6545546644370270514}
   - component: {fileID: 6545546644370270515}
   - component: {fileID: 6545546644370270512}
+  - component: {fileID: 2373531593960461914}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -13196,8 +13240,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644370270518}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -13273,6 +13317,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &2373531593960461914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644370270518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546644451063167
 GameObject:
   m_ObjectHideFlags: 0
@@ -13289,6 +13345,7 @@ GameObject:
   - component: {fileID: 6545546644451063163}
   - component: {fileID: 6545546644451063160}
   - component: {fileID: 6545546644451063161}
+  - component: {fileID: 1538673485337432599}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -13368,8 +13425,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644451063167}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -13445,6 +13502,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &1538673485337432599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644451063167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546644600488479
 GameObject:
   m_ObjectHideFlags: 0
@@ -13461,6 +13530,7 @@ GameObject:
   - component: {fileID: 6545546644600488475}
   - component: {fileID: 6545546644600488472}
   - component: {fileID: 6545546644600488473}
+  - component: {fileID: 6719039697353568172}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -13540,8 +13610,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644600488479}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -13617,6 +13687,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6719039697353568172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644600488479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546644698496317
 GameObject:
   m_ObjectHideFlags: 0
@@ -13633,6 +13715,7 @@ GameObject:
   - component: {fileID: 6545546644698496313}
   - component: {fileID: 6545546644698496318}
   - component: {fileID: 6545546644698496319}
+  - component: {fileID: 8320767916832493435}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -13712,8 +13795,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644698496317}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -13789,6 +13872,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &8320767916832493435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644698496317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546644856946641
 GameObject:
   m_ObjectHideFlags: 0
@@ -13805,6 +13900,7 @@ GameObject:
   - component: {fileID: 6545546644856946653}
   - component: {fileID: 6545546644856946642}
   - component: {fileID: 6545546644856946643}
+  - component: {fileID: 934424324175574260}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -13884,8 +13980,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546644856946641}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -13961,6 +14057,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &934424324175574260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546644856946641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546645216712089
 GameObject:
   m_ObjectHideFlags: 0
@@ -13977,6 +14085,7 @@ GameObject:
   - component: {fileID: 6545546645216712037}
   - component: {fileID: 6545546645216712090}
   - component: {fileID: 6545546645216712091}
+  - component: {fileID: 5656033863631312775}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -14056,8 +14165,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546645216712089}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -14133,6 +14242,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &5656033863631312775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546645216712089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6545546645289247756
 GameObject:
   m_ObjectHideFlags: 0
@@ -14149,6 +14270,7 @@ GameObject:
   - component: {fileID: 6545546645289247752}
   - component: {fileID: 6545546645289247753}
   - component: {fileID: 6545546645289247758}
+  - component: {fileID: 7983169141437793523}
   m_Layer: 0
   m_Name: Pin
   m_TagString: pin
@@ -14228,8 +14350,8 @@ Rigidbody:
   m_GameObject: {fileID: 6545546645289247756}
   serializedVersion: 2
   m_Mass: 4
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -14305,6 +14427,18 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &7983169141437793523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545546645289247756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733f10018c851e74d903821678ca4c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7494801305883732919
 GameObject:
   m_ObjectHideFlags: 0
