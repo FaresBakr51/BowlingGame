@@ -70,16 +70,35 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     {
         if (GameModes._rankedMode) return;
          AddPlayerListing(newPlayer);
-         if(PhotonNetwork.IsMasterClient){
-         if(PhotonNetwork.CurrentRoom.PlayerCount >=2){
-             _WaitingPlayerMass.SetActive(false);
-             _startButt.SetActive(true);
-         }
-         if(PhotonNetwork.CurrentRoom.PlayerCount <2){
-                 _WaitingPlayerMass.SetActive(true);
-             _startButt.SetActive(false);
-         }
-         }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (!GameModes._battleRoyale)
+            {
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+                {
+                    _WaitingPlayerMass.SetActive(false);
+                    _startButt.SetActive(true);
+                }
+                if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
+                {
+                    _WaitingPlayerMass.SetActive(true);
+                    _startButt.SetActive(false);
+                }
+            }
+            else
+            {
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 3)
+                {
+                    _WaitingPlayerMass.SetActive(false);
+                    _startButt.SetActive(true);
+                }
+                if (PhotonNetwork.CurrentRoom.PlayerCount < 3)
+                {
+                    _WaitingPlayerMass.SetActive(true);
+                    _startButt.SetActive(false);
+                }
+            }
+        }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
