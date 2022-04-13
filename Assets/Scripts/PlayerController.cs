@@ -107,9 +107,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          _gameactions = new GameActions();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
-        if(SceneManager.GetActiveScene().name == "Map4")
+        if (SceneManager.GetActiveScene().name == "Map4")
         {
-            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z -0.7f);
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.5f);
+        }
+        else
+        {
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z + 0.3f);
         }
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
           _scoreplayer = GetComponent<ScorePlayer>();
