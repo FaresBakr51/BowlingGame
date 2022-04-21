@@ -75,7 +75,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         else
         {
-            playerController._timerAfk = 10;
+            playerController._timerAfk = 15;
             playerController._canhit = true;
         }
        

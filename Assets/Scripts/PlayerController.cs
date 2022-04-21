@@ -97,6 +97,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public bool _usingRock;
     private Vector3 _mypos;
     public float _timerAfk;
+
+    [Header("BattleRoyal")]
+
+    [SerializeField] private bool _battleStart;
+    [SerializeField] private float battletimer = 7;
+    private GameObject _battleRoyalDescrypt;
     private void Awake()
     {
 
@@ -147,7 +153,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
               };
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
         _gameactions.ButtonActions.pause.performed += x => {
-            if (!_gameend && !_usingRock) {
+            if (!_gameend && !_usingRock && _battleStart) {
                 _pauseMenupanel.SetActive(true);
                 _gamePaused = true;
                 EventSystem.current.SetSelectedGameObject(_pauseMenuFirstbutt);
@@ -160,7 +166,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 if (!_usedRocket)
                 {
 
-                    if (!_gamePaused)
+                    if (!_gamePaused && _battleStart)
                     {
                         _usingRock = true;
                         transform.position = _mypos;
@@ -228,15 +234,24 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         
         if (_photonview.IsMine)
         {
-            _timerAfk = 10;
-           if (!PhotonNetwork.OfflineMode  || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
-            myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
-           }
-          _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
+            _timerAfk = 15;
+            if (!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom))
+            {
+                myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
+            }
+            _GoHomebutt = myleader.GetComponentInChildren<Button>().gameObject;
             var rankedpanelobj = myleader.GetComponentsInChildren<Transform>();
             _waitOtherPlayer = rankedpanelobj.FirstOrDefault(x => x.name == "waitingotherplayer").gameObject;
+            var playcanavas = _MyPlayCanavas.GetComponentsInChildren<Transform>().ToList();
+            _battleRoyalDescrypt = playcanavas.FirstOrDefault(x => x.name == "BattleRoyalDescrypt").gameObject;
+            _battleRoyalDescrypt.SetActive(false);
+            if (GameModes._battleRoyale)
+            {
+                _battleRoyalDescrypt.SetActive(true);
+            }
+            else { _battleStart = true; }
             _waitOtherPlayer.SetActive(false);
-             _rankedPanel = rankedpanelobj.FirstOrDefault(x => x.name == "RankedPanel").gameObject;
+            _rankedPanel = rankedpanelobj.FirstOrDefault(x => x.name == "RankedPanel").gameObject;
             var rankedpanobj = _rankedPanel.GetComponentsInChildren<Transform>();
             _rankedpointtxt = rankedpanelobj.FirstOrDefault(x => x.name == "rankedpoints").GetComponent<Text>();
             _rankedstatetxt = rankedpanelobj.FirstOrDefault(x => x.name == "rankedstate").GetComponent<Text>();
@@ -247,10 +262,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
             myleader.transform.GetComponent<RectTransform>().localScale = new Vector3(2, 2f, 2);
 
-           
+
         }
 
-       
+
 
         _hookScroll.gameObject.SetActive(true);
         _playercontext = new PlayerStateContext(this);
@@ -268,7 +283,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
              
              _gameactions.ButtonActions.powerupaction.performed += x => {
                   if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-                 if(_canhit && _ball.activeInHierarchy){
+                 if(_canhit && _ball.activeInHierarchy && _battleStart)
+                     {
                      if(_hookcalclated){
                           if(_calcPower){
                                GetPowerValue();
@@ -279,7 +295,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            };
           _gameactions.ButtonActions.driftbar.performed += y => {
                if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-              if(_canhit && _ball.activeInHierarchy)
+              if(_canhit && _ball.activeInHierarchy && _battleStart)
                   {
                   if(_hookcalclated == false){
                       GetDriftValue();
@@ -335,6 +351,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (GameModes._battleRoyale)
             {
+                if (!_battleStart)
+                {
+
+                    battletimer -= Time.deltaTime;
+
+                    if (battletimer <= 3 && battletimer > 0)
+                    {
+                        _battleRoyalDescrypt.GetComponent<Text>().text = ((int)battletimer).ToString();
+                    }
+                    else if (battletimer <= 0 && battletimer > -1)
+                    {
+                        _battleRoyalDescrypt.GetComponent<Text>().text = "GO !";
+                    }
+                    else if (battletimer <= -1)
+                    {
+                        _battleRoyalDescrypt.SetActive(false);
+                        _battleStart = true;
+                    }
+
+                }
                 if (_modePlayers.Count > 0 && _checkIfthereOther)
                 {
                     
@@ -369,7 +405,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (_canhit)
             {
-                if (GameModes._battleRoyale)
+                if (GameModes._battleRoyale && _battleStart)
                 {
                     _timerAfk -= Time.deltaTime;
                     if (_timerAfk <= 0 && _checkIfthereOther)

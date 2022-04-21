@@ -12,7 +12,7 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
             playercontroller = _playercontroller;
         }
         playercontroller._canhit = false;
-        playercontroller._timerAfk = 10;
+        playercontroller._timerAfk = 15;
 
 
         RpcShotBall();
