@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class RoomListing : MonoBehaviourPunCallbacks
 {
-
+  
     public RoomInfo RoomInfo {get;private set;}
     [SerializeField] private  TextMeshProUGUI _text;
     public bool _inGame;
@@ -28,5 +28,6 @@ public class RoomListing : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(RoomInfo.Name);
           }
     }
+ 
 
 }

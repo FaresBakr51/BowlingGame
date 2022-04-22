@@ -52,27 +52,15 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
 
     private void AddPlayerListing(Player player){
 
-       /*  int index = _listings.FindIndex(x => x.Player == player);
-        if(index != -1){
-            _listings[index].SetPlayerInfo(player);
-        }else{ */
-            PlayerListing listing = Instantiate(_playerlisting,_content);
+        /*  int index = _listings.FindIndex(x => x.Player == player);
+         if(index != -1){
+             _listings[index].SetPlayerInfo(player);
+         }else{ */
+
+
+        PlayerListing listing = Instantiate(_playerlisting, _content);
      
            if (listing !=null){
-        
-            //ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
-            //myCustomProperties.Clear();
-            //if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-            //{
-
-            //    myCustomProperties.Add("platformimagepc", 0);
-            //}
-            //else if (Application.platform == RuntimePlatform.Android)
-            //{
-            //    myCustomProperties.Add("platformimageandroid", 1);
-            //}
-          
-            //player.SetCustomProperties(myCustomProperties);
             listing.SetPlayerInfo(player);
                _listings.Add(listing);
            }
@@ -121,12 +109,31 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     {
         if (GameModes._rankedMode) return;
         int index = _listings.FindIndex(x => x.Player == otherPlayer);
-               if(index != -1){
+        if (index != -1)
+        {
 
-                  Destroy(_listings[index].gameObject);
-                   _listings.RemoveAt(index);
-               }
+            Destroy(_listings[index].gameObject);
+            _listings.RemoveAt(index);
+        }
+        if (!GameModes._battleRoyale)
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
+            {
                 
+                _startButt.SetActive(false);
+                _WaitingPlayerMass.SetActive(true);
+            }
+
+        }
+        else
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount < 3)
+            {
+
+                _startButt.SetActive(false);
+                _WaitingPlayerMass.SetActive(true);
+            }
+        }
     }
     public void Onclick_StartGame(){
         if (!GameModes._battleRoyale)
@@ -158,51 +165,6 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
         }
     }
 
-    private void Update()
-    {
-        if (_listings.Count > 0)
-        {
-             SetplayersPlatform();
-            //if (TypePlatform() != -1 && !_listings[TypePlatform()]._ImageSet)
-            //{
-
-            //     _listings[TypePlatform()].GetComponentInChildren<Image>().sprite = _plaformSprites[TypePlatform()];
-            //    _listings[TypePlatform()]._ImageSet = true;
-
-            //}
-
-        }
-
-    }
-    //int TypePlatform()
-    //{
-    //    object temp  = null;
-    //    int isArcade = _listings.FindIndex(t => t.Player.CustomProperties.TryGetValue("platformimage",out temp));
-    //    Debug.Log(temp);
-    //    return (int)temp;
-
-    //}
-
-    private void SetplayersPlatform()
-    {
-
-
-        //for (int i = 0; i < _listings.Count; i++)
-        //{
-        //    object temp;
-        //    if(_listings[i].Player.CustomProperties.TryGetValue("platformimage", out temp))
-        //    {
-        //        _listings[i].GetComponentInChildren<Image>().sprite = _plaformSprites[(int)(temp)];
-
-        //    }
-         
-        //}
-
-    }
-
-
-
-        //}
 
 
   }

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
-
 public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -71,6 +69,16 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     private void RpcSharetotalScore(){
 
        totalscorePref = PhotonNetwork.Instantiate("_mytotalscoreprefab",_mytotalscore.transform.position,Quaternion.identity,0);
+
+        if (Application.platform == RuntimePlatform.WindowsPlayer)
+        {
+              var platform = PhotonNetwork.Instantiate("platformpc", totalscorePref.transform.position, Quaternion.identity, 0);
+        }
+        else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.WindowsEditor)
+        {
+               var platform =   PhotonNetwork.Instantiate("platformarcade", totalscorePref.transform.position, Quaternion.identity, 0);
+     
+        }
         _myAvatarController._mytotal = totalscorePref;
 
         /*   foreach(Transform obj in totalscorePref.GetComponentsInChildren<Transform>()){
@@ -91,9 +99,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     }
     IEnumerator ShareName()
     {
+        
         yield return new WaitForSeconds(2f);
+       
         photonView.RPC("RpcShareName", RpcTarget.All);
         _startCounter = true;
+       
     }
     void Update(){
         if(_pv.IsMine){
@@ -127,9 +138,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
                  
                 PhotonNetwork.Destroy(this.gameObject);
             }
-            
 
-    }
+
+        }
+     
     }
    
     [PunRPC]
@@ -146,13 +158,16 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
     [PunRPC]
     private void RpcShareName()
     {
+
+
         if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
         _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = _pv.Owner.NickName;
     }
 
 
     private void GetSpawnPoints(){
-        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("spawnpoint")){
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("spawnpoint"))
+        {
 
             _spawnPoints.Add(obj);
         }
@@ -160,7 +175,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-       
      
     }
    
