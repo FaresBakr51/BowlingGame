@@ -159,7 +159,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient && !_gameLoading && PhotonNetwork.CurrentRoom.PlayerCount >= 3)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                PhotonNetwork.LoadLevel(5);
+                PhotonNetwork.LoadLevel(4);
             }
             _gameLoading = true;
         }
