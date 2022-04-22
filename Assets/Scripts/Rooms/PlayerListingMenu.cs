@@ -59,6 +59,20 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
             PlayerListing listing = Instantiate(_playerlisting,_content);
      
            if (listing !=null){
+        
+            //ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
+            //myCustomProperties.Clear();
+            //if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+            //{
+
+            //    myCustomProperties.Add("platformimagepc", 0);
+            //}
+            //else if (Application.platform == RuntimePlatform.Android)
+            //{
+            //    myCustomProperties.Add("platformimageandroid", 1);
+            //}
+          
+            //player.SetCustomProperties(myCustomProperties);
             listing.SetPlayerInfo(player);
                _listings.Add(listing);
            }
@@ -146,19 +160,19 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        //if (_listings.Count > 0)
-        //{
-        //  //  SetplayersPlatform();
-        //    //if (TypePlatform() != -1 && !_listings[TypePlatform()]._ImageSet)
-        //    //{
+        if (_listings.Count > 0)
+        {
+             SetplayersPlatform();
+            //if (TypePlatform() != -1 && !_listings[TypePlatform()]._ImageSet)
+            //{
 
-        //    //     _listings[TypePlatform()].GetComponentInChildren<Image>().sprite = _plaformSprites[TypePlatform()];
-        //    //    _listings[TypePlatform()]._ImageSet = true;
+            //     _listings[TypePlatform()].GetComponentInChildren<Image>().sprite = _plaformSprites[TypePlatform()];
+            //    _listings[TypePlatform()]._ImageSet = true;
 
-        //    //}
+            //}
 
-        //}
-        
+        }
+
     }
     //int TypePlatform()
     //{
@@ -169,22 +183,26 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
 
     //}
 
-    //private void SetplayersPlatform()
-    //{
-       
-
-    //    for(int i =0;i< _listings.Count; i++)
-    //    {
-    //        object temp;
-    //        _listings[i].Player.CustomProperties.TryGetValue("platformimage", out temp);
-    //        _listings[i].GetComponentInChildren<Image>().sprite = _plaformSprites[(int)(temp)];
-    //    }
-    
+    private void SetplayersPlatform()
+    {
 
 
-      
+        //for (int i = 0; i < _listings.Count; i++)
+        //{
+        //    object temp;
+        //    if(_listings[i].Player.CustomProperties.TryGetValue("platformimage", out temp))
+        //    {
+        //        _listings[i].GetComponentInChildren<Image>().sprite = _plaformSprites[(int)(temp)];
 
-    //}
- 
+        //    }
+         
+        //}
 
-}
+    }
+
+
+
+        //}
+
+
+  }
