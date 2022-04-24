@@ -29,9 +29,9 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""powerupaction"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""421b8609-13e1-4749-8cf0-f0aa2ab731d8"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -176,6 +176,17 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""ea6b3772-66ce-47fb-bad2-d37618b8ba4f"",
                     ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""powerupaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b30bf18-9502-4e87-96ff-26d9622dfe04"",
+                    ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

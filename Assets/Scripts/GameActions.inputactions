@@ -7,11 +7,12 @@
             "actions": [
                 {
                     "name": "powerupaction",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "421b8609-13e1-4749-8cf0-f0aa2ab731d8",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Navigate",
@@ -19,7 +20,8 @@
                     "id": "3fc4d3e3-0bbe-4c81-8d15-fdf2c83f67a7",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "powerupaction2",
@@ -27,7 +29,8 @@
                     "id": "75d00f2c-d190-4f8a-ad48-392ba3ff4ee5",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "driftbar",
@@ -35,7 +38,8 @@
                     "id": "2037763c-0abf-46fd-ba65-8225675ac4b9",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "driftbar2",
@@ -43,7 +47,8 @@
                     "id": "d07662cc-fa04-4c67-a42b-2d9931b365bb",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "moving",
@@ -51,7 +56,8 @@
                     "id": "24eae9dd-3d6f-461d-952d-a394132dc575",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "moving2",
@@ -59,7 +65,8 @@
                     "id": "d7a5af90-2181-4c09-8b32-32b687707c5b",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "pause",
@@ -67,7 +74,8 @@
                     "id": "bb89a99d-7ce2-4163-8640-16567146bfbd",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Rocket",
@@ -75,7 +83,8 @@
                     "id": "7d5e5510-dcf8-4604-8530-a58752f7244b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Rocket2",
@@ -83,7 +92,8 @@
                     "id": "7d2d8f79-1a83-46f7-bd26-02b8d1d028c1",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "submit",
@@ -91,7 +101,8 @@
                     "id": "8d28903d-d2c9-4a7c-b33f-640e3fdb9121",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -143,6 +154,17 @@
                     "name": "",
                     "id": "ea6b3772-66ce-47fb-bad2-d37618b8ba4f",
                     "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "powerupaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3b30bf18-9502-4e87-96ff-26d9622dfe04",
+                    "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
