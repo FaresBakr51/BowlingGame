@@ -69,7 +69,9 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
            
             else
             {
-                playerController.CheckWinner();
+                if (!playerController._rankedPanel.activeInHierarchy){
+                    playerController.CheckWinner();
+                }
             }
            
         }

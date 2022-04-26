@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _myManager;
 
   
-    [SerializeField] private GameObject _rankedPanel;
+     public GameObject _rankedPanel;
     [SerializeField] private Text _rankedpointtxt;
     [SerializeField] private Text _rankedstatetxt;
     [SerializeField] private GameObject _waitOtherPlayer;
@@ -103,6 +103,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private bool _battleStart;
     [SerializeField] private float battletimer = 7;
     private GameObject _battleRoyalDescrypt;
+
+
+    [Header("TrackBall")]
+    [SerializeField] private bool _trackBall;
+    [SerializeField] private GameObject[] _trackBallOnOf;
     private void Awake()
     {
 
@@ -280,19 +285,38 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
            if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
 
-             
+            _gameactions.ButtonActions.trackBall.performed += e =>
+            {
+                if (_trackBall)
+                {
+                    if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
+                    {
+                        if (_canhit && _ball.activeInHierarchy && _battleStart)
+                        {
+                            if (_hookcalclated)
+                            {
+                                if (_calcPower)
+                                {
+                                    GetPowerValue();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
              _gameactions.ButtonActions.powerupaction.performed += x => {
                   if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
                  if(_canhit && _ball.activeInHierarchy && _battleStart)
                      {
                      if(_hookcalclated){
-                          if(_calcPower){
-                               GetPowerValue();
+                          if(_calcPower && !_trackBall){
+                                 GetPowerValue();
                            }
                      }
                    }
                }
            };
+           
           _gameactions.ButtonActions.driftbar.performed += y => {
                if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               if(_canhit && _ball.activeInHierarchy && _battleStart)
@@ -326,7 +350,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         } */
         if (_photonview.IsMine)
         {
-
+            if (_trackBall)
+            {
+                _powerSlider.gameObject.SetActive(false);
+            }
+            else
+            {
+                _powerSlider.gameObject.SetActive(true);
+            }
             if (GameModes._rankedMode)
             {
                 if (_gameend && !_gameRankedFinished)
@@ -891,6 +922,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     
         AudioListener.volume = 0;
         EventSystem.current.SetSelectedGameObject(_soundOnOF[0]);
+    }
+    public void TrackBallOn()
+    {
+        _trackBall = true;
+        EventSystem.current.SetSelectedGameObject(_trackBallOnOf[0]);
+    }
+    public void TrackBallOff()
+    {
+        _trackBall = false;
+        EventSystem.current.SetSelectedGameObject(_trackBallOnOf[1]);
     }
       IEnumerator PostScore() {
         // form data settings

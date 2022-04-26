@@ -42,6 +42,6 @@ public class SetParent :MonoBehaviour
         var photonvi = this.GetComponent<PhotonView>();
         transform.SetParent(_totalScoretexts[photonvi.OwnerActorNr-1].transform);
         gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-        gameObject.GetComponent<RectTransform>().localPosition = new Vector3(180, 0, 0);
+        gameObject.GetComponent<RectTransform>().localPosition = new Vector3(200, 0, 0);
     }
 }

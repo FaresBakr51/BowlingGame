@@ -49,6 +49,10 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 				_playercontroll._gameend = true;
 				_playercontroll.ShowRankedResult("lose2");
             }
+            else
+            {
+				_playercontroll._MyPlayCanavas.SetActive(true);
+            }
         }
 		if(_scoreStrn.EndsWith("X ")){
 			UpdateStrikeSound();

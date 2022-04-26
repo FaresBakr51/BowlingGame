@@ -62,9 +62,10 @@ public class OfflinePlayerMode : MonoBehaviour
         foreach (GameObject obj in _SelectionButtonsPlayer2){
         obj.SetActive(true);
       }
-       foreach(GameObject obj in _SelectionButtonsPlayer1){
-        obj.GetComponent<Button>().interactable = false;
-      }
+        foreach (GameObject obj in _SelectionButtonsPlayer1)
+        {
+            obj.GetComponent<Button>().interactable = false;
+        }
         EventSystem.current.SetSelectedGameObject(_player2Firstchar);
     }
     public void SelectCharacter2(GameObject pl2){

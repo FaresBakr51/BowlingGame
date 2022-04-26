@@ -37,6 +37,15 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""trackBall"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b4029cdc-7c4e-4be4-af75-0dfb40ccb394"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Navigate"",
                     ""type"": ""Value"",
                     ""id"": ""3fc4d3e3-0bbe-4c81-8d15-fdf2c83f67a7"",
@@ -185,17 +194,6 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3b30bf18-9502-4e87-96ff-26d9622dfe04"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""powerupaction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""334ff061-416d-4509-ae08-c24c1d5735e0"",
                     ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
@@ -242,6 +240,17 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""b9442208-87e4-437c-bff5-9c46eca7d485"",
                     ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""driftbar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0fb4417-6d52-470f-90ed-9d6e36f7545a"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -787,6 +796,17 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                     ""action"": ""submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25d154f5-79ae-4ef7-af1c-e01c8c68dd87"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""trackBall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -796,6 +816,7 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
         // ButtonActions
         m_ButtonActions = asset.FindActionMap("ButtonActions", throwIfNotFound: true);
         m_ButtonActions_powerupaction = m_ButtonActions.FindAction("powerupaction", throwIfNotFound: true);
+        m_ButtonActions_trackBall = m_ButtonActions.FindAction("trackBall", throwIfNotFound: true);
         m_ButtonActions_Navigate = m_ButtonActions.FindAction("Navigate", throwIfNotFound: true);
         m_ButtonActions_powerupaction2 = m_ButtonActions.FindAction("powerupaction2", throwIfNotFound: true);
         m_ButtonActions_driftbar = m_ButtonActions.FindAction("driftbar", throwIfNotFound: true);
@@ -866,6 +887,7 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_ButtonActions;
     private IButtonActionsActions m_ButtonActionsActionsCallbackInterface;
     private readonly InputAction m_ButtonActions_powerupaction;
+    private readonly InputAction m_ButtonActions_trackBall;
     private readonly InputAction m_ButtonActions_Navigate;
     private readonly InputAction m_ButtonActions_powerupaction2;
     private readonly InputAction m_ButtonActions_driftbar;
@@ -881,6 +903,7 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
         private @GameActions m_Wrapper;
         public ButtonActionsActions(@GameActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @powerupaction => m_Wrapper.m_ButtonActions_powerupaction;
+        public InputAction @trackBall => m_Wrapper.m_ButtonActions_trackBall;
         public InputAction @Navigate => m_Wrapper.m_ButtonActions_Navigate;
         public InputAction @powerupaction2 => m_Wrapper.m_ButtonActions_powerupaction2;
         public InputAction @driftbar => m_Wrapper.m_ButtonActions_driftbar;
@@ -903,6 +926,9 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                 @powerupaction.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPowerupaction;
                 @powerupaction.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPowerupaction;
                 @powerupaction.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPowerupaction;
+                @trackBall.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnTrackBall;
+                @trackBall.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnTrackBall;
+                @trackBall.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnTrackBall;
                 @Navigate.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigate;
                 @Navigate.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigate;
                 @Navigate.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigate;
@@ -940,6 +966,9 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
                 @powerupaction.started += instance.OnPowerupaction;
                 @powerupaction.performed += instance.OnPowerupaction;
                 @powerupaction.canceled += instance.OnPowerupaction;
+                @trackBall.started += instance.OnTrackBall;
+                @trackBall.performed += instance.OnTrackBall;
+                @trackBall.canceled += instance.OnTrackBall;
                 @Navigate.started += instance.OnNavigate;
                 @Navigate.performed += instance.OnNavigate;
                 @Navigate.canceled += instance.OnNavigate;
@@ -977,6 +1006,7 @@ public partial class @GameActions : IInputActionCollection2, IDisposable
     public interface IButtonActionsActions
     {
         void OnPowerupaction(InputAction.CallbackContext context);
+        void OnTrackBall(InputAction.CallbackContext context);
         void OnNavigate(InputAction.CallbackContext context);
         void OnPowerupaction2(InputAction.CallbackContext context);
         void OnDriftbar(InputAction.CallbackContext context);

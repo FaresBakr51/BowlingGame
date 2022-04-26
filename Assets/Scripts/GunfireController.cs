@@ -27,8 +27,8 @@ namespace BigRookGames.Weapons
         private bool lastScopeState;
 
         // --- Projectile ---
-        [Tooltip("The projectile gameobject to instantiate each time the weapon is fired.")]
-        public GameObject projectilePrefab;
+        //[Tooltip("The projectile gameobject to instantiate each time the weapon is fired.")]
+        //public GameObject projectilePrefab;
         [Tooltip("Sometimes a mesh will want to be disabled on fire. For example: when a rocket is fired, we instantiate a new rocket, and disable" +
             " the visible rocket attached to the rocket launcher")]
         public GameObject projectileToDisableOnFire;
@@ -83,17 +83,14 @@ namespace BigRookGames.Weapons
             var flash = Instantiate(muzzlePrefab, muzzlePosition.transform);
 
             // --- Shoot Projectile Object ---
-            if (projectilePrefab != null)
+
+            if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
             {
-                if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
-                {
-                    GameObject newProjectile = PhotonNetwork.Instantiate("projectilePrefab", muzzlePosition.transform.position, muzzlePosition.transform.rotation);
-                }
-                else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
-                {
-                    GameObject newProjectile = Instantiate(_projectilePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation);
-                }
-               
+                GameObject newProjectile = PhotonNetwork.Instantiate("projectilePrefab", muzzlePosition.transform.position, muzzlePosition.transform.rotation);
+            }
+            else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
+            {
+                GameObject newProjectile = Instantiate(_projectilePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation);
             }
 
             // --- Disable any gameobjects, if needed ---
