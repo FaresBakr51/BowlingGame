@@ -96,6 +96,10 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         {
             _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.6f);
         }
+        else
+        {
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z + 0.3f);
+        }
     }
       public  void OnEnable()
     {
@@ -139,8 +143,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
               _strikeTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_strikeTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_strikeTxt.GetComponent<RectTransform>().anchoredPosition.y);
              _spareTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_spareTxt.GetComponent<RectTransform>().anchoredPosition.x+350,_spareTxt.GetComponent<RectTransform>().anchoredPosition.y);
             _gutterTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(_gutterTxt.GetComponent<RectTransform>().anchoredPosition.x + 350, _gutterTxt.GetComponent<RectTransform>().anchoredPosition.y);
-            _RocketOff.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOff.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOff.GetComponent<RectTransform>().anchoredPosition.y);
-            _RocketOn.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOn.GetComponent<RectTransform>().anchoredPosition.x + 650, _RocketOn.GetComponent<RectTransform>().anchoredPosition.y);
+            _RocketOff.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOff.GetComponent<RectTransform>().anchoredPosition.x + 750, _RocketOff.GetComponent<RectTransform>().anchoredPosition.y);
+            _RocketOn.GetComponent<RectTransform>().anchoredPosition = new Vector2(_RocketOn.GetComponent<RectTransform>().anchoredPosition.x + 750, _RocketOn.GetComponent<RectTransform>().anchoredPosition.y);
             SecondControll();
             }
             
@@ -699,7 +703,8 @@ private void GetReady()
         {
             _canhit = false;
             myleader.SetActive(true);
-          
+            _GoHomebutt.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_GoHomebutt);
             if (_scoreplayer.totalscre >= 300)
             {
                 UpdateSound(_gameClips[7]);

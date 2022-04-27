@@ -360,7 +360,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (GameModes._rankedMode)
             {
-                if (_gameend && !_gameRankedFinished)
+                if (_gameend && !_gameRankedFinished && !_rankedPanel.activeInHierarchy)
                 {
                     CheckWinner();
                   
@@ -370,7 +370,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 {
                     if (_modePlayers[0] == null)
                     {
-                        if (!_gameend)
+                        if (!_gameend && !_rankedPanel.activeInHierarchy)
                         {
                             _gameend = true;
                             ShowRankedResult("win");
