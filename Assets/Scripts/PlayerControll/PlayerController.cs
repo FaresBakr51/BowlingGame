@@ -81,29 +81,34 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _myManager;
 
   
-     public GameObject _rankedPanel;
-    [SerializeField] private Text _rankedpointtxt;
-    [SerializeField] private Text _rankedstatetxt;
+ 
     [SerializeField] private GameObject _waitOtherPlayer;
-    private bool _checkIfthereOther;
+    public bool _checkIfthereOther;
     [SerializeField] public GameObject _myRocket;
     [SerializeField] public GameObject _RocketOff;
     [SerializeField] public GameObject _RocketOn;
     public bool _usedRocket;
     public bool _readyLunch;
-    [SerializeField] private List<GameObject> _modePlayers;
+    public List<GameObject> _modePlayers;
   
-    private bool _gameRankedFinished;
+  
     public bool _usingRock;
     private Vector3 _mypos;
-    public float _timerAfk;
+
+
+    [Header("RankedMode")]
+    public GameObject _rankedPanel;
+    [SerializeField] private Text _rankedpointtxt;
+    [SerializeField] private Text _rankedstatetxt;
+    public bool _gameRankedFinished;
+    public RankedModeState _rankedMode;
 
     [Header("BattleRoyal")]
-
-    [SerializeField] private bool _battleStart;
-    [SerializeField] private float battletimer = 7;
-    private GameObject _battleRoyalDescrypt;
-
+    public float _timerAfk;
+    public bool _battleStart;
+    public float battletimer = 7;
+    public GameObject _battleRoyalDescrypt;
+    public RoyalModeState _royalMode;
 
     [Header("TrackBall")]
     [SerializeField] private bool _trackBall;
@@ -279,6 +284,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _idleState = gameObject.AddComponent<PlayerIdleState>();
         _playerAnim = GetComponent<Animator>();
          GetReady();
+        if (GameModes._battleRoyale)
+        {
+            _royalMode = this.gameObject.AddComponent<RoyalModeState>();
+            _royalMode.GameMode(this);
+        }
+        else if (GameModes._rankedMode)
+        {
+            _rankedMode = this.gameObject.AddComponent<RankedModeState>();
+            _rankedMode.GameMode(this);
+        }
     }
    
     private void CheckControlles(){
@@ -360,61 +375,61 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (GameModes._rankedMode)
             {
-                if (_gameend && !_gameRankedFinished && !_rankedPanel.activeInHierarchy)
-                {
-                    CheckWinner();
+                //if (_gameend && !_gameRankedFinished && !_rankedPanel.activeInHierarchy)
+                //{
+                //    CheckWinner();
                   
-                }
+                //}
                 
-                else if (_modePlayers.Count > 0 && _checkIfthereOther)
-                {
-                    if (_modePlayers[0] == null)
-                    {
-                        if (!_gameend && !_rankedPanel.activeInHierarchy)
-                        {
-                            _gameend = true;
-                            ShowRankedResult("win");
-                            _checkIfthereOther = false;
-                        }
-                    }
-                }
+                //else if (_modePlayers.Count > 0 && _checkIfthereOther)
+                //{
+                //    if (_modePlayers[0] == null)
+                //    {
+                //        if (!_gameend && !_rankedPanel.activeInHierarchy)
+                //        {
+                //            _gameend = true;
+                //            ShowRankedResult("win");
+                //            _checkIfthereOther = false;
+                //        }
+                //    }
+                //}
               
             }
             if (GameModes._battleRoyale)
             {
-                if (!_battleStart)
-                {
+                //if (!_battleStart)
+                //{
 
-                    battletimer -= Time.deltaTime;
+                //    battletimer -= Time.deltaTime;
 
-                    if (battletimer <= 3 && battletimer > 0)
-                    {
-                        _battleRoyalDescrypt.GetComponent<Text>().text = ((int)battletimer).ToString();
-                    }
-                    else if (battletimer <= 0 && battletimer > -1)
-                    {
-                        _battleRoyalDescrypt.GetComponent<Text>().text = "GO !";
-                    }
-                    else if (battletimer <= -1)
-                    {
-                        _battleRoyalDescrypt.SetActive(false);
-                        _battleStart = true;
-                    }
+                //    if (battletimer <= 3 && battletimer > 0)
+                //    {
+                //        _battleRoyalDescrypt.GetComponent<Text>().text = ((int)battletimer).ToString();
+                //    }
+                //    else if (battletimer <= 0 && battletimer > -1)
+                //    {
+                //        _battleRoyalDescrypt.GetComponent<Text>().text = "GO !";
+                //    }
+                //    else if (battletimer <= -1)
+                //    {
+                //        _battleRoyalDescrypt.SetActive(false);
+                //        _battleStart = true;
+                //    }
 
-                }
-                if (_modePlayers.Count > 0 && _checkIfthereOther)
-                {
+                //}
+                //if (_modePlayers.Count > 0 && _checkIfthereOther)
+                //{
                     
-                    if (IamTheOnlyOne())
-                    {
-                        if (!_gameend)
-                        {
-                            _gameend = true;
-                            ShowRankedResult("win2");
-                            _checkIfthereOther = false;
-                        }
-                    }
-                }
+                //    if (IamTheOnlyOne())
+                //    {
+                //        if (!_gameend)
+                //        {
+                //            _gameend = true;
+                //            ShowRankedResult("win2");
+                //            _checkIfthereOther = false;
+                //        }
+                //    }
+                //}
 
             }
             if (_gameend)
@@ -438,17 +453,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             {
                 if (GameModes._battleRoyale && _battleStart)
                 {
-                    _timerAfk -= Time.deltaTime;
-                    if (_timerAfk <= 0 && _checkIfthereOther)
-                    {
+                    //_timerAfk -= Time.deltaTime;
+                    //if (_timerAfk <= 0 && _checkIfthereOther)
+                    //{
 
-                        if (!_gameend)
-                        {
-                            _gameend = true;
-                            ShowRankedResult("timeout");
-                            _checkIfthereOther = false;
-                        }
-                    }
+                    //    if (!_gameend)
+                    //    {
+                    //        _gameend = true;
+                    //        ShowRankedResult("timeout");
+                    //        _checkIfthereOther = false;
+                    //    }
+                    //}
                 }
                 if (_readyLunch)
                 {
@@ -486,7 +501,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
        
        
     }
-   private bool IamTheOnlyOne()
+    public bool IamTheOnlyOne()
     {
 
         var checkPlayers = _modePlayers.All(x => x.gameObject == null);

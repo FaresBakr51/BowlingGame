@@ -114,6 +114,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
         void Start()
     {
+        AudioListener.volume = 1;
         GameModes._rankedMode = false;
         GameModes._battleRoyale = false;
         StartCoroutine(GetRankedPoints());

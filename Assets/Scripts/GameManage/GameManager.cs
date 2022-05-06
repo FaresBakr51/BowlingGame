@@ -6,12 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
 
-public struct GameModes
-{
 
-   public static bool _rankedMode;
-   public static bool _battleRoyale;
-}
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
