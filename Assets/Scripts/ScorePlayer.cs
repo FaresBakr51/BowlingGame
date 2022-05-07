@@ -44,15 +44,15 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 
         if (GameModes._battleRoyale)
         {
-			if(!_scoreStrn.EndsWith("X "))
-            {
-				_playercontroll._gameend = true;
-				_playercontroll.ShowRankedResult("lose2");
-            }
-            else
-            {
-				_playercontroll._MyPlayCanavas.SetActive(true);
-            }
+			//if(!_scoreStrn.EndsWith("X "))
+   //         {
+			//	_playercontroll._gameend = true;
+			//	_playercontroll.ShowRankedResult("lose2");
+   //         }
+   //         else
+   //         {
+			//	_playercontroll._MyPlayCanavas.SetActive(true);
+   //         }
         }
 		if(_scoreStrn.EndsWith("X ")){
 			UpdateStrikeSound();
@@ -110,11 +110,12 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 		for (int i = 0; i < frames.Count; i++)
 		{
 			round_scores_text[i].text = frames[i].ToString();
-		   totalscre  = frames[i];
-		}
-	
-	
 			
+			totalscre  = frames[i];
+		}
+		
+
+
 	}
 	
 	

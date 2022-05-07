@@ -115,35 +115,52 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 
     IEnumerator WaitToReset()
     {
-
-        if (!GameModes._battleRoyale)
+        playerController.myleader.SetActive(true);
+        if (playerController._leftpins.Count > 0)
         {
-            yield return new WaitForSeconds(1.5f);
-
-            playerController.myleader.SetActive(true);
-            if (playerController._leftpins.Count > 0)
+            foreach (Transform leftpin in playerController._leftpins)
             {
-                foreach (Transform leftpin in playerController._leftpins)
+                leftpin.transform.rotation = Quaternion.identity;
+                if (leftpin.gameObject.GetComponent<Rigidbody>().isKinematic)
                 {
-                    leftpin.transform.rotation = Quaternion.identity;
-                    if (leftpin.gameObject.GetComponent<Rigidbody>().isKinematic)
-                    {
-                        leftpin.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                    }
-                    leftpin.gameObject.SetActive(true);
-                    leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
+                    leftpin.gameObject.GetComponent<Rigidbody>().isKinematic = false;
                 }
+                leftpin.gameObject.SetActive(true);
+                leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
             }
-            yield return new WaitForSeconds(3f);
-            playerController.myleader.SetActive(false);
-            playerController._MyPlayCanavas.SetActive(true);
-            ResetCamAndpins();
         }
-        else
-        {
-            yield return new WaitForSeconds(1.5f);
-            ResetCamAndpins();
-        }
+        yield return new WaitForSeconds(3f);
+        playerController.myleader.SetActive(false);
+        playerController._MyPlayCanavas.SetActive(true);
+        ResetCamAndpins();
+        //if (!GameModes._battleRoyale)
+        //{
+        //    yield return new WaitForSeconds(1.5f);
+
+        //    playerController.myleader.SetActive(true);
+        //    if (playerController._leftpins.Count > 0)
+        //    {
+        //        foreach (Transform leftpin in playerController._leftpins)
+        //        {
+        //            leftpin.transform.rotation = Quaternion.identity;
+        //            if (leftpin.gameObject.GetComponent<Rigidbody>().isKinematic)
+        //            {
+        //                leftpin.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        //            }
+        //            leftpin.gameObject.SetActive(true);
+        //            leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
+        //        }
+        //    }
+        //    yield return new WaitForSeconds(3f);
+        //    playerController.myleader.SetActive(false);
+        //    playerController._MyPlayCanavas.SetActive(true);
+        //    ResetCamAndpins();
+        //}
+        //else
+        //{
+        //    yield return new WaitForSeconds(1.5f);
+        //    ResetCamAndpins();
+        //}
        
     }
 }

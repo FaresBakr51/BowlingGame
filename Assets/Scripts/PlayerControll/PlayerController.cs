@@ -109,7 +109,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public float battletimer = 7;
     public GameObject _battleRoyalDescrypt;
     public RoyalModeState _royalMode;
-
+    public int _trackScore;
+    public int _checkCond;
     [Header("TrackBall")]
     [SerializeField] private bool _trackBall;
     [SerializeField] private GameObject[] _trackBallOnOf;
@@ -786,6 +787,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
    
     public void Bowl(int pinFall)
     {
+        if (GameModes._battleRoyale)
+        {
+            CheckRoyalCondition(pinFall);
+        }
         try
         {
             rolls.Add(pinFall);
@@ -807,7 +812,35 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         _calcScore = true;
     }
-   
+    
+    private void CheckRoyalCondition(int pins)
+    {
+        if(pins != 10)
+        {
+            _trackScore += pins;
+            _checkCond++;
+        }
+        else
+        {
+
+            _trackScore = 0;
+            _checkCond = 0;
+        }
+        if(_checkCond >= 2)
+        {
+            if(_trackScore != 10)
+            {
+                _gameend = true;
+                ShowRankedResult("lose2");
+            }
+            else
+            {
+                _trackScore = 0;
+                _checkCond = 0;
+            }
+        }
+
+    }
   
     public void PerformAction(ActionMasterOld.Action action)
     {
