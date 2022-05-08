@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
   
  
-    [SerializeField] private GameObject _waitOtherPlayer;
+    
     public bool _checkIfthereOther;
     [SerializeField] public GameObject _myRocket;
     [SerializeField] public GameObject _RocketOff;
@@ -102,6 +102,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private Text _rankedstatetxt;
     public bool _gameRankedFinished;
     public RankedModeState _rankedMode;
+    [SerializeField] private GameObject _waitOtherPlayer;
 
     [Header("BattleRoyal")]
     public float _timerAfk;
@@ -295,8 +296,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             _rankedMode = this.gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
         }
+        StartCoroutine(TestRanked());
     }
-   
+   IEnumerator TestRanked()
+    {
+        yield return new WaitForSeconds(10f);
+        _gameend = true;
+    }
     private void CheckControlles(){
 
            if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
@@ -904,6 +910,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     }
                     else
                     {
+                        Debug.Log("Wiating Opponent");
                         _waitOtherPlayer.SetActive(true);
                     }
                 }
