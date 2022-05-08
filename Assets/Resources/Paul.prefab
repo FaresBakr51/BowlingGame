@@ -5061,8 +5061,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468316450950524577}
-  m_LocalRotation: {x: 0.67666, y: 0.23937963, z: -0.49456877, w: -0.49013314}
-  m_LocalPosition: {x: -0.04360015, y: 0.045644883, z: -0.003275998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0233, y: 0.046, z: 0.0044}
   m_LocalScale: {x: 0.4000002, y: 0.40000013, z: 0.39999995}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8158,7 +8158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ball: {fileID: 468316450950524577}
   _playerhand: {fileID: 6475400318924308723}
-  _BallConstantPos: {x: -0.02660311, y: 0.05005124, z: 0.008595809}
+  _BallConstantPos: {x: -0.0233, y: 0.046, z: 0.0044}
   _power: 0
   _camera: {fileID: 6475400319270017575}
   _powerSlider: {fileID: 6475400319621677683}
@@ -8241,6 +8241,8 @@ MonoBehaviour:
   battletimer: 7
   _battleRoyalDescrypt: {fileID: 0}
   _royalMode: {fileID: 0}
+  _trackScore: 0
+  _checkCond: 0
   _trackBall: 0
   _trackBallOnOf:
   - {fileID: 6305465336463193958}
@@ -9788,7 +9790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9917,7 +9919,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

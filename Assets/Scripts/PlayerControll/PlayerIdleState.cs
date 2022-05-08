@@ -115,7 +115,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 
     IEnumerator WaitToReset()
     {
-        playerController.myleader.SetActive(true);
+        if (!GameModes._battleRoyale) { playerController.myleader.SetActive(true); }
         if (playerController._leftpins.Count > 0)
         {
             foreach (Transform leftpin in playerController._leftpins)
@@ -130,7 +130,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             }
         }
         yield return new WaitForSeconds(3f);
-        playerController.myleader.SetActive(false);
+        if (playerController.myleader.activeInHierarchy) { playerController.myleader.SetActive(false); }
         playerController._MyPlayCanavas.SetActive(true);
         ResetCamAndpins();
         //if (!GameModes._battleRoyale)

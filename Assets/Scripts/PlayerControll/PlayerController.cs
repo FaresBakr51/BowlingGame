@@ -828,7 +828,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         if(_checkCond >= 2)
         {
-            if(_trackScore != 10)
+            if(_trackScore != 10 && !_rankedPanel.activeInHierarchy)
             {
                 _gameend = true;
                 ShowRankedResult("lose2");
