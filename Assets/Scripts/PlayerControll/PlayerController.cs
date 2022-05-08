@@ -296,13 +296,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             _rankedMode = this.gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
         }
-        StartCoroutine(TestRanked());
+      
     }
-   IEnumerator TestRanked()
-    {
-        yield return new WaitForSeconds(10f);
-        _gameend = true;
-    }
+ 
     private void CheckControlles(){
 
            if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
