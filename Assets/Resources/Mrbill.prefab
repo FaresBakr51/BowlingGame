@@ -798,7 +798,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '"You have 15 seconds to bowl a strike, if your time is up or you don''t
-    bowl a strike you lose"'
+    bowl a strike or Spare YOU''RE OUT"'
 --- !u!1 &2901759675859351662
 GameObject:
   m_ObjectHideFlags: 0
@@ -9610,7 +9610,6 @@ MonoBehaviour:
   _isspeakingButt: {fileID: 0}
   _notSpeakingButt: {fileID: 0}
   _myManager: {fileID: 0}
-  _waitOtherPlayer: {fileID: 0}
   _checkIfthereOther: 0
   _myRocket: {fileID: 4490302565752502208}
   _RocketOff: {fileID: 457274083}
@@ -9624,6 +9623,7 @@ MonoBehaviour:
   _rankedstatetxt: {fileID: 0}
   _gameRankedFinished: 0
   _rankedMode: {fileID: 0}
+  _waitOtherPlayer: {fileID: 0}
   _timerAfk: 0
   _battleStart: 0
   battletimer: 7

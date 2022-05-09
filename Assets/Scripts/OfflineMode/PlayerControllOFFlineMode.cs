@@ -379,9 +379,11 @@ private void GetReady()
         {
             if (_offlinePlayers.Count > 0)
             {
+                _MyPlayCanavas.SetActive(false);
                 var findscore = _offlinePlayers[0].GetComponent<PlayerControllOFFlineMode>();
                 if (findscore._gameend && !_gameFinished)
                 {
+
                     _GoHomebutt.SetActive(true);
                     EventSystem.current.SetSelectedGameObject(_GoHomebutt);
                     _gameFinished = true;
@@ -812,6 +814,7 @@ public void Bowl(int pinFall)
         else if (action == ActionMasterOld.Action.EndGame)
         {
             _gameend = true;
+          
             throw new UnityException("Don't know how to handle end game yet");
         }
     }
