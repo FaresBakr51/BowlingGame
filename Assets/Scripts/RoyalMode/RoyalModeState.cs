@@ -6,8 +6,6 @@ public class RoyalModeState : MonoBehaviour, GameModeState
     public void GameMode(PlayerController controll)
     {
         _controller = controll;
-        Debug.Log("BattleRoyalMode");
-
     }
     void Update()
     {

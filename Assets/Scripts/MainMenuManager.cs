@@ -157,7 +157,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     {
         if (GameModes._rankedMode)
         {
-            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
+          
             if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.LoadLevel(Random.Range(2, 4));

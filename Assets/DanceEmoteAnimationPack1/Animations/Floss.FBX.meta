@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 232251281f0da574d9bb15206781902b
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 21202
   internalIDToNameTable:
   - first:
       74: 8993902097722301239
@@ -17,6 +17,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -46,7 +47,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -75,21 +76,27 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -695,8 +702,7 @@ ModelImporter:
     - name: upperarm_twist_01_l
       parentName: upperarm_l
       position: {x: -0.00000018876949, y: 0.000000031108048, z: -0.0000000022066342}
-      rotation: {x: -0.00000038743005, y: -0.00000032782543, z: 0.00000021653243,
-        w: 1}
+      rotation: {x: -0.00000038743005, y: -0.00000032782543, z: 0.00000021653243, w: 1}
       scale: {x: 0.9999998, y: 0.99999994, z: 0.99999994}
     - name: clavicle_r
       parentName: spine_03
@@ -826,8 +832,7 @@ ModelImporter:
     - name: calf_twist_01_l
       parentName: calf_l
       position: {x: 0.20032518, y: -0.008796579, z: -0.00082220073}
-      rotation: {x: 0.000000043798916, y: -0.000000011643364, z: 0.000000014901175,
-        w: 1}
+      rotation: {x: 0.000000043798916, y: -0.000000011643364, z: 0.000000014901175, w: 1}
       scale: {x: 1.0000002, y: 1.0000002, z: 1}
     - name: foot_l
       parentName: calf_l
@@ -842,8 +847,7 @@ ModelImporter:
     - name: thigh_twist_01_l
       parentName: thigh_l
       position: {x: 0.0000000018801656, y: -0.000000003872296, z: 0.0000000020512587}
-      rotation: {x: -0.000000014901161, y: -0.00000032037497, z: 0.00000027753413,
-        w: 1}
+      rotation: {x: -0.000000014901161, y: -0.00000032037497, z: 0.00000027753413, w: 1}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: thigh_r
       parentName: pelvis
@@ -858,8 +862,7 @@ ModelImporter:
     - name: calf_twist_01_r
       parentName: calf_r
       position: {x: -0.20032474, y: 0.008796868, z: 0.00082170486}
-      rotation: {x: -0.000000024746969, y: 0.0000015422032, z: -0.000000022351804,
-        w: 1}
+      rotation: {x: -0.000000024746969, y: 0.0000015422032, z: -0.000000022351804, w: 1}
       scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
     - name: foot_r
       parentName: calf_r
@@ -874,8 +877,7 @@ ModelImporter:
     - name: thigh_twist_01_r
       parentName: thigh_r
       position: {x: -0.000000012163195, y: 0.000000015848261, z: 0.000000008932774}
-      rotation: {x: -0.0000000912696, y: 0.00000038370484, z: -0.000000101514146,
-        w: 1}
+      rotation: {x: -0.0000000912696, y: 0.00000038370484, z: -0.000000101514146, w: 1}
       scale: {x: 1.0000004, y: 0.99999976, z: 1.0000002}
     armTwist: 0.5
     foreArmTwist: 0.5
@@ -894,6 +896,7 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

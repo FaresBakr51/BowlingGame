@@ -44,11 +44,14 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._scrolltime = 0;
         playerController._powerSlider.value = 0;
         playerController._hookScroll.value = 0.5f;
-      
+        playerController._driftBall = false;
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
+        playerController._roundscore = 0;
+        playerController._ball.GetComponent<BallSound>()._hit = false;
+        this.transform.position = _mypos;
+        playerController._camera.transform.position = _Cambos;
 
-      
-      if(playerController._gameend)
+        if (playerController._gameend)
         {
             if(playerController._scoreplayer.totalscre >= 300)
             {
@@ -78,8 +81,25 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         else
         {
             playerController._timerAfk = 15;
-            playerController._canhit = true;
+
+            if (playerController._strikeDance )
+            {
+                playerController.RunRpcDance(playerController._ball, false);
+                playerController.UpdateAnimator("shot", 3);
+                StartCoroutine(WaitDanceMotion(playerController._strikeClip.length));
+            }else if (playerController._spareDance)
+            {
+                playerController.RunRpcDance(playerController._ball, false);
+                playerController.UpdateAnimator("shot", 4);
+                StartCoroutine(WaitDanceMotion(playerController._spareClip.length));
+            }
+            else
+            {
+                playerController._canhit = true;
+            }
+            
         }
+
        
         if (playerController._myRocket.activeInHierarchy)
         {
@@ -94,10 +114,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             playerController._camera.transform.position = _Cambos;
         }
 
-        playerController._roundscore = 0;
-        playerController._ball.GetComponent<BallSound>()._hit = false;
-        this.transform.position = _mypos;
-        playerController._camera.transform.position = _Cambos;
+     
        
         foreach (Transform pins in playerController._mypins)
         {
@@ -112,7 +129,17 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 
     }
   
-
+    IEnumerator WaitDanceMotion(float length)
+    {
+       
+        yield return new WaitForSeconds(length);
+       
+        playerController._canhit = true;
+        playerController.UpdateAnimator("shot", 0);
+        playerController.RunRpcDance(playerController._ball, true);
+        if (playerController._strikeDance) { playerController._strikeDance = false; }
+        if (playerController._spareDance) { playerController._spareDance = false; }
+    }
     IEnumerator WaitToReset()
     {
         if (!GameModes._battleRoyale) { playerController.myleader.SetActive(true); }

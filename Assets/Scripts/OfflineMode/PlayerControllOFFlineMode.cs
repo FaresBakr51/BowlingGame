@@ -47,7 +47,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
  
 
     public GameObject _GoHomebutt;
-   public GameActions _gameactions;
+   public GameControls _gameactions;
    public bool _powerval;
    private bool _moveright;
    private Vector3 _movingL;
@@ -90,7 +90,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         _scoreplayer = GetComponent<ScorePlayer>();
         _powerSlider.gameObject.SetActive(false);
         _hookScroll.gameObject.SetActive(false);
-         _gameactions = new GameActions();
+         _gameactions = new GameControls();
         _mypinsobj.transform.parent = null;
         if (SceneManager.GetActiveScene().name == "Map3")
         {
@@ -520,7 +520,6 @@ private void GetReady()
         else
         {
             float driftval = (Mathf.Round(_hookScroll.value * 10));
-            Debug.Log(driftval);
             GetDrifRealVal(driftval);
         }
 

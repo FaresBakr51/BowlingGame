@@ -13,9 +13,8 @@ public class RankedModeState : MonoBehaviour, GameModeState
         if (!_controller.photonView.IsMine) return;
         if (_controller._gameend && !_controller._gameRankedFinished && !_controller._rankedPanel.activeInHierarchy)
         {
-            Debug.Log("Checking Winner");
             _controller.CheckWinner();
-
+          
         }
 
         else if (_controller._modePlayers.Count > 0 && _controller._checkIfthereOther)

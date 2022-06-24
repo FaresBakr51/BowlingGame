@@ -55,11 +55,12 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
    //         }
         }
 		if(_scoreStrn.EndsWith("X ")){
+			
 			UpdateStrikeSound();
 		}
 		else if(_scoreStrn.EndsWith("/")){
-					   	   	   
-		   if((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom ))){
+			_playercontroll._spareDance = true;
+			if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom ))){
 			_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
 			StartCoroutine(WaitTxt(_playercontroll._spareTxt));
 			
@@ -136,10 +137,11 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	}
 	private void UpdateStrikeSound()
     {
+		_playercontroll._strikeDance = true;
 		_StrikeInrow ++;
 		if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
 		{
-		
+			
 			StartCoroutine(WaitTxt(_playercontroll._strikeTxt));
 		}
 		else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)

@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public bool _followBall;
     public GameObject _mytotal;
     public GameObject _GoHomebutt;
-    public GameActions _gameactions;
+    public GameControls _gameactions;
     public bool _powerval;
     private bool _moveright;
     private Vector3 _movingL;
@@ -115,6 +115,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [Header("TrackBall")]
     [SerializeField] private bool _trackBall;
     [SerializeField] private GameObject[] _trackBallOnOf;
+
+
+    [Header("BallControll")]
+    public bool _driftBall;
+    [SerializeField] private float _controllBallPower;
+
+    [Header("ScoreMotions")]
+    public AnimationClip _strikeClip;
+    public AnimationClip _spareClip;
+    public bool _strikeDance;
+    public bool _spareDance;
+
     private void Awake()
     {
 
@@ -122,7 +134,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _mypos = this.transform.position;
         _powerSlider.gameObject.SetActive(false);
         _hookScroll.gameObject.SetActive(false);
-         _gameactions = new GameActions();
+         _gameactions = new GameControls();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
         if (SceneManager.GetActiveScene().name == "Map4")
@@ -157,8 +169,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
          _gameactions.ButtonActions.moving.performed += cntxt =>{
-             
-             if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
+
+             if (_driftBall)
+             {
+
+                 if (_movingL.x > 0)
+                 {
+                    
+                     var rig = _ball.GetComponent<Rigidbody>();
+                     rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
+                     _driftBall = false;
+                 }
+                 else if(_movingL.x < 0)
+                 {
+                   
+                     var rig = _ball.GetComponent<Rigidbody>();
+                     rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
+                     _driftBall = false;
+                 }
+             }
+                 if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               _movingL = cntxt.ReadValue<Vector2>();
              }
               
@@ -194,8 +224,21 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 }
             }
         };
-           
-            _gameactions.Enable();
+ 
+        _gameactions.Enable();
+    }
+    public void RunRpcDance(GameObject obj, bool state)
+    {
+
+        if (_photonview.IsMine)
+        {
+            _photonview.RPC("RPCDance", RpcTarget.All, obj, state);
+        }
+    }
+    [PunRPC]
+    private void RPCDance(GameObject obj, bool state)
+    {
+        obj.SetActive(state);
     }
     public void RunRpc()
     {
@@ -376,65 +419,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             {
                 _powerSlider.gameObject.SetActive(true);
             }
-            if (GameModes._rankedMode)
-            {
-                //if (_gameend && !_gameRankedFinished && !_rankedPanel.activeInHierarchy)
-                //{
-                //    CheckWinner();
-                  
-                //}
-                
-                //else if (_modePlayers.Count > 0 && _checkIfthereOther)
-                //{
-                //    if (_modePlayers[0] == null)
-                //    {
-                //        if (!_gameend && !_rankedPanel.activeInHierarchy)
-                //        {
-                //            _gameend = true;
-                //            ShowRankedResult("win");
-                //            _checkIfthereOther = false;
-                //        }
-                //    }
-                //}
-              
-            }
-            if (GameModes._battleRoyale)
-            {
-                //if (!_battleStart)
-                //{
 
-                //    battletimer -= Time.deltaTime;
-
-                //    if (battletimer <= 3 && battletimer > 0)
-                //    {
-                //        _battleRoyalDescrypt.GetComponent<Text>().text = ((int)battletimer).ToString();
-                //    }
-                //    else if (battletimer <= 0 && battletimer > -1)
-                //    {
-                //        _battleRoyalDescrypt.GetComponent<Text>().text = "GO !";
-                //    }
-                //    else if (battletimer <= -1)
-                //    {
-                //        _battleRoyalDescrypt.SetActive(false);
-                //        _battleStart = true;
-                //    }
-
-                //}
-                //if (_modePlayers.Count > 0 && _checkIfthereOther)
-                //{
-                    
-                //    if (IamTheOnlyOne())
-                //    {
-                //        if (!_gameend)
-                //        {
-                //            _gameend = true;
-                //            ShowRankedResult("win2");
-                //            _checkIfthereOther = false;
-                //        }
-                //    }
-                //}
-
-            }
             if (_gameend)
             {
                 if (_MyPlayCanavas.activeInHierarchy)
@@ -454,20 +439,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (_canhit)
             {
-                if (GameModes._battleRoyale && _battleStart)
-                {
-                    //_timerAfk -= Time.deltaTime;
-                    //if (_timerAfk <= 0 && _checkIfthereOther)
-                    //{
-
-                    //    if (!_gameend)
-                    //    {
-                    //        _gameend = true;
-                    //        ShowRankedResult("timeout");
-                    //        _checkIfthereOther = false;
-                    //    }
-                    //}
-                }
                 if (_readyLunch)
                 {
                     _myRocket?.GetComponent<GunfireController>().FireWeapon();
@@ -514,6 +485,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
        if(!_gameend){
         _playercontext.Transition(_BowlingState);
+         
        }
     }
    
@@ -666,26 +638,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
   
     private void GetDriftValue()
     {
-
-     
-      //  _driftvalue = driftval;
-        //if (_hookScroll.value < 0.45f)//1,2,3,4///30///120
-        //{
-        //    float driftval = (Mathf.Round(_hookScroll.value * 10));
-        //    //float driftval = ((Mathf.Round(_hookScroll.value * 100) / 100.0f) * - 10 * _driftmaxvaluleft);
-        //    //Debug.Log((Mathf.Round(_hookScroll.value * 10)));
-        //    //Debug.Log(driftval);
-        //    _driftvalue = driftval;
-        //}
-        //if (_hookScroll.value > 0.45f)//4,5,6,7,8/////15///120
-        //{
-           
-        //    //float driftval = ((Mathf.Round(_hookScroll.value * 100) / 100.0f) * 10 * _driftmaxvaluright);
-        //    //Debug.Log((Mathf.Round(_hookScroll.value * 10)));
-        //    //Debug.Log(driftval);
-        //   // _driftvalue = driftval;
-
-        //}
         if(_hookScroll.value == 0.45f)
         {
             _driftvalue = 0;
@@ -693,7 +645,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         else
         {
             float driftval = (Mathf.Round(_hookScroll.value * 10));
-            Debug.Log(driftval);
+           
             GetDrifRealVal(driftval);
         }
            _hookcalclated = true;
@@ -906,7 +858,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     }
                     else
                     {
-                        Debug.Log("Wiating Opponent");
+                      
                         _waitOtherPlayer.SetActive(true);
                     }
                 }

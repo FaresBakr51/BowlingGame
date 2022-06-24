@@ -26,6 +26,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 
         _playercontroller._ball.GetComponent<BallSound>().UpdateSound(_playercontroller._movingclip);
         }
+        playercontroller._driftBall = true;
         StartCoroutine(WaitHit());
     }
     private void Update()
@@ -46,7 +47,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
     }
     IEnumerator WaitHit()
     {
-        yield return new WaitForSeconds(5f);
+      yield return new WaitForSeconds(5f);
        StartCoroutine(ChechPins());
         
 
