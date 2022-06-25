@@ -122,14 +122,20 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private float _controllBallPower;
 
     [Header("ScoreMotions")]
-    public AnimationClip _strikeClip;
-    public AnimationClip _spareClip;
-    public bool _strikeDance;
-    public bool _spareDance;
+
+    public IDictionary<int,AnimationClip> _DanceClips = new Dictionary<int, AnimationClip>();
+    public AnimationClip[] _danceClips;
+    private int keys = 3;
+    public bool _dance;
 
     private void Awake()
     {
+      for(int i = 0; i < _danceClips.Length; i++)
+        {
 
+            _DanceClips.Add(keys, _danceClips[i]);
+            keys++;
+        }
         //  _myVoice = GetComponent<PhotonVoiceView>();
         _mypos = this.transform.position;
         _powerSlider.gameObject.SetActive(false);

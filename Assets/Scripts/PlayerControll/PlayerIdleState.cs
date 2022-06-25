@@ -82,16 +82,20 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         {
             playerController._timerAfk = 15;
 
-            if (playerController._strikeDance )
+            if (playerController._dance )
             {
                 playerController.RunRpcDance(playerController._ball, false);
-                playerController.UpdateAnimator("shot", 3);
-                StartCoroutine(WaitDanceMotion(playerController._strikeClip.length));
-            }else if (playerController._spareDance)
-            {
-                playerController.RunRpcDance(playerController._ball, false);
-                playerController.UpdateAnimator("shot", 4);
-                StartCoroutine(WaitDanceMotion(playerController._spareClip.length));
+
+                int rand = Random.Range(3, 7);
+                AnimationClip varclip;
+                if (playerController._DanceClips.TryGetValue(rand,out varclip))
+                {
+                    playerController.UpdateAnimator("shot", rand);
+                    StartCoroutine(WaitDanceMotion(varclip.length));
+
+                }
+             //   playerController.UpdateAnimator("shot", 3);
+               // StartCoroutine(WaitDanceMotion(playerController._strikeClip.length));
             }
             else
             {
@@ -137,8 +141,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._canhit = true;
         playerController.UpdateAnimator("shot", 0);
         playerController.RunRpcDance(playerController._ball, true);
-        if (playerController._strikeDance) { playerController._strikeDance = false; }
-        if (playerController._spareDance) { playerController._spareDance = false; }
+        if (playerController._dance) { playerController._dance = false; }
     }
     IEnumerator WaitToReset()
     {

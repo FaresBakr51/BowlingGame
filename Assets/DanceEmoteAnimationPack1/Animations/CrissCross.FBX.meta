@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 39ec0075052ceaa41997ac332786e526
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 21202
   internalIDToNameTable:
   - first:
       74: 8993902097722301239
@@ -17,6 +17,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -46,7 +47,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -75,21 +76,27 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -585,8 +592,7 @@ ModelImporter:
     - name: spine_03
       parentName: spine_02
       position: {x: -0.15238129, y: 0.0013240194, z: 0.00000027656554}
-      rotation: {x: -0.00000018603168, y: -0.000000029991497, z: -0.00000017295997,
-        w: 1}
+      rotation: {x: -0.00000018603168, y: -0.000000029991497, z: -0.00000017295997, w: 1}
       scale: {x: 0.9999999, y: 1.0000001, z: 0.99999994}
     - name: clavicle_l
       parentName: spine_03
@@ -821,8 +827,7 @@ ModelImporter:
     - name: calf_twist_01_l
       parentName: calf_l
       position: {x: 0.2003245, y: -0.008796596, z: -0.0008221054}
-      rotation: {x: -0.00000004947669, y: 0.00000010947585, z: -0.000000037252878,
-        w: 1}
+      rotation: {x: -0.00000004947669, y: 0.00000010947585, z: -0.000000037252878, w: 1}
       scale: {x: 1.0000006, y: 1.0000002, z: 1.0000001}
     - name: foot_l
       parentName: calf_l
@@ -837,8 +842,7 @@ ModelImporter:
     - name: thigh_twist_01_l
       parentName: thigh_l
       position: {x: 6.688193e-10, y: -0.0000000022866216, z: -9.156304e-11}
-      rotation: {x: -0.00000004470348, y: -0.00000030547378, z: 0.00000015553086,
-        w: 1}
+      rotation: {x: -0.00000004470348, y: -0.00000030547378, z: 0.00000015553086, w: 1}
       scale: {x: 1.0000001, y: 1, z: 1.0000001}
     - name: thigh_r
       parentName: pelvis
@@ -868,8 +872,7 @@ ModelImporter:
     - name: thigh_twist_01_r
       parentName: thigh_r
       position: {x: -0.000000008687122, y: 0.000000015031226, z: -0.000000007898933}
-      rotation: {x: -0.000000065658234, y: 0.00000032037494, z: -0.000000090338276,
-        w: 1}
+      rotation: {x: -0.000000065658234, y: 0.00000032037494, z: -0.000000090338276, w: 1}
       scale: {x: 1.0000002, y: 1, z: 1.0000004}
     - name: StikkMan
       parentName: CrissCross(Clone)
@@ -893,6 +896,7 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
