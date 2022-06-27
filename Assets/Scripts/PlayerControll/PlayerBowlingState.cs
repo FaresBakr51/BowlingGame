@@ -23,7 +23,7 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
     {
        
         playercontroller.UpdateAnimator("shot", 1);
-      StartCoroutine(WaitGrounded());
+        StartCoroutine(WaitGrounded());
         
      
         

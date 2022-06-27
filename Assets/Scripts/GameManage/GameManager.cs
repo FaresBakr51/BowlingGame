@@ -9,12 +9,8 @@ using System.Linq;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-
-    private GameObject _leaderBoardobj;
-   
-
     public static GameManager instance;
-  //  public bool _rankedMode;
+    private GameObject _player;
     private void Awake()
     {
         
@@ -51,7 +47,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.RemoveCallbackTarget(this);
         SceneManager.sceneLoaded -= OnSceneLoadingFinished;
     }
-    
+    private void Update()
+    {
+        if (!GameModes._arcadeMode) return;
+         
+     }
     private void OnSceneLoadingFinished(Scene lvl, LoadSceneMode mode)
     {
 
@@ -64,9 +64,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
     }
+    private void ControllArcadeMode()
+    {
+        if(_player.GetComponent<PlayerController>()._scoreplayer.totalscre > 0)
+        {
+
+        }
+    }
      private void CreatPlayer(){
         GameObject avatar =    PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
-       
+        _player = avatar;
+
+
     } 
 
   

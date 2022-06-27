@@ -11,6 +11,7 @@ public struct GameModes
 
     public static bool _rankedMode;
     public static bool _battleRoyale;
+    public static bool _arcadeMode;
 }
 public interface GameModeState
 {

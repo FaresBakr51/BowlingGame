@@ -261,7 +261,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
      IEnumerator Join2PMODE()
     {
         yield return new WaitForSeconds(1f);
-      PhotonNetwork.Disconnect();
+        PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
         {
             yield return null;
