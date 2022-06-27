@@ -57,15 +57,15 @@ public class AiController : MonoBehaviour
     private bool _ControllPower;
 
     public bool _checkIfthereOther;
-    [SerializeField] public GameObject _myRocket;
-    [SerializeField] public GameObject _RocketOff;
-    [SerializeField] public GameObject _RocketOn;
-    public bool _usedRocket;
-    public bool _readyLunch;
-    public List<GameObject> _modePlayers;
+    //[SerializeField] public GameObject _myRocket;
+    //[SerializeField] public GameObject _RocketOff;
+    //[SerializeField] public GameObject _RocketOn;
+   // public bool _usedRocket;
+    //public bool _readyLunch;
+    //public List<GameObject> _modePlayers;
 
 
-    public bool _usingRock;
+   // public bool _usingRock;
     private Vector3 _mypos;
     void Awake()
     {
@@ -114,7 +114,8 @@ public class AiController : MonoBehaviour
             myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
             myleader.transform.GetComponent<RectTransform>().localScale = new Vector3(2, 2f, 2);
         }
-        _hookScroll.gameObject.SetActive(true);
+        _hookScroll.gameObject.SetActive(false);
+        _powerSlider.gameObject.SetActive(false);
         _bowlingState = gameObject.AddComponent<AiBowlState>();
         _waitingState = gameObject.AddComponent<AiWaitingState>();
         _resetState = gameObject.AddComponent<AiResetState>();
@@ -129,23 +130,23 @@ public class AiController : MonoBehaviour
         {
           
 
-            if (_gameend)
-            {
-                //if (_MyPlayCanavas.activeInHierarchy)
-                //{
-                //    _MyPlayCanavas.SetActive(false);
-                //}
-                //if (!_GoHomebutt.activeInHierarchy)
-                //{
-                //    _GoHomebutt.SetActive(true);
-                //}
-                //if (!myleader.activeInHierarchy)
-                //{
-                //    myleader.SetActive(true);
-                //}
-                //EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+            //if (_gameend)
+            //{
+            //    //if (_MyPlayCanavas.activeInHierarchy)
+            //    //{
+            //    //    _MyPlayCanavas.SetActive(false);
+            //    //}
+            //    //if (!_GoHomebutt.activeInHierarchy)
+            //    //{
+            //    //    _GoHomebutt.SetActive(true);
+            //    //}
+            //    //if (!myleader.activeInHierarchy)
+            //    //{
+            //    //    myleader.SetActive(true);
+            //    //}
+            //    //EventSystem.current.SetSelectedGameObject(_GoHomebutt);
 
-            }
+            //}
             if (_canhit)
             {
             
@@ -163,17 +164,17 @@ public class AiController : MonoBehaviour
 
                     UpdateGui();
                 }
-                if (!_usingRock)
-                {
-                    if (!_gameend)
-                    {
-                        //inputdir = new Vector3(_movingL.x, 0, 0);
-                        //transform.Translate(inputdir * Time.deltaTime);
-                        //Vector3 clampedPosition = transform.position;
-                        //clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
-                        //transform.position = clampedPosition;
-                    }
-                }
+                //if (!_usingRock)
+                //{
+                //    if (!_gameend)
+                //    {
+                //        //inputdir = new Vector3(_movingL.x, 0, 0);
+                //        //transform.Translate(inputdir * Time.deltaTime);
+                //        //Vector3 clampedPosition = transform.position;
+                //        //clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
+                //        //transform.position = clampedPosition;
+                //    }
+                //}
 
             }
 
@@ -227,14 +228,14 @@ public class AiController : MonoBehaviour
 
             }
         }
-        if (GameModes._rankedMode || GameModes._battleRoyale)
-        {
-            _modePlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
-            if (_modePlayers.Contains(this.gameObject))
-            {
-                _modePlayers.Remove(this.gameObject);
-            }
-        }
+        //if (GameModes._rankedMode || GameModes._battleRoyale)
+        //{
+        //    _modePlayers = GameObject.FindGameObjectsWithTag("Player").ToList();
+        //    if (_modePlayers.Contains(this.gameObject))
+        //    {
+        //        _modePlayers.Remove(this.gameObject);
+        //    }
+        //}
 
 
         foreach (Transform framtxt in _frametextobj.GetComponentInChildren<Transform>())
