@@ -9,7 +9,6 @@ public class CreatRooms : MonoBehaviourPunCallbacks
      private GetNickname _getRoomname;
     private RoomsController _roomController;
     [SerializeField] private GameObject _roomspanel;
-    public MainMenuManager _menumanager;
     [SerializeField] private GetNickname _getMyName;
     public void FirstIniatlize(RoomsController _controll){
         _roomController  = _controll;

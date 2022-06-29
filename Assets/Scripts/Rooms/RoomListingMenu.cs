@@ -14,7 +14,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
 
     private RoomsController _roomcontroll;
     [SerializeField] private Button _startbutt;
-    [SerializeField] private MainMenuManager _menuManager;
+    [SerializeField] private MainMenuAndNetworkManager _menuManager;
     [SerializeField] private List<RoomListing> _rankedMatches = new List<RoomListing>();
    
     public void FirstIniatlize(RoomsController _controll){

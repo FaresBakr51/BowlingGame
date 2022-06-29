@@ -5,7 +5,7 @@ public class LeaveRoomMenu : MonoBehaviour
 
     private RoomsController _controller;
    [SerializeField] private GameObject _currentroompanel;
-   public MainMenuManager _menuManager;
+   public MainMenuAndNetworkManager _menuManager;
    public void Onclick_Leavroom(){
         if (GameModes._battleRoyale)
         {

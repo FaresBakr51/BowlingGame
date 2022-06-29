@@ -325,9 +325,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
 
         }
-
-
-
         _hookScroll.gameObject.SetActive(true);
         _playercontext = new PlayerStateContext(this);
         _BowlingState = gameObject.AddComponent<PlayerBowlingState>();

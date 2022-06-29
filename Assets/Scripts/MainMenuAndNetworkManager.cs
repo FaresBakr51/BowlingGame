@@ -4,9 +4,9 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
-
-public class MainMenuManager : MonoBehaviourPunCallbacks
+public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
   
    
@@ -27,12 +27,18 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public GameObject _guidPanel;
 
     public GameObject[] _CharacterButtons;
-   
+
+    [Header("RankedPanel")]
     [SerializeField] private GameObject _WAITINPanel;
     public static int _totalRankedPoints;
-
     [SerializeField] private Text _rankedpointTxt;
     
+    public TextMeshProUGUI _myCharName;
+    public TextMeshProUGUI _EnemyCharName;
+    public GameObject _waitTimeOBj;
+    public TextMeshProUGUI _waitTime;
+    public int waitTime;
+   
     public void ActiveRoompanel(){
 
        if(!PhotonNetwork.IsConnected){
@@ -157,13 +163,84 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     {
         if (GameModes._rankedMode)
         {
-          
+            newPlayer.CustomProperties.TryGetValue("selectedcharacter", out var value);
+            photonView.RPC("RPCSendToMaster", RpcTarget.All, value.ToString());
+            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("selectedcharacter", out var master);
+            photonView.RPC("RPCSendtoClient", RpcTarget.All, master.ToString());
             if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.LoadLevel(Random.Range(2, 4));
+                StartCoroutine(StartRankedMatch());
+              //  PhotonNetwork.LoadLevel(Random.Range(2, 4));
             }
         }
     }
+
+    [PunRPC]
+    private void RPCSendToMaster(string ch )
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _EnemyCharName.text = ch;
+        }
+        
+    }
+    [PunRPC]
+    private void RPCSendtoClient(string ch)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            _EnemyCharName.text = ch;
+        }
+       
+    }
+    public override void OnJoinedRoom()
+    {
+        if (GameModes._rankedMode)
+        {
+            //if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            //{
+            //    for (int i = 0; i <= PhotonNetwork.PlayerList.Length; i++)
+            //    {
+
+            //        if (PhotonNetwork.PlayerList[i].IsLocal && !PhotonNetwork.PlayerList[i].IsMasterClient)
+            //        {
+            //            var hash = PhotonNetwork.PlayerList[i - 1].CustomProperties.TryGetValue("selectedcharacter", out var hashValue);
+            //            _EnemyCharName.text = hashValue.ToString();
+            //        }
+            //        if (PhotonNetwork.PlayerList[i].IsMasterClient)
+            //        {
+            //            Debug.Log("masterclient");
+            //            var hash = PhotonNetwork.PlayerList[i+1].CustomProperties.TryGetValue("selectedcharacter", out var hashValue);
+            //            _EnemyCharName.text = hashValue.ToString();
+            //        }
+            //    }
+            //}
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+       
+
+        //if(targetPlayer.IsMasterClient && targetPlayer.IsLocal)
+        //{
+        //    targetPlayer.CustomProperties.TryGetValue("selectedcharacter", out hasval1);
+        //    if (hasval2 != null)
+        //    {
+        //        _EnemyCharName.text = hasval2.ToString();
+        //    }
+        
+        //}
+        //if (!targetPlayer.IsMasterClient && targetPlayer.IsLocal)
+        //{
+        //    targetPlayer.CustomProperties.TryGetValue("selectedcharacter", out hasval2);
+        //    if (hasval1 != null)
+        //    {
+        //        _EnemyCharName.text = hasval1.ToString();
+        //    }
+        //}
+    }
+
     public override void OnConnectedToMaster()
     {
       if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
@@ -175,8 +252,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         _compettbutt.enabled = true;
   
     }
- 
-   public void SelectCharacter(string ch){
+   
+    public void SelectCharacter(string ch){
 
        PlayerPrefs.SetString("character",ch);
        foreach(GameObject obj in _CharacterButtons){
@@ -184,9 +261,18 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
        }
         PlayerPrefs.Save();
         SetSelectedGameObject(_mainMenubuttns[0]);
+
+        if (GameModes._rankedMode)
+        {
+            ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+            hash.Add("selectedcharacter", ch);
+             _myCharName.text = ch;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
         CheckGameMode();
        
    }
+
    public void playersmode(){
 
      PhotonNetwork.Disconnect();
@@ -197,7 +283,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
      _PickPlayerPanel.SetActive(false);
         if (!GameModes._rankedMode)
         {
-            if (_offlinemode == true)
+            if (_offlinemode)
             {
 
                 PhotonNetwork.Disconnect();
@@ -241,6 +327,24 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
       _offlinemode = true;
       _PickPlayerPanel.SetActive(true);
       _mainPanel.SetActive(false);
+    }
+    IEnumerator StartRankedMatch()
+    {
+        _waitTimeOBj.SetActive(true);
+        _waitTime.text = waitTime.ToString();
+        yield return new WaitForSeconds(2);
+        PhotonNetwork.LoadLevel(Random.Range(2, 4));
+        //if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        //{
+        //    PhotonNetwork.LoadLevel(Random.Range(2, 4));
+        //}
+        //else
+        //{
+        //    _waitTimeOBj.SetActive(false);
+        //    _EnemyCharName.text = "";
+        //    //reset time player quit
+        //    waitTime = 0;
+        //}
     }
     IEnumerator DisconnectJoinPractice()
     {
