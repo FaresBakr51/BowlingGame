@@ -5,6 +5,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
@@ -19,7 +20,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _mainPanel;
     [SerializeField] private GameObject _leaderBoardPanel;
     public GameObject[] _mainMenubuttns;
-    
+
+
+    [Header("MainButtonsActions")] 
+    private int indx;
+    public GameObject[] mainButtons;
     public GameObject _PickPlayerPanel;
 
     private bool _offlinemode;
@@ -38,7 +43,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public GameObject _waitTimeOBj;
     public TextMeshProUGUI _waitTime;
     public int waitTime;
-   
+
+ 
     public void ActiveRoompanel(){
 
        if(!PhotonNetwork.IsConnected){
@@ -52,9 +58,15 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
        }
       
     }
- 
-    
+
+
    
+    public void PlayNextMainButtAnimation()
+    {
+       if(indx >= mainButtons.Length) return;
+        mainButtons[indx].SetActive(true);
+        indx++;
+    }
     public void ShowCredits(){
 
       SceneManager.LoadScene(1);
