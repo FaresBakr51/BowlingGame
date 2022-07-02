@@ -80,9 +80,10 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         else
         {
+            playerController._MyPlayCanavas.SetActive(true);
             playerController._timerAfk = 15;
-
-            if (playerController._dance )
+            
+            if (playerController._dance)
             {
                 playerController.RunRpcDance(playerController._ball, false);
 
@@ -100,6 +101,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             else
             {
                 playerController._canhit = true;
+             
             }
             
         }
@@ -116,8 +118,9 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
             playerController.UpdateAnimator("shot", 0);
             playerController._camera.transform.position = _Cambos;
+          
         }
-
+      
      
        
         foreach (Transform pins in playerController._mypins)
@@ -161,7 +164,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         yield return new WaitForSeconds(3f);
         if (playerController.myleader.activeInHierarchy) { playerController.myleader.SetActive(false); }
-        playerController._MyPlayCanavas.SetActive(true);
+        
         ResetCamAndpins();
         //if (!GameModes._battleRoyale)
         //{

@@ -161,6 +161,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             Destroy(_MyPlayCanavas);
 
         }
+
+        Cursor.lockState = CursorLockMode.Locked;
+       
          _canhit = true;
         _myxpos = transform.position.x;
     }
@@ -185,6 +188,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
+                     Debug.Log("Drifting");
                  }
                  else if(_movingL.x < 0)
                  {
@@ -192,6 +196,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
+                     Debug.Log("Drifting");
                  }
              }
                  if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
