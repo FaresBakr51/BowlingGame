@@ -23,14 +23,13 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
 
     [Header("MainButtonsActions")] 
-    private int indx;
+    public int indx;
     public GameObject[] mainButtons;
     public GameObject _PickPlayerPanel;
-
     private bool _offlinemode;
     public GameObject[] _guidePic;
     public GameObject _guidPanel;
-
+    [SerializeField] private GameObject[] _onlineSubmenu;
     public GameObject[] _CharacterButtons;
 
     [Header("RankedPanel")]
@@ -41,10 +40,48 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI _myCharName;
     public TextMeshProUGUI _EnemyCharName;
     public GameObject _waitTimeOBj;
-    public TextMeshProUGUI _waitTime;
+   
     public int waitTime;
+    
+    public void ActiveSubMenu(string submenusName)
+    {
+        switch (submenusName)
+        {
+            case "online":
+                
+                for (int i = 0; i < _onlineSubmenu.Length; i++)
+                {
+                    if (_onlineSubmenu[i].activeInHierarchy)
+                    {
+                        _onlineSubmenu[i].SetActive(false);
 
- 
+                        for (int k = 2; k < mainButtons.Length; k++)
+                        {
+                            mainButtons[k].SetActive(true);
+                            
+                        }
+
+                      
+                    }
+                    else
+                    {
+                        for (int k = 2; k < mainButtons.Length; k++)
+                        {
+                            mainButtons[k].SetActive(false);
+                            
+                        }
+
+                        _onlineSubmenu[i].SetActive(true);
+                    }
+                }
+
+                break;
+            case "solo":
+                break;
+        }
+       
+        
+    }
     public void ActiveRoompanel(){
 
        if(!PhotonNetwork.IsConnected){
@@ -176,9 +213,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         if (GameModes._rankedMode)
         {
             newPlayer.CustomProperties.TryGetValue("selectedcharacter", out var value);
-            photonView.RPC("RPCSendToMaster", RpcTarget.All, value.ToString());
+            photonView.RPC("RPCSendToMaster", RpcTarget.All, newPlayer.NickName);
             PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("selectedcharacter", out var master);
-            photonView.RPC("RPCSendtoClient", RpcTarget.All, master.ToString());
+            photonView.RPC("RPCSendtoClient", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
             if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
             {
                 StartCoroutine(StartRankedMatch());
@@ -205,53 +242,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         }
        
     }
-    public override void OnJoinedRoom()
-    {
-        if (GameModes._rankedMode)
-        {
-            //if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
-            //{
-            //    for (int i = 0; i <= PhotonNetwork.PlayerList.Length; i++)
-            //    {
+   
 
-            //        if (PhotonNetwork.PlayerList[i].IsLocal && !PhotonNetwork.PlayerList[i].IsMasterClient)
-            //        {
-            //            var hash = PhotonNetwork.PlayerList[i - 1].CustomProperties.TryGetValue("selectedcharacter", out var hashValue);
-            //            _EnemyCharName.text = hashValue.ToString();
-            //        }
-            //        if (PhotonNetwork.PlayerList[i].IsMasterClient)
-            //        {
-            //            Debug.Log("masterclient");
-            //            var hash = PhotonNetwork.PlayerList[i+1].CustomProperties.TryGetValue("selectedcharacter", out var hashValue);
-            //            _EnemyCharName.text = hashValue.ToString();
-            //        }
-            //    }
-            //}
-        }
-    }
-
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
-    {
-       
-
-        //if(targetPlayer.IsMasterClient && targetPlayer.IsLocal)
-        //{
-        //    targetPlayer.CustomProperties.TryGetValue("selectedcharacter", out hasval1);
-        //    if (hasval2 != null)
-        //    {
-        //        _EnemyCharName.text = hasval2.ToString();
-        //    }
-        
-        //}
-        //if (!targetPlayer.IsMasterClient && targetPlayer.IsLocal)
-        //{
-        //    targetPlayer.CustomProperties.TryGetValue("selectedcharacter", out hasval2);
-        //    if (hasval1 != null)
-        //    {
-        //        _EnemyCharName.text = hasval1.ToString();
-        //    }
-        //}
-    }
 
     public override void OnConnectedToMaster()
     {
@@ -278,7 +270,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("selectedcharacter", ch);
-             _myCharName.text = ch;
+            
+             _myCharName.text = PhotonNetwork.LocalPlayer.NickName;
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
         CheckGameMode();
@@ -343,7 +336,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     IEnumerator StartRankedMatch()
     {
         _waitTimeOBj.SetActive(true);
-        _waitTime.text = waitTime.ToString();
+        //_waitTime.text = waitTime.ToString();
         yield return new WaitForSeconds(2);
         PhotonNetwork.LoadLevel(Random.Range(2, 4));
         //if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
