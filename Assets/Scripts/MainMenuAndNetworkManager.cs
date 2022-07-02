@@ -36,13 +36,19 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _WAITINPanel;
     public static int _totalRankedPoints;
     [SerializeField] private Text _rankedpointTxt;
+    public GameObject _vsPanel;
+    private string localSelectedCh;
+    public Sprite[] _bowlersSprites;
+    public TextMeshProUGUI _mylocalname;
+    public Image _mylocalImage;
+    public TextMeshProUGUI _enemylocalname;
+    public Image _enemylocalImage;
     
-    public TextMeshProUGUI _myCharName;
-    public TextMeshProUGUI _EnemyCharName;
-    public GameObject _waitTimeOBj;
-   
-    public int waitTime;
+    [Header("Audio")]
+    public AudioSource _playerAudio;
     
+    public AudioClip[] _uiclips;
+
     public void ActiveSubMenu(string submenusName)
     {
         switch (submenusName)
@@ -96,7 +102,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
       
     }
 
-
+    public void UdpateSoundSource(AudioSource source, AudioClip clip)
+    {
+        source.clip = clip;
+        source.PlayOneShot(clip);
+    }
    
     public void PlayNextMainButtAnimation()
     {
@@ -179,7 +189,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         _offlinemode = false;
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
-      
+      UdpateSoundSource(_playerAudio, _uiclips[0]);
     }
    
     IEnumerator GetRankedPoints()
@@ -213,36 +223,86 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         if (GameModes._rankedMode)
         {
             newPlayer.CustomProperties.TryGetValue("selectedcharacter", out var value);
-            photonView.RPC("RPCSendToMaster", RpcTarget.All, newPlayer.NickName);
+            photonView.RPC("RPCSendToMaster", RpcTarget.All, newPlayer.NickName,value.ToString());
             PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("selectedcharacter", out var master);
-            photonView.RPC("RPCSendtoClient", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName);
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2 && PhotonNetwork.IsMasterClient)
+            photonView.RPC("RPCSendtoClient", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName,master.ToString());
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
             {
-                StartCoroutine(StartRankedMatch());
-              //  PhotonNetwork.LoadLevel(Random.Range(2, 4));
+               
+               photonView.RPC("RPCRunRankedGame",RpcTarget.All);
+               if (PhotonNetwork.IsMasterClient)
+               {
+                   StartCoroutine(StartRankedMatch());
+               }
+
             }
         }
     }
 
     [PunRPC]
-    private void RPCSendToMaster(string ch )
+    private void RPCRunRankedGame()
+    {
+        UdpateSoundSource(_playerAudio, _uiclips[1]);
+        _vsPanel.SetActive(true);
+        _mylocalname.text = PhotonNetwork.LocalPlayer.NickName;
+        _mylocalImage.sprite = _bowlersSprites[GetPlayerSpriteInx(localSelectedCh)];
+    }
+    [PunRPC]
+    private void RPCSendToMaster(string ch,string spriteindex )
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            _EnemyCharName.text = ch;
+            _enemylocalname.text = ch;
+            _enemylocalImage.sprite = _bowlersSprites[GetPlayerSpriteInx(spriteindex)];
         }
         
     }
     [PunRPC]
-    private void RPCSendtoClient(string ch)
+    private void RPCSendtoClient(string ch,string spriteindex)
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            _EnemyCharName.text = ch;
+            _enemylocalname.text = ch;
+            _enemylocalImage.sprite = _bowlersSprites[GetPlayerSpriteInx(spriteindex)];
         }
        
     }
-   
+
+    private int GetPlayerSpriteInx(string ch)
+    {
+
+        int indx = 0;
+        switch (ch)
+        {
+            case "Paul":
+                indx = 0;
+                break;
+            case "Mrbill":
+                indx = 1;
+                break;
+            case "Izzy":
+                indx = 2;
+                break;
+            case "Barney":
+                indx = 3;
+                break;
+            case "Cindy":
+                indx = 4;
+                break;
+            case "Carl":
+                indx = 5;
+                break;
+            case "Jong":
+                indx = 6;
+                break;
+            case "Sergent Major":
+                indx = 7;
+                break;
+        }
+
+        return indx;
+    }
+
 
 
     public override void OnConnectedToMaster()
@@ -268,17 +328,18 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
         if (GameModes._rankedMode)
         {
+            
             ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
             hash.Add("selectedcharacter", ch);
-            
-             _myCharName.text = PhotonNetwork.LocalPlayer.NickName;
+            localSelectedCh = ch;
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
         CheckGameMode();
        
    }
+    
 
-   public void playersmode(){
+    public void playersmode(){
 
      PhotonNetwork.Disconnect();
      StartCoroutine(Join2PMODE());
@@ -335,21 +396,12 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     IEnumerator StartRankedMatch()
     {
-        _waitTimeOBj.SetActive(true);
-        //_waitTime.text = waitTime.ToString();
         yield return new WaitForSeconds(2);
-        PhotonNetwork.LoadLevel(Random.Range(2, 4));
-        //if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
-        //{
-        //    PhotonNetwork.LoadLevel(Random.Range(2, 4));
-        //}
-        //else
-        //{
-        //    _waitTimeOBj.SetActive(false);
-        //    _EnemyCharName.text = "";
-        //    //reset time player quit
-        //    waitTime = 0;
-        //}
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+            PhotonNetwork.LoadLevel(Random.Range(2, 4));
+        }
+   
     }
     IEnumerator DisconnectJoinPractice()
     {

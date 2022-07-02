@@ -339,12 +339,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          GetReady();
         if (GameModes._battleRoyale)
         {
-            _royalMode = this.gameObject.AddComponent<RoyalModeState>();
+            _royalMode = gameObject.AddComponent<RoyalModeState>();
             _royalMode.GameMode(this);
         }
         else if (GameModes._rankedMode)
         {
-            _rankedMode = this.gameObject.AddComponent<RankedModeState>();
+            _rankedMode = gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
         }
       

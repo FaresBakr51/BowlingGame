@@ -47,11 +47,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.RemoveCallbackTarget(this);
         SceneManager.sceneLoaded -= OnSceneLoadingFinished;
     }
-    private void Update()
-    {
-        if (!GameModes._arcadeMode) return;
-         
-     }
+
     private void OnSceneLoadingFinished(Scene lvl, LoadSceneMode mode)
     {
 

@@ -64,6 +64,18 @@ public class AiResetState : AiStates
         
         }
 
+        if (_aiController._myRocket.activeInHierarchy)
+        {
+        
+          
+            _aiController._usingRock = false;
+            _aiController.RunRpc();           
+           
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+            _aiController.UpdateAnimator("shot", 0);
+        
+          
+        }
 
 
 

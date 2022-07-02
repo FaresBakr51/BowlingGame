@@ -57,15 +57,12 @@ public class AiController : MonoBehaviour
     private bool _ControllPower;
 
     public bool _checkIfthereOther;
-    //[SerializeField] public GameObject _myRocket;
-    //[SerializeField] public GameObject _RocketOff;
-    //[SerializeField] public GameObject _RocketOn;
-   // public bool _usedRocket;
-    //public bool _readyLunch;
-    //public List<GameObject> _modePlayers;
-
-
-   // public bool _usingRock;
+    
+    [Header("RocketProp")]
+    public GameObject _myRocket;
+    public bool _usingRock;
+    public bool _usedRocket;
+    public bool _readyLunch;
     private Vector3 _mypos;
     void Awake()
     {
@@ -123,7 +120,28 @@ public class AiController : MonoBehaviour
         GetReady();
      
     }
+    public void RunRpc()
+    {
+        if (_photonview.IsMine)
+        {
+            _photonview.RPC("RPCRocketOFF", RpcTarget.All);
+        }
+    }
+    [PunRPC]
+    private void RPCHiRocket()
+    {
+        _myRocket?.SetActive(true);
+        transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+        _ball?.SetActive(false);
+       
+    }
+    [PunRPC]
+    private void RPCRocketOFF()
+    {
 
+        _myRocket.SetActive(false);
+        _ball.SetActive(true);
+    }
     void Update()
     {
         if (_photonview.IsMine)
