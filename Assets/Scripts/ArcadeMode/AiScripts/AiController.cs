@@ -10,11 +10,8 @@ public class AiController : MonoBehaviour
     public GameObject _ball;
     public Transform _playerhand;
     public Vector3 _BallConstantPos;
-    public float _power;
-   // public GameObject _camera;
+ 
     private Animator _playerAnim;
-    public Slider _powerSlider;
-    public Scrollbar _hookScroll;
     public List<Transform> _mypins = new List<Transform>();
     [SerializeField] public List<Vector3> _resetpins = new List<Vector3>();
     [SerializeField] public List<Transform> _leftpins = new List<Transform>();
@@ -23,14 +20,10 @@ public class AiController : MonoBehaviour
     public float _speed;
   
     private AiStates _waitingState, _bowlingState, _resetState;
-    public float _slidertime;
-    public float _scrolltime;
-    private Vector3 inputdir;
-    public GameObject _MyPlayCanavas;
-    private float _myxpos;
+    //public float _slidertime;
+    //public float _scrolltime;
+  //  public GameObject _MyPlayCanavas;
     public bool _hookcalclated;
-    public float _driftvalue;
-    [SerializeField] private float _driftMaxval;
     public bool _canhit;
     public int _roundscore;
     public ScorePlayer _scoreplayer;
@@ -46,18 +39,31 @@ public class AiController : MonoBehaviour
     public GameObject _mypinsobj;
     public bool _followBall;
     public GameObject _mytotal;
-    public GameObject _GoHomebutt;
     public GameControls _gameactions;
     public bool _powerval;
     private bool _moveright;
     private Vector3 _movingL;
 
     public bool _calcScore;
-    public bool _calcPower;
+ //   public bool _calcPower;
     private bool _ControllPower;
 
     public bool _checkIfthereOther;
-    
+    [Header("PhotonaAvatarAndVoiceManager")]
+ 
+    public GameObject _myManager;
+
+    [Header("SlidersProp")]
+
+
+    public float powerminval;
+    public float powermaxval;
+    public float _power;
+
+   
+    public float _driftvalue;
+    public float _drifMinval;
+    public float _driftMaxval;
     [Header("RocketProp")]
     public GameObject _myRocket;
     public bool _usingRock;
@@ -67,8 +73,6 @@ public class AiController : MonoBehaviour
     void Awake()
     {
         _mypos = this.transform.position;
-        _powerSlider.gameObject.SetActive(false);
-        _hookScroll.gameObject.SetActive(false);
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
         if (SceneManager.GetActiveScene().name == "Map4")
@@ -86,11 +90,11 @@ public class AiController : MonoBehaviour
             //_camera.GetComponent<Camera>().enabled = false;
             //_camera.GetComponent<AudioListener>().enabled = false;
             GetComponent<PlayerController>().enabled = false;
-            Destroy(_MyPlayCanavas);
+         
 
         }
         _canhit = true;
-        _myxpos = transform.position.x;
+    
     }
     private void Start()
     {
@@ -101,9 +105,9 @@ public class AiController : MonoBehaviour
             {
                 myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
             }
-            _GoHomebutt = myleader.GetComponentInChildren<Button>().gameObject;
-            var rankedpanelobj = myleader.GetComponentsInChildren<Transform>();
-            var playcanavas = _MyPlayCanavas.GetComponentsInChildren<Transform>().ToList();
+       
+       //     var rankedpanelobj = myleader.GetComponentsInChildren<Transform>();
+      //      var playcanavas = _MyPlayCanavas.GetComponentsInChildren<Transform>().ToList();
 
             myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
             myleader.transform.parent = _golballeaderboradcanavas.transform;
@@ -111,8 +115,7 @@ public class AiController : MonoBehaviour
             myleader.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f);
             myleader.transform.GetComponent<RectTransform>().localScale = new Vector3(2, 2f, 2);
         }
-        _hookScroll.gameObject.SetActive(false);
-        _powerSlider.gameObject.SetActive(false);
+     
         _bowlingState = gameObject.AddComponent<AiBowlState>();
         _waitingState = gameObject.AddComponent<AiWaitingState>();
         _resetState = gameObject.AddComponent<AiResetState>();
@@ -172,10 +175,6 @@ public class AiController : MonoBehaviour
                 {
 
                     UpdateHookSlider();
-                }
-                else
-                {
-                    _hookScroll.gameObject.SetActive(false);
                 }
                 if (_hookcalclated && !_powerval)
                 {
@@ -274,136 +273,26 @@ public class AiController : MonoBehaviour
     }
     private void UpdateGui()
     {
-        if (_powerSlider.value == _powerSlider.maxValue)
-        {
 
-            _ControllPower = true;
-            _slidertime = 0;
-
-        }
-        if (_powerSlider.value == _powerSlider.minValue)
-        {
-            _slidertime = 0;
-
-            _ControllPower = false;
-
-        }
-
-        if (_ControllPower == false)
-        {
-            _slidertime += Time.deltaTime;
-            _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.3f);
-        }
-        else
-        {
-
-            _slidertime += Time.deltaTime;
-            _powerSlider.value = Mathf.Lerp(_powerSlider.maxValue, _powerSlider.minValue, _slidertime / 0.3f);
-        }
-
+        GetPowerValue();
 
     }
-    IEnumerator ActivePowerShot()
-    {
-
-        yield return new WaitForSeconds(0.5f);
-        _calcPower = true;
-    }
+ 
     private void GetPowerValue()
     {
         _powerval = true;
-        _power = _powerSlider.value;
+        _power = Random.Range(powerminval,powermaxval);
          BowlState();
     }
     private void UpdateHookSlider()
     {
-        if (_moveright == false)
-        {
-
-            _scrolltime = 0;
-            _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 1f, _scrolltime / 0.168f);
-
-            if (_hookScroll.value >= 0.9)
-            {
-                _moveright = true;
-            }
-        }
-        else
-        {
-            _scrolltime = 0;
-            _scrolltime += Time.deltaTime;
-            _hookScroll.value = Mathf.Lerp(_hookScroll.value, 0f, _scrolltime / 0.168f);//0.3
-
-            if (_hookScroll.value <= 0.1f)
-            {
-
-                _moveright = false;
-            }
-
-        }
-
-    }
-
-    private void GetDriftValue()
-    {
-        if (_hookScroll.value == 0.45f)
-        {
-            _driftvalue = 0;
-        }
-        else
-        {
-            float driftval = (Mathf.Round(_hookScroll.value * 10));
-
-            GetDrifRealVal(driftval);
-        }
+        _driftvalue = Random.Range(_drifMinval, _driftMaxval);
         _hookcalclated = true;
-        _hookScroll.gameObject.SetActive(false);
-        _powerSlider.gameObject.SetActive(true);
-        StartCoroutine(ActivePowerShot());
+      
     }
-    private void GetDrifRealVal(float val)
-    {
 
-        switch (val)
-        {
-            case 0:
-                _driftvalue = (_driftMaxval * -1);
-                break;
-            case 1:
-                _driftvalue = (_driftMaxval * -1);//ex : -100
-                break;
-            case 2:
-                _driftvalue = (_driftMaxval * -1) + 20;//ex -80
-                break;
-            case 3:
-                _driftvalue = (_driftMaxval * -1) + 40;
-                break;
-            case 4:
-                _driftvalue = (_driftMaxval * -1) + 60;
-                break;
-            case 5:
-                _driftvalue = 0;
-                break;
-            case 6:
-                _driftvalue = _driftMaxval - 60;
-                break;
-            case 7:
-                _driftvalue = _driftMaxval - 40;
-                break;
-            case 8:
-                _driftvalue = _driftMaxval - 20;
-                break;
-            case 9:
-                _driftvalue = _driftMaxval;
-                break;
-            case 10:
-                _driftvalue = _driftMaxval;
-                break;
-
-
-        }
-    }
+ 
+ 
     private void BowlState()
     {
         if (!_gameend)
@@ -424,7 +313,8 @@ public class AiController : MonoBehaviour
       
     }
 
-    private void CheckOtherHit()
+
+    public void CheckOtherHit()
     {
 
 

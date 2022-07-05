@@ -30,6 +30,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public GameObject[] _guidePic;
     public GameObject _guidPanel;
     [SerializeField] private GameObject[] _onlineSubmenu;
+    [SerializeField] private GameObject[] _soloSubmenu;
     public GameObject[] _CharacterButtons;
 
     [Header("RankedPanel")]
@@ -61,9 +62,12 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                     {
                         _onlineSubmenu[i].SetActive(false);
 
-                        for (int k = 2; k < mainButtons.Length; k++)
+                        for (int k = 0; k < mainButtons.Length; k++)
                         {
-                            mainButtons[k].SetActive(true);
+                            if (k != 2)
+                            {
+                                mainButtons[k].SetActive(true);
+                            }
                             
                         }
 
@@ -71,10 +75,12 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                     }
                     else
                     {
-                        for (int k = 2; k < mainButtons.Length; k++)
+                        for (int k = 0; k < mainButtons.Length; k++)
                         {
-                            mainButtons[k].SetActive(false);
-                            
+                            if (k != 2)
+                            {
+                                mainButtons[k].SetActive(false);
+                            }
                         }
 
                         _onlineSubmenu[i].SetActive(true);
@@ -83,6 +89,33 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
                 break;
             case "solo":
+                for (int i = 0; i < _soloSubmenu.Length; i++)
+                {
+                    if (_soloSubmenu[i].activeInHierarchy)
+                    {
+                        _soloSubmenu[i].SetActive(false);
+
+                        for (int k = 1; k < mainButtons.Length; k++)
+                        {
+                           
+                             mainButtons[k].SetActive(true);
+                            
+
+                        }
+
+
+                    }
+                    else
+                    {
+                        for (int k = 1; k < mainButtons.Length; k++)
+                        {
+                            mainButtons[k].SetActive(false);
+
+                        }
+
+                        _soloSubmenu[i].SetActive(true);
+                    }
+                }
                 break;
         }
        
@@ -110,7 +143,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
    
     public void PlayNextMainButtAnimation()
     {
-       if(indx >= mainButtons.Length) return;
+       if(indx >= mainButtons.Length-1) return;
         mainButtons[indx].SetActive(true);
         indx++;
     }
@@ -150,6 +183,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             GameModes._rankedMode = false;
         }
+        if (GameModes._arcadeMode)
+        {
+            GameModes._arcadeMode = false;
+        }
         if (_WAITINPanel.activeInHierarchy)
         {
             if (PhotonNetwork.InRoom)
@@ -181,6 +218,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     {
         AudioListener.volume = 1;
         GameModes._rankedMode = false;
+        GameModes._arcadeMode = false;
         GameModes._battleRoyale = false;
         StartCoroutine(GetRankedPoints());
        PhotonNetwork.OfflineMode = false;
@@ -387,6 +425,13 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
            
         }
    }
+    public void CreatArcadeMatch()
+    {
+        GameModes._arcadeMode = true;
+        _offlinemode = true;
+        _PickPlayerPanel.SetActive(true);
+        _mainPanel.SetActive(false);
+    }
       public void JoinRoom()
     {
    
@@ -416,7 +461,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRoom(null);
           PhotonNetwork.CurrentRoom.IsOpen = false;
            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(Random.Range(2, 4));
+            PhotonNetwork.LoadLevel(Random.Range(2, 3));
         } 
     }
      IEnumerator Join2PMODE()

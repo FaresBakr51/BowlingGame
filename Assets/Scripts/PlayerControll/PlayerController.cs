@@ -69,12 +69,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _strikeTxt;
     public GameObject _spareTxt;
     public GameObject _gutterTxt;
-     [SerializeField] private GameObject _pauseMenupanel;
-     [SerializeField] private GameObject _pauseMenuFirstbutt;
-     [SerializeField] private GameObject[] _soundOnOF;
+    [SerializeField] private GameObject _pauseMenupanel;
+    [SerializeField] private GameObject _pauseMenuFirstbutt;
+    [SerializeField] private GameObject[] _soundOnOF;
     
     private bool _gamePaused;
-   
+
+    [Header("PhotonaAvatarAndVoiceManager")]
     [SerializeField] private PhotonVoiceView _myVoice;
     public GameObject _isspeakingButt;
     public GameObject _notSpeakingButt;
@@ -162,7 +163,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
         }
 
-        Cursor.lockState = CursorLockMode.Locked;
+    //    Cursor.lockState = CursorLockMode.Locked;
        
          _canhit = true;
         _myxpos = transform.position.x;

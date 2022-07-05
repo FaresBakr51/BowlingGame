@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class ArcadeModeManage : MonoBehaviour
 {
-    [SerializeField] private Transform _spawnPoint;
+    public Transform _spawnPoint;
     void Start()
     {
         if (GameModes._arcadeMode)
         {
-          //  PhotonNetwork.Instantiate("PhotonAiAvatar",_spawnPoint.position,transform.rotation);
+            PhotonNetwork.Instantiate("PhotonAiAvatar",_spawnPoint.position,transform.rotation);
         }
     }
 

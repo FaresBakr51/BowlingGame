@@ -81,22 +81,23 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         else
         {
             playerController._MyPlayCanavas.SetActive(true);
-            playerController._timerAfk = 15;
-            
+            if (GameModes._battleRoyale)
+            {
+                playerController._timerAfk = 15;
+            }
             if (playerController._dance)
             {
+
                 playerController.RunRpcDance(playerController._ball, false);
 
                 int rand = Random.Range(3, 7);
                 AnimationClip varclip;
-                if (playerController._DanceClips.TryGetValue(rand,out varclip))
+                if (playerController._DanceClips.TryGetValue(rand, out varclip))
                 {
                     playerController.UpdateAnimator("shot", rand);
                     StartCoroutine(WaitDanceMotion(varclip.length));
 
                 }
-             //   playerController.UpdateAnimator("shot", 3);
-               // StartCoroutine(WaitDanceMotion(playerController._strikeClip.length));
             }
             else
             {
@@ -114,21 +115,16 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             playerController._RocketOff.SetActive(true);
             playerController._usingRock = false;
             playerController.RunRpc();           
-           
             transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
             playerController.UpdateAnimator("shot", 0);
             playerController._camera.transform.position = _Cambos;
           
         }
-      
-     
-       
         foreach (Transform pins in playerController._mypins)
         {
             if (pins.name != "PinSetter")
             {
-                pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-             //   pins.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;  
             }
         }
       
@@ -141,10 +137,11 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
        
         yield return new WaitForSeconds(length);
        
-        playerController._canhit = true;
+      
         playerController.UpdateAnimator("shot", 0);
         playerController.RunRpcDance(playerController._ball, true);
         if (playerController._dance) { playerController._dance = false; }
+        playerController._canhit = true;
     }
     IEnumerator WaitToReset()
     {
@@ -166,34 +163,6 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         if (playerController.myleader.activeInHierarchy) { playerController.myleader.SetActive(false); }
         
         ResetCamAndpins();
-        //if (!GameModes._battleRoyale)
-        //{
-        //    yield return new WaitForSeconds(1.5f);
-
-        //    playerController.myleader.SetActive(true);
-        //    if (playerController._leftpins.Count > 0)
-        //    {
-        //        foreach (Transform leftpin in playerController._leftpins)
-        //        {
-        //            leftpin.transform.rotation = Quaternion.identity;
-        //            if (leftpin.gameObject.GetComponent<Rigidbody>().isKinematic)
-        //            {
-        //                leftpin.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        //            }
-        //            leftpin.gameObject.SetActive(true);
-        //            leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
-        //        }
-        //    }
-        //    yield return new WaitForSeconds(3f);
-        //    playerController.myleader.SetActive(false);
-        //    playerController._MyPlayCanavas.SetActive(true);
-        //    ResetCamAndpins();
-        //}
-        //else
-        //{
-        //    yield return new WaitForSeconds(1.5f);
-        //    ResetCamAndpins();
-        //}
        
     }
 }

@@ -28,16 +28,15 @@ public class AiResetState : AiStates
         _aiController._followBall = false;
         _aiController._powerval = false;
         _aiController._hookcalclated = false;
-        _aiController._powerSlider.gameObject.SetActive(false);
-        _aiController._hookScroll.gameObject.SetActive(true);
-        _aiController._calcPower = false;
+      
+        //_aiController._calcPower = false;
         _aiController._ball.GetComponent<Rigidbody>().isKinematic = true;
         _aiController._ball.GetComponent<BallSound>().enabled = false;
         _aiController._ball.transform.parent = _aiController._playerhand;
-        _aiController._slidertime = 0;
-        _aiController._scrolltime = 0;
-        _aiController._powerSlider.value = 0;
-        _aiController._hookScroll.value = 0.5f;
+     //   _aiController._slidertime = 0;
+       // _aiController._scrolltime = 0;
+       // _aiController._power = 0;
+     //   _aiController._driftvalue = 0f;
        
         _aiController._ball.transform.localPosition = _aiController._BallConstantPos;
         _aiController._roundscore = 0;
@@ -49,11 +48,7 @@ public class AiResetState : AiStates
         {
 
             _aiController._canhit = false;
-            if (_aiController._MyPlayCanavas.activeInHierarchy)
-            {
-                _aiController._MyPlayCanavas.SetActive(false);
-            }
-
+        
       
         }
         else
@@ -64,18 +59,18 @@ public class AiResetState : AiStates
         
         }
 
-        if (_aiController._myRocket.activeInHierarchy)
-        {
+        //if (_aiController._myRocket.activeInHierarchy)
+        //{
         
           
-            _aiController._usingRock = false;
-            _aiController.RunRpc();           
+        //    _aiController._usingRock = false;
+        //    _aiController.RunRpc();           
            
-            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
-            _aiController.UpdateAnimator("shot", 0);
+        //    transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+        //    _aiController.UpdateAnimator("shot", 0);
         
           
-        }
+        //}
 
 
 
@@ -85,14 +80,14 @@ public class AiResetState : AiStates
             if (pins.name != "PinSetter")
             {
                 pins.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                //   pins.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+             
             }
         }
 
     }
     IEnumerator WaitToReset()
     {
-      //  _aiController.myleader.SetActive(true);
+  
         if (_aiController._leftpins.Count > 0)
         {
             foreach (Transform leftpin in _aiController._leftpins)
@@ -107,8 +102,7 @@ public class AiResetState : AiStates
             }
         }
         yield return new WaitForSeconds(3f);
-      //  if (_aiController.myleader.activeInHierarchy) { _aiController.myleader.SetActive(false); }
-        _aiController._MyPlayCanavas.SetActive(true);
+    
         ResetCamAndpins();
     }
 }

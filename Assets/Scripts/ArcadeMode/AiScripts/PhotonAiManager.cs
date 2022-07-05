@@ -15,14 +15,23 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _mytotalscore;
     [SerializeField]  private GameObject totalscorePref;
     public GameObject _myavatar;
-    private PlayerController _myAvatarController;
+    private AiController _myAvatarController;
     [SerializeField] private int myscore;
     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>();
     private bool _startCounter;
+    private ArcadeModeManage _arcade;
     public override void OnEnable()
     {
+        if (GameModes._arcadeMode)
+        {
+            _arcade = FindObjectOfType<ArcadeModeManage>();
+        }
+        else
+        {
+            GetSpawnPoints();
+        }
         _pv = GetComponent<PhotonView>();
-         GetSpawnPoints();
+       
       
     }
 
@@ -50,9 +59,21 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
   
     private void SetUpPlayer(){
         if(_pv.IsMine){
+
+            if (GameModes._arcadeMode)
+            {
+                _myavatar = PhotonNetwork.Instantiate("AIPaul", _arcade._spawnPoint.transform.position, Quaternion.Euler(0, 180, 0), 0);
+            }
+            else
+            {
+
+                _myavatar = PhotonNetwork.Instantiate("AIPaul", _spawnPoints[_pv.Owner.ActorNumber - 1].transform.position, Quaternion.Euler(0, 180, 0), 0);
+            }
             
-            _myavatar =    PhotonNetwork.Instantiate("AIPaul",_spawnPoints[_pv.Owner.ActorNumber-1].transform.position,Quaternion.Euler(0,180,0),0);
-            _myAvatarController = _myavatar.GetComponent<PlayerController>();
+
+            
+          
+            _myAvatarController = _myavatar.GetComponent<AiController>();
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
             _myAvatarController._myManager = this.gameObject;
         

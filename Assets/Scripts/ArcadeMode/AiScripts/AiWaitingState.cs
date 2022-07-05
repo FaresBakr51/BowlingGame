@@ -13,7 +13,7 @@ public class AiWaitingState : AiStates
 
     private void WaitState()
     {
-        _aiController._MyPlayCanavas.SetActive(false);
+       // _aiController._MyPlayCanavas.SetActive(false);
         if (_aiController._canhit)
         {
             _aiController._canhit = false;
@@ -68,6 +68,6 @@ public class AiWaitingState : AiStates
     IEnumerator Waittopublish()
     {
         yield return new WaitForSeconds(1f);
-        GameEventBus.Publish(GameEventType.leaderboard);
+        _aiController.CheckOtherHit();
     }
 }

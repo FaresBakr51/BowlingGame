@@ -49,7 +49,7 @@ public class AiBowlState : AiStates
         rig.AddForce(new Vector3(0, 0, -_aiController._power), ForceMode.Impulse);
         rig.AddForce(new Vector3(-_aiController._driftvalue, 0, 0), ForceMode.Force);
         _aiController.Waitstate();
-      //  GameEventBus.Publish(GameEventType.waiting);
+     
     }
 
 }
