@@ -88,7 +88,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             {
                 playerController._timerAfk = 15;
             }
-            if (playerController._dance)
+            if (playerController._dance && !playerController._usingRock)
             {
 
                 playerController.RunRpcDance(playerController._ball, false);
@@ -138,7 +138,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
     IEnumerator WaitDanceMotion(float length)
     {
        
-        yield return new WaitForSeconds(length);
+        yield return new WaitForSeconds(length -0.1f);
        
       
         playerController.UpdateAnimator("shot", 0);

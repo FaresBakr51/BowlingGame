@@ -353,6 +353,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
       
     }
  
+ 
     private void CheckControlles(){
 
            if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
@@ -448,6 +449,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     EventSystem.current.SetSelectedGameObject(_GoHomebutt);
 
             }
+            if(GameModes._arcadeMode ) { if (!_canPlay) return; }
             if (_canhit)
             {
                 if (_readyLunch)

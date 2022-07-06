@@ -89,15 +89,15 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
 
        totalscorePref = PhotonNetwork.Instantiate("_mytotalscoreprefab",_mytotalscore.transform.position,Quaternion.identity,0);
 
-        if (Application.platform == RuntimePlatform.WindowsPlayer)
-        {
-              var platform = PhotonNetwork.Instantiate("platformpc", totalscorePref.transform.position, Quaternion.identity, 0);
-        }
-        else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.WindowsEditor)
-        {
-               var platform =   PhotonNetwork.Instantiate("platformarcade", totalscorePref.transform.position, Quaternion.identity, 0);
+        //if (Application.platform == RuntimePlatform.WindowsPlayer)
+        //{
+        //      var platform = PhotonNetwork.Instantiate("platformpc", totalscorePref.transform.position, Quaternion.identity, 0);
+        //}
+        //else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.WindowsEditor)
+        //{
+        //       var platform =   PhotonNetwork.Instantiate("platformarcade", totalscorePref.transform.position, Quaternion.identity, 0);
      
-        }
+        //}
         _myAvatarController._mytotal = totalscorePref;
         StartCoroutine(ShareName());
 
@@ -154,11 +154,11 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
     private void RpcShareScore(string usedString, int framenumb){
 
 
-        if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
-           _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai") + ": " + usedString;
+      //  if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
+        totalscorePref.GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai","Paul") + ": " + usedString;
         if (framenumb <= 9)
         {
-            _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
+            totalscorePref.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
         }
     }
     [PunRPC]
@@ -166,8 +166,8 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
     {
 
 
-        if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
-        _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai");
+      //  if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
+        totalscorePref.GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai", "Paul");
     }
 
 

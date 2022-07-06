@@ -69,7 +69,10 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			}
 			else if (_scoreStrn.EndsWith("/"))
 			{
-				_playercontroll._dance = true;
+				if (!_playercontroll._usingRock)
+				{
+					_playercontroll._dance = true;
+				}
 				if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
 				{
 					_playercontroll.UpdateSound(_playercontroll._gameClips[1]);
@@ -151,7 +154,10 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 	}
 	private void UpdateStrikeSound()
     {
-		_playercontroll._dance = true;
+		if (!_playercontroll._usingRock)
+		{
+			_playercontroll._dance = true;
+		}
 		_StrikeInrow ++;
 		if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
 		{

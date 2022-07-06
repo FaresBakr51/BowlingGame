@@ -6,7 +6,7 @@ public class RankedModeState : MonoBehaviour, GameModeState
     public void GameMode(PlayerController controll)
     {
         _controller = controll;
-        throw new System.NotImplementedException();
+      
     }
     void Update()
     {

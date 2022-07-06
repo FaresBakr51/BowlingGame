@@ -5,7 +5,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine.EventSystems;
+using System.Linq;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
@@ -27,12 +27,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public GameObject[] mainButtons;
     public GameObject _PickPlayerPanel;
     private bool _offlinemode;
-    public GameObject[] _guidePic;
-    public GameObject _guidPanel;
-    [SerializeField] private GameObject[] _onlineSubmenu;
-    [SerializeField] private GameObject[] _soloSubmenu;
+   
+    [SerializeField] private GameObject[] _submenuButtons;
     public GameObject[] _CharacterButtons;
-
+    private bool _canActiveSub;
     [Header("RankedPanel")]
     [SerializeField] private GameObject _WAITINPanel;
     public static int _totalRankedPoints;
@@ -52,15 +50,16 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     public void ActiveSubMenu(string submenusName)
     {
+        if (!_canActiveSub) return;
         switch (submenusName)
         {
             case "online":
                 
-                for (int i = 0; i < _onlineSubmenu.Length; i++)
+                for (int i = 2; i < _submenuButtons.Length; i++)
                 {
-                    if (_onlineSubmenu[i].activeInHierarchy)
+                    if (_submenuButtons[i].activeInHierarchy)
                     {
-                        _onlineSubmenu[i].SetActive(false);
+                        _submenuButtons[i].SetActive(false);
 
                         for (int k = 0; k < mainButtons.Length; k++)
                         {
@@ -83,17 +82,17 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                             }
                         }
 
-                        _onlineSubmenu[i].SetActive(true);
+                        _submenuButtons[i].SetActive(true);
                     }
                 }
 
                 break;
             case "solo":
-                for (int i = 0; i < _soloSubmenu.Length; i++)
+                for (int i = 0; i < _submenuButtons.Length; i++)
                 {
-                    if (_soloSubmenu[i].activeInHierarchy)
+                    if (_submenuButtons[i].activeInHierarchy)
                     {
-                        _soloSubmenu[i].SetActive(false);
+                        _submenuButtons[i].SetActive(false);
 
                         for (int k = 1; k < mainButtons.Length; k++)
                         {
@@ -113,13 +112,20 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
                         }
 
-                        _soloSubmenu[i].SetActive(true);
+                        _submenuButtons[i].SetActive(true);
                     }
                 }
                 break;
         }
        
         
+    }
+    private void DisableSubMenusBacktoDefult()
+    {
+     
+      
+        foreach(GameObject obj in mainButtons) { if (!obj.activeInHierarchy) { obj.SetActive(true); } }
+        foreach (GameObject obj in _submenuButtons) {{ obj.SetActive(false); } }
     }
     public void ActiveRoompanel(){
 
@@ -140,12 +146,18 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         source.clip = clip;
         source.PlayOneShot(clip);
     }
-   
+
     public void PlayNextMainButtAnimation()
     {
-       if(indx >= mainButtons.Length-1) return;
-        mainButtons[indx].SetActive(true);
-        indx++;
+        if (indx >= mainButtons.Length - 1)
+        {
+            _canActiveSub = true;
+        }
+        else
+        {
+            mainButtons[indx].SetActive(true);
+            indx++;
+        }
     }
     public void ShowCredits(){
 
@@ -197,7 +209,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             StartCoroutine(Leavroom());
             _WAITINPanel.SetActive(false);
         }
-          
+        DisableSubMenusBacktoDefult();
         SetSelectedGameObject(_mainMenubuttns[0]);
         _mainPanel.SetActive(true);
     }
@@ -315,25 +327,25 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             case "Paul":
                 indx = 0;
                 break;
-            case "Mrbill":
+            case "Barney":
                 indx = 1;
                 break;
-            case "Izzy":
+            case "Carl":
                 indx = 2;
                 break;
-            case "Barney":
+            case "Cindy":
                 indx = 3;
                 break;
-            case "Cindy":
+            case "Izzy":
                 indx = 4;
                 break;
-            case "Carl":
+            case "Jong":
                 indx = 5;
                 break;
-            case "Jong":
+            case "Sergent Major":
                 indx = 6;
                 break;
-            case "Sergent Major":
+            case "Mrbill":
                 indx = 7;
                 break;
         }
@@ -363,7 +375,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
        }
         PlayerPrefs.Save();
         SetSelectedGameObject(_mainMenubuttns[0]);
-
+        if (GameModes._arcadeMode)
+        {
+            PlayerPrefs.SetInt("selectedplayerindx", GetPlayerSpriteInx(ch));
+        }
         if (GameModes._rankedMode)
         {
             
@@ -418,7 +433,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             else
             {
                 _WAITINPanel.SetActive(true);
-                SetSelectedGameObject(_mainMenubuttns[11]);
+                SetSelectedGameObject(_mainMenubuttns[7]);
                 PhotonNetwork.JoinRandomRoom(null, 2);
             }
      
@@ -428,6 +443,18 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public void CreatArcadeMatch()
     {
         GameModes._arcadeMode = true;
+        if (PlayerPrefs.HasKey("ai"))
+        {
+            PlayerPrefs.DeleteKey("ai");
+        }
+        if (PlayerPrefs.HasKey("selectedai"))
+        {
+            PlayerPrefs.DeleteKey("selectedai");
+        }
+        if (PlayerPrefs.HasKey("selectedplayerindx"))
+        {
+            PlayerPrefs.DeleteKey("selectedplayerindx");
+        }
         _offlinemode = true;
         _PickPlayerPanel.SetActive(true);
         _mainPanel.SetActive(false);

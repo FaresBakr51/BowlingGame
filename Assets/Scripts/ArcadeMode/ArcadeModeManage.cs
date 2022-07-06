@@ -14,6 +14,7 @@ public class ArcadeModeManage : MonoBehaviour
     [SerializeField] private Image _previewbotImage;
     [SerializeField] private Image _previewplayerImage;
     [SerializeField] private Sprite[] _bowlerSprites;
+    [SerializeField] private List<GameObject> totalscoreframes = new List<GameObject>();
     //[SerializeField] private GameObject[]
     [SerializeField] private bool _getnextAi;
     private bool _checkWinner;
@@ -128,6 +129,18 @@ public class ArcadeModeManage : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         _currentAi = GameObject.FindGameObjectWithTag("Ai").GetComponent<AiController>();
         _currentPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        yield return new WaitForSeconds(2f);
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("totalplayerscore"))
+        {
+            totalscoreframes.Add(obj);
+            obj.SetActive(false);
+        }
+        _vsPanel.SetActive(true);
+        _previewbotImage.sprite = _bowlerSprites[PlayerPrefs.GetInt("ai", 0)];
+        _previewplayerImage.sprite = _bowlerSprites[PlayerPrefs.GetInt("selectedplayerindx",0)];
+        yield return new WaitForSeconds(3f);
+        _vsPanel.SetActive(false);
+       totalscoreframes.ForEach(obj => obj.SetActive(true));
         PlayArcadeGame();
     }
 
