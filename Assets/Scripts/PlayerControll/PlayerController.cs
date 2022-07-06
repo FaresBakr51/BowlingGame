@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private GameObject[] _soundOnOF;
     
     private bool _gamePaused;
+    [Header("ArcadeGame")]
+    public bool _canPlay;
 
     [Header("PhotonaAvatarAndVoiceManager")]
     [SerializeField] private PhotonVoiceView _myVoice;

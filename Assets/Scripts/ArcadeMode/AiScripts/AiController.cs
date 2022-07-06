@@ -41,14 +41,20 @@ public class AiController : MonoBehaviour
     public GameObject _mytotal;
     public GameControls _gameactions;
     public bool _powerval;
-    private bool _moveright;
-    private Vector3 _movingL;
+    //private bool _moveright;
+    //private Vector3 _movingL;
 
     public bool _calcScore;
- //   public bool _calcPower;
-    private bool _ControllPower;
-
+    //   public bool _calcPower;
+    //  private bool _ControllPower;
     public bool _checkIfthereOther;
+    [Header("ArcadeGame")]
+    public bool _canPlay;
+
+
+
+
+   
     [Header("PhotonaAvatarAndVoiceManager")]
  
     public GameObject _myManager;
@@ -149,7 +155,7 @@ public class AiController : MonoBehaviour
     {
         if (_photonview.IsMine)
         {
-          
+
 
             //if (_gameend)
             //{
@@ -168,6 +174,7 @@ public class AiController : MonoBehaviour
             //    //EventSystem.current.SetSelectedGameObject(_GoHomebutt);
 
             //}
+            if (!_canPlay) return;
             if (_canhit)
             {
             

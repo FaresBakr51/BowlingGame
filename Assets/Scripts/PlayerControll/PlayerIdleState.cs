@@ -62,7 +62,10 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             {
                playerController._MyPlayCanavas.SetActive(false);
             }
-
+            if (GameModes._arcadeMode)
+            {
+                GameEventBus.Publish(GameEventType.arcademode);
+            }
             if (!GameModes._rankedMode)
             {
                 playerController._GoHomebutt.SetActive(true);

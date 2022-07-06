@@ -62,12 +62,12 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
 
             if (GameModes._arcadeMode)
             {
-                _myavatar = PhotonNetwork.Instantiate("AIPaul", _arcade._spawnPoint.transform.position, Quaternion.Euler(0, 180, 0), 0);
+                _myavatar = PhotonNetwork.Instantiate(PlayerPrefs.GetString("selectedai", "AiPaul"), _arcade._spawnPoint.transform.position, Quaternion.Euler(0, 180, 0), 0);
             }
             else
             {
 
-                _myavatar = PhotonNetwork.Instantiate("AIPaul", _spawnPoints[_pv.Owner.ActorNumber - 1].transform.position, Quaternion.Euler(0, 180, 0), 0);
+                _myavatar = PhotonNetwork.Instantiate(PlayerPrefs.GetString("selectedai","AiPaul"), _spawnPoints[_pv.Owner.ActorNumber - 1].transform.position, Quaternion.Euler(0, 180, 0), 0);
             }
             
 
@@ -155,7 +155,7 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
 
 
         if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
-           _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = "AiBot" + ": " + usedString;
+           _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai") + ": " + usedString;
         if (framenumb <= 9)
         {
             _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
@@ -167,7 +167,7 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
 
 
         if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
-        _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = "AiBot";
+        _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai");
     }
 
 

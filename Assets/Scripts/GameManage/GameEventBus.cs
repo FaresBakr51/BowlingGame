@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public enum GameEventType
 {
-    waiting,leaderboard,menuLeader
+    waiting,leaderboard,menuLeader,arcademode
 }
 public class GameEventBus : MonoBehaviour
 {
