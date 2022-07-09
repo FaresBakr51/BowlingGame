@@ -107,13 +107,14 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 			{
 				_StrikeInrow = 0;
 			}
-			StartCoroutine(waitFrameSound());
+		
 		}
+		StartCoroutine(waitFrameSound());
 	}
 	IEnumerator waitFrameSound(){
 
 		yield return new WaitForSeconds(1.5f);
-			UpdateFrameSound();
+	   UpdateFrameSound();
 	}
 	 IEnumerator WaitTxt(GameObject obj){
 
@@ -143,6 +144,7 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 
 			_counterStringFrames = _scoreStrn.Length;
 			_currentframe++;
+			if (_aiPlayer) return;
 			if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)){
 			_playercontroll.UpdateSound(_playercontroll._FramesClips[_currentframe]);
 			}else if(PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom){

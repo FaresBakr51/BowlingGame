@@ -20,6 +20,7 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private List<GameObject> _totalScoretexts = new List<GameObject>();
     private bool _startCounter;
     private ArcadeModeManage _arcade;
+    private string  _currentAiName;
     public override void OnEnable()
     {
         if (GameModes._arcadeMode)
@@ -155,7 +156,7 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
 
 
       //  if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
-        totalscorePref.GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai","Paul") + ": " + usedString;
+        totalscorePref.GetComponentInChildren<Text>().text = _currentAiName + ": " + usedString;
         if (framenumb <= 9)
         {
             totalscorePref.GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = (framenumb + 1).ToString();
@@ -166,8 +167,11 @@ public class PhotonAiManager : MonoBehaviourPunCallbacks,IPunObservable
     {
 
 
-      //  if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
-        totalscorePref.GetComponentInChildren<Text>().text = PlayerPrefs.GetString("selectedai", "Paul");
+        //  if (_totalScoretexts[_pv.OwnerActorNr - 1].gameObject == null) return;
+
+        var name = PlayerPrefs.GetString("selectedai","AiPaul").Remove(0, 2);
+        _currentAiName = name;
+        totalscorePref.GetComponentInChildren<Text>().text = _currentAiName;
     }
 
 

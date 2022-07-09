@@ -49,7 +49,7 @@ public class AiController : MonoBehaviour
     //  private bool _ControllPower;
     public bool _checkIfthereOther;
     [Header("ArcadeGame")]
-    public bool _canPlay;
+    //public bool _canPlay;
 
 
 
@@ -174,7 +174,7 @@ public class AiController : MonoBehaviour
             //    //EventSystem.current.SetSelectedGameObject(_GoHomebutt);
 
             //}
-            if (!_canPlay) return;
+            
             if (_canhit)
             {
             
@@ -338,13 +338,13 @@ public class AiController : MonoBehaviour
 
         if (_photonview.IsMine)
         {
-            _photonview.RPC("ResetPinsRunCounter", RpcTarget.All);
+            _photonview.RPC("ResetPinsRunCounterAi", RpcTarget.All);
         }
 
 
     }
     [PunRPC]
-    private void ResetPinsRunCounter()
+    private void ResetPinsRunCounterAi()
     {
         for (int y = 0; y < _resetpins.Count; y++)
         {

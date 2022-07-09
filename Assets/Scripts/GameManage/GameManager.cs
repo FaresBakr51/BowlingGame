@@ -54,7 +54,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3" || lvl.name == "Map4")
         {
             if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
-           CreatPlayer();
+                if (GameModes._arcadeMode) return;
+               CreatPlayer();
             }
           
         }

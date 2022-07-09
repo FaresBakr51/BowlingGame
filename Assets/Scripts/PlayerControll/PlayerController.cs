@@ -75,8 +75,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     
     private bool _gamePaused;
     [Header("ArcadeGame")]
-    public bool _canPlay;
-
+  
+    public bool publishGameEnd;
     [Header("PhotonaAvatarAndVoiceManager")]
     [SerializeField] private PhotonVoiceView _myVoice;
     public GameObject _isspeakingButt;
@@ -180,12 +180,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
-         _gameactions.ButtonActions.moving.performed += cntxt =>{
+       
+        _gameactions.ButtonActions.moving.performed += cntxt =>{
 
              if (_driftBall)
              {
-
-                 if (_movingL.x > 0)
+              
+                if (_movingL.x > 0)
                  {
                     
                      var rig = _ball.GetComponent<Rigidbody>();
@@ -209,6 +210,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
               };
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
         _gameactions.ButtonActions.pause.performed += x => {
+          
             if (!_gameend && !_usingRock && _battleStart) {
                 _pauseMenupanel.SetActive(true);
                 _gamePaused = true;
@@ -217,6 +219,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         };
         _gameactions.ButtonActions.Rocket2.performed += r =>
         {
+           
             if (_canhit && !GameModes._battleRoyale)
             {
                 if (!_usedRocket)
@@ -356,12 +359,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
  
     private void CheckControlles(){
 
-           if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
+       
+        if (!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
 
             _gameactions.ButtonActions.trackBall.performed += e =>
             {
                 if (_trackBall)
                 {
+                   
                     if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
                     {
                         if (_canhit && _ball.activeInHierarchy && _battleStart)
@@ -378,7 +383,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 }
             };
              _gameactions.ButtonActions.powerupaction.performed += x => {
-                  if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
+               
+                 if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
                  if(_canhit && _ball.activeInHierarchy && _battleStart)
                      {
                      if(_hookcalclated){
@@ -391,7 +397,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            };
            
           _gameactions.ButtonActions.driftbar.performed += y => {
-               if(!_gamePaused && !_pauseMenupanel.activeInHierarchy){
+           
+              if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               if(_canhit && _ball.activeInHierarchy && _battleStart)
                   {
                   if(_hookcalclated == false){
@@ -438,18 +445,29 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 {
                     _MyPlayCanavas.SetActive(false);
                 }
-                if (!_GoHomebutt.activeInHierarchy)
-                {
-                    _GoHomebutt.SetActive(true);
-                }
                 if (!myleader.activeInHierarchy)
                 {
                     myleader.SetActive(true);
                 }
+                if (GameModes._arcadeMode && !publishGameEnd)
+                {
+
+                    GameEventBus.Publish(GameEventType.arcademode);
+                    publishGameEnd = true;
+                }
+                else if(!GameModes._arcadeMode)
+                {
+                    if (!_GoHomebutt.activeInHierarchy)
+                    {
+                        _GoHomebutt.SetActive(true);
+                    }
                     EventSystem.current.SetSelectedGameObject(_GoHomebutt);
+                }
+             
+                 
 
             }
-            if(GameModes._arcadeMode ) { if (!_canPlay) return; }
+           
             if (_canhit)
             {
                 if (_readyLunch)

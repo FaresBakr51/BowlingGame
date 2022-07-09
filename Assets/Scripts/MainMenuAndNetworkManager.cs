@@ -48,6 +48,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     
     public AudioClip[] _uiclips;
 
+    [Header("ArcadePanel")]
+    [SerializeField] private GameObject _arcadePanel;
+    [SerializeField] private GameObject _massegepanel;
+    [SerializeField] private Text _arcadegametxt;
     public void ActiveSubMenu(string submenusName)
     {
         if (!_canActiveSub) return;
@@ -179,10 +183,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     public void Back() {
 
-
+      
         if (_roomsPanel.activeInHierarchy) {
             _roomsPanel.SetActive(false);
         }
+
         if (_PickPlayerPanel.activeInHierarchy) {
 
             _PickPlayerPanel.SetActive(false);
@@ -191,6 +196,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
             _leaderBoardPanel.SetActive(false);
         }
+        if (_arcadePanel.activeInHierarchy)
+        {
+            _arcadePanel.SetActive(false);
+        }
+
         if (GameModes._rankedMode)
         {
             GameModes._rankedMode = false;
@@ -373,7 +383,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
        foreach(GameObject obj in _CharacterButtons){
          obj.GetComponent<Button>().interactable = true;
        }
-        PlayerPrefs.Save();
+     
         SetSelectedGameObject(_mainMenubuttns[0]);
         if (GameModes._arcadeMode)
         {
@@ -387,9 +397,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             localSelectedCh = ch;
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
+        PlayerPrefs.Save();
         CheckGameMode();
-       
-   }
+     
+    }
     
 
     public void playersmode(){
@@ -399,7 +410,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
    }
    private void CheckGameMode(){
 
-     _PickPlayerPanel.SetActive(false);
+        if (_PickPlayerPanel.activeInHierarchy) { _PickPlayerPanel.SetActive(false); }
+   
         if (!GameModes._rankedMode)
         {
             if (_offlinemode)
@@ -458,6 +470,22 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         _offlinemode = true;
         _PickPlayerPanel.SetActive(true);
         _mainPanel.SetActive(false);
+    }
+    public void ContinueArcadeMatch()
+    {
+        if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("character"))
+        {
+            GameModes._arcadeMode = true;
+            _offlinemode = true;
+            _mainPanel.SetActive(false);
+            CheckGameMode();
+        }
+        else
+        {
+
+            _arcadegametxt.text = "NO DATA SAVED !";
+        }
+      
     }
       public void JoinRoom()
     {

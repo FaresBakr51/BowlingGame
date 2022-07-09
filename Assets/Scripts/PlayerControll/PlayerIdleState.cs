@@ -62,22 +62,22 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             {
                playerController._MyPlayCanavas.SetActive(false);
             }
-            if (GameModes._arcadeMode)
-            {
-                GameEventBus.Publish(GameEventType.arcademode);
-            }
-            if (!GameModes._rankedMode)
+         
+            if (!GameModes._rankedMode && !GameModes._arcadeMode)
             {
                 playerController._GoHomebutt.SetActive(true);
                 playerController.myleader.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
             }
            
-            else
+            else if(GameModes._rankedMode)
             {
                 if (!playerController._rankedPanel.activeInHierarchy){
                     playerController.CheckWinner();
                 }
+            }else if (GameModes._arcadeMode)
+            {
+
             }
            
         }

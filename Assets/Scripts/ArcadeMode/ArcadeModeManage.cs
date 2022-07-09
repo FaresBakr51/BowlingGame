@@ -14,7 +14,7 @@ public class ArcadeModeManage : MonoBehaviour
     [SerializeField] private Image _previewbotImage;
     [SerializeField] private Image _previewplayerImage;
     [SerializeField] private Sprite[] _bowlerSprites;
-    [SerializeField] private List<GameObject> totalscoreframes = new List<GameObject>();
+  
     //[SerializeField] private GameObject[]
     [SerializeField] private bool _getnextAi;
     private bool _checkWinner;
@@ -37,23 +37,19 @@ public class ArcadeModeManage : MonoBehaviour
     {
         if (GameModes._arcadeMode)
         {
-            PhotonNetwork.Instantiate("PhotonAiAvatar", _spawnPoint.position, transform.rotation);
+          
             StartCoroutine(RunArcadeGame());
         }
     }
 
-    private void PlayArcadeGame()
-    {
-
-        _currentAi._canPlay = true;
-        _currentPlayer._canPlay = true;
-    }
+ 
     private void Update()
     {
-        if (_currentAi || _currentPlayer == null) return;
+        if (_currentAi == null || _currentPlayer == null) return;
         if (_currentAi._gameend && _currentPlayer._gameend && _checkWinner)
         {
 
+           
             CheckWinner();
             _checkWinner = false;
         }
@@ -61,10 +57,11 @@ public class ArcadeModeManage : MonoBehaviour
     public void GetToNextAi()
     {
         _checkWinner = true;
-        
+        Debug.Log("checking winner");
     }
     private void CheckWinner()
     {
+        Debug.Log("Checkarcade winner");
         if(_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
         {
             
@@ -80,16 +77,14 @@ public class ArcadeModeManage : MonoBehaviour
             _getnextAi = true;
             //draw go next
         }
-        var lastai = PlayerPrefs.GetInt("ai", 0);
-        PlayerPrefs.SetInt("ai", lastai + 1);
-        PlayerPrefs.Save();
-        GetAiNameDependOnIndex(PlayerPrefs.GetInt("ai"));
+       
         if (_getnextAi)
         {
-            if (PlayerPrefs.GetInt("ai") < 7)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
+            var lastai = PlayerPrefs.GetInt("ai", 0);
+            PlayerPrefs.SetInt("ai", lastai + 1);
+            PlayerPrefs.Save();
+            GetAiNameDependOnIndex(PlayerPrefs.GetInt("ai"));
+            StartCoroutine(GetNextAiGame());
         }
     }
     public void GetAiNameDependOnIndex(int indx)
@@ -122,26 +117,29 @@ public class ArcadeModeManage : MonoBehaviour
         }
         PlayerPrefs.Save();
     }
-
+    IEnumerator GetNextAiGame()
+    {
+        yield return new WaitForSeconds(3f);
+        if (PlayerPrefs.GetInt("ai") < 7)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
    IEnumerator RunArcadeGame()
     {
-
-        yield return new WaitForSeconds(1.5f);
-        _currentAi = GameObject.FindGameObjectWithTag("Ai").GetComponent<AiController>();
-        _currentPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        yield return new WaitForSeconds(2f);
-        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("totalplayerscore"))
-        {
-            totalscoreframes.Add(obj);
-            obj.SetActive(false);
-        }
         _vsPanel.SetActive(true);
         _previewbotImage.sprite = _bowlerSprites[PlayerPrefs.GetInt("ai", 0)];
         _previewplayerImage.sprite = _bowlerSprites[PlayerPrefs.GetInt("selectedplayerindx",0)];
+     
         yield return new WaitForSeconds(3f);
+
         _vsPanel.SetActive(false);
-       totalscoreframes.ForEach(obj => obj.SetActive(true));
-        PlayArcadeGame();
+        PhotonNetwork.Instantiate("PhotonNetworkAvatar", transform.position, transform.rotation, 0);
+        PhotonNetwork.Instantiate("PhotonAiAvatar", _spawnPoint.position, transform.rotation);
+        yield return new WaitForSeconds(1f);
+        _currentAi = GameObject.FindGameObjectWithTag("Ai").GetComponent<AiController>();
+        _currentPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+     
     }
 
     
