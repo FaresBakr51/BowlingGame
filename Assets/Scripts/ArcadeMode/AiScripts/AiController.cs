@@ -102,8 +102,10 @@ public class AiController : MonoBehaviour
         _canhit = true;
     
     }
+ 
     private void Start()
     {
+      
         if (_photonview.IsMine)
         {
 

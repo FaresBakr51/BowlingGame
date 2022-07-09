@@ -75,8 +75,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     
     private bool _gamePaused;
     [Header("ArcadeGame")]
-  
+    public GameObject _saveCbutt;
     public bool publishGameEnd;
+
+
     [Header("PhotonaAvatarAndVoiceManager")]
     [SerializeField] private PhotonVoiceView _myVoice;
     public GameObject _isspeakingButt;
@@ -299,9 +301,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
           _gameactions.Disable();
        
     }
-
+  
     void Start()
     {
+     
             CheckControlles();
         
         if (_photonview.IsMine)
@@ -311,9 +314,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             {
                 myleader = PhotonNetwork.Instantiate("Panel", _leaderboardprefab.transform.position, _leaderboardprefab.transform.rotation);
             }
-            _GoHomebutt = myleader.GetComponentInChildren<Button>().gameObject;
-            var rankedpanelobj = myleader.GetComponentsInChildren<Transform>();
-            _waitOtherPlayer = rankedpanelobj.FirstOrDefault(x => x.name == "waitingotherplayer").gameObject;
+            var leadercomp = myleader.GetComponentsInChildren<Transform>();
+            _GoHomebutt = leadercomp.FirstOrDefault(x=>x.name == "HomeButt").gameObject;
+           
+            
+            _saveCbutt = leadercomp.FirstOrDefault(x => x.name == "save&continue").gameObject;
+            _saveCbutt.SetActive(false);
+            _waitOtherPlayer = leadercomp.FirstOrDefault(x => x.name == "waitingotherplayer").gameObject;
             var playcanavas = _MyPlayCanavas.GetComponentsInChildren<Transform>().ToList();
             _battleRoyalDescrypt = playcanavas.FirstOrDefault(x => x.name == "BattleRoyalDescrypt").gameObject;
             _battleRoyalDescrypt.SetActive(false);
@@ -323,10 +330,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             else { _battleStart = true; }
             _waitOtherPlayer.SetActive(false);
-            _rankedPanel = rankedpanelobj.FirstOrDefault(x => x.name == "RankedPanel").gameObject;
+            _rankedPanel = leadercomp.FirstOrDefault(x => x.name == "RankedPanel").gameObject;
             var rankedpanobj = _rankedPanel.GetComponentsInChildren<Transform>();
-            _rankedpointtxt = rankedpanelobj.FirstOrDefault(x => x.name == "rankedpoints").GetComponent<Text>();
-            _rankedstatetxt = rankedpanelobj.FirstOrDefault(x => x.name == "rankedstate").GetComponent<Text>();
+            _rankedpointtxt = leadercomp.FirstOrDefault(x => x.name == "rankedpoints").GetComponent<Text>();
+            _rankedstatetxt = leadercomp.FirstOrDefault(x => x.name == "rankedstate").GetComponent<Text>();
             _rankedPanel.SetActive(false);
             myleader.GetComponentInChildren<Button>().gameObject.SetActive(false);
             myleader.transform.parent = _golballeaderboradcanavas.transform;

@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 public class ArcadeModeManage : MonoBehaviour
 {
     public Transform _spawnPoint;
@@ -14,15 +13,14 @@ public class ArcadeModeManage : MonoBehaviour
     [SerializeField] private Image _previewbotImage;
     [SerializeField] private Image _previewplayerImage;
     [SerializeField] private Sprite[] _bowlerSprites;
-  
-    //[SerializeField] private GameObject[]
-    [SerializeField] private bool _getnextAi;
+   
     private bool _checkWinner;
-
+    private bool _clicked;
     private void OnEnable()
     {
         if (GameModes._arcadeMode)
         {
+            _clicked = false;
             GameEventBus.Subscribe(GameEventType.arcademode, GetToNextAi);
         }
     }
@@ -57,34 +55,50 @@ public class ArcadeModeManage : MonoBehaviour
     public void GetToNextAi()
     {
         _checkWinner = true;
-        Debug.Log("checking winner");
+      
     }
     private void CheckWinner()
     {
-        Debug.Log("Checkarcade winner");
+     
         if(_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
         {
-            
+            _currentPlayer._saveCbutt.SetActive(false);
+            _currentPlayer._GoHomebutt.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_currentPlayer._GoHomebutt);
             //botwinner dont get next one 
         }
         else if(_currentAi._scoreplayer.totalscre < _currentPlayer._scoreplayer.totalscre)
         {
-            _getnextAi = true;
+         
+            _currentPlayer._saveCbutt.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
             //playerwinnget next
         }
         else
         {
-            _getnextAi = true;
+            _currentPlayer._saveCbutt.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
             //draw go next
         }
+
        
-        if (_getnextAi)
+       
+    }
+    private void ApplyNextAiButt()
+    {
+        if (!_clicked)
         {
-            var lastai = PlayerPrefs.GetInt("ai", 0);
-            PlayerPrefs.SetInt("ai", lastai + 1);
-            PlayerPrefs.Save();
-            GetAiNameDependOnIndex(PlayerPrefs.GetInt("ai"));
-            StartCoroutine(GetNextAiGame());
+
+            if (PlayerPrefs.GetInt("ai") < 7)
+            {
+
+                var lastai = PlayerPrefs.GetInt("ai", 0);
+                PlayerPrefs.SetInt("ai", lastai + 1);
+                PlayerPrefs.Save();
+                GetAiNameDependOnIndex(PlayerPrefs.GetInt("ai"));
+                StartCoroutine(GetNextAiGame());
+                _clicked = true;
+            }
         }
     }
     public void GetAiNameDependOnIndex(int indx)
@@ -111,7 +125,7 @@ public class ArcadeModeManage : MonoBehaviour
                 PlayerPrefs.SetString("selectedai", "AiTwig");
                 break;
             case 7:
-                PlayerPrefs.SetString("selectedai", "AiBill");
+                PlayerPrefs.SetString("selectedai", "AiMrBill");
                 break;
 
         }
@@ -120,10 +134,7 @@ public class ArcadeModeManage : MonoBehaviour
     IEnumerator GetNextAiGame()
     {
         yield return new WaitForSeconds(3f);
-        if (PlayerPrefs.GetInt("ai") < 7)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
    IEnumerator RunArcadeGame()
     {
@@ -139,7 +150,7 @@ public class ArcadeModeManage : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _currentAi = GameObject.FindGameObjectWithTag("Ai").GetComponent<AiController>();
         _currentPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-     
+        _currentPlayer._saveCbutt.GetComponent<Button>().onClick.AddListener(ApplyNextAiButt);
     }
 
     
