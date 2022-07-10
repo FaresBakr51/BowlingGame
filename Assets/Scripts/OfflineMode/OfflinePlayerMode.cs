@@ -72,7 +72,10 @@ public class OfflinePlayerMode : MonoBehaviour
        
      player1 = pl2;
        foreach(GameObject obj in _SelectionButtonsPlayer2){
-        obj.GetComponent<Button>().interactable = false;
+            if (obj.GetComponent<Button>())
+            {
+                obj.GetComponent<Button>().interactable = false;
+            }
       }
         StartGame();
     }

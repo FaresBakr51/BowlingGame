@@ -242,6 +242,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         GameModes._rankedMode = false;
         GameModes._arcadeMode = false;
         GameModes._battleRoyale = false;
+        GameModes._2pMode = false;
         StartCoroutine(GetRankedPoints());
        PhotonNetwork.OfflineMode = false;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
@@ -405,7 +406,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     public void playersmode(){
 
-     PhotonNetwork.Disconnect();
+ //    PhotonNetwork.Disconnect();
      StartCoroutine(Join2PMODE());
    }
    private void CheckGameMode(){
@@ -417,7 +418,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             if (_offlinemode)
             {
 
-                PhotonNetwork.Disconnect();
+           //     PhotonNetwork.Disconnect();
                 StartCoroutine(DisconnectJoinPractice());
             }
             else
@@ -521,7 +522,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
      IEnumerator Join2PMODE()
     {
-        yield return new WaitForSeconds(1f);
+        GameModes._2pMode = true;
+      //  yield return new WaitForSeconds(1f);
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
         {

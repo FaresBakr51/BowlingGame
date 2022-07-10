@@ -474,7 +474,7 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   unityMicrophoneDevice: 
-  photonMicrophoneDeviceId: -1
+  photonMicrophoneDeviceId: 0
   interestGroup: 0
   debugEchoMode: 0
   reliableMode: 0
@@ -3592,7 +3592,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 212, y: 65}
+  m_AnchoredPosition: {x: 212, y: 45}
   m_SizeDelta: {x: 331.5158, y: 76}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &451205337
@@ -4120,7 +4120,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 98448fe78e04a9e489bfd8e7e72b6ede, type: 3}
   - {fileID: 21300000, guid: 2cfac3fa08a9f5a4d913cab5f4799f9c, type: 3}
   - {fileID: 21300000, guid: 6f0bbd32175bc7147bd25bef235e024c, type: 3}
-  _getnextAi: 0
 --- !u!4 &497866326 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 447100, guid: f0c87f29557704648956eaa5ad1a5cfd, type: 3}
@@ -10392,6 +10391,8 @@ MonoBehaviour:
   - {fileID: 1854074250}
   - {fileID: 369543904}
   - {fileID: 1967978230}
+  - {fileID: 1043267294}
+  - {fileID: 1455301884}
   _soundOnOF:
   - {fileID: 1554686401}
   - {fileID: 2100584206}
@@ -14300,7 +14301,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 132, y: 65}
+  m_AnchoredPosition: {x: 132, y: 45}
   m_SizeDelta: {x: 331.5158, y: 76}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1958547070

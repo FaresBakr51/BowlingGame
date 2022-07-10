@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
                 if (GameModes._arcadeMode) return;
+                if (GameModes._2pMode) return;
                CreatPlayer();
             }
           
