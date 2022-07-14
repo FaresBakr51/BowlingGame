@@ -111,9 +111,9 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
 
        
-        if (playerController._myRocket.activeInHierarchy)
+        if (playerController._usingRock)
         {
-        
+           
             playerController._RocketOn.SetActive(false);
             playerController._RocketOff.SetActive(true);
             playerController._usingRock = false;

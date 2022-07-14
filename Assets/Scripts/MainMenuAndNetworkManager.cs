@@ -5,7 +5,8 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System.Linq;
+using System.Collections.Generic;
+using System;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
@@ -52,6 +53,17 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _arcadePanel;
     [SerializeField] private GameObject _massegepanel;
     [SerializeField] private Text _arcadegametxt;
+
+    [Header("Achivement")]
+    //  private IDictionary<string,int> _unlouckedCharacters = new Dictionary<string, int>();
+    [SerializeField] private List<string> _achivmentCharacters = new List<string>();
+    [SerializeField] private List<Button> _lockedButtons= new List<Button>();
+    [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
+    public static Action<string,int>  _unlouckCharacterAcrtion;
+  
+    public override void OnEnable() => _unlouckCharacterAcrtion += UnlouchAchivment;
+
+    public override void OnDisable() => _unlouckCharacterAcrtion -= UnlouchAchivment;
     public void ActiveSubMenu(string submenusName)
     {
         if (!_canActiveSub) return;
@@ -251,6 +263,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
       UdpateSoundSource(_playerAudio, _uiclips[0]);
+        RetriveData();
     }
    
     IEnumerator GetRankedPoints()
@@ -359,6 +372,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             case "Mrbill":
                 indx = 7;
                 break;
+            case "isaiah":
+                indx = 8;
+                break;
         }
 
         return indx;
@@ -418,7 +434,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             if (_offlinemode)
             {
 
-           //     PhotonNetwork.Disconnect();
+       
                 StartCoroutine(DisconnectJoinPractice());
             }
             else
@@ -495,12 +511,33 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
       _PickPlayerPanel.SetActive(true);
       _mainPanel.SetActive(false);
     }
+
+    private void RetriveData()
+    {
+       foreach(string s in _achivmentCharacters)
+        {
+            if (PlayerPrefs.HasKey(s))
+            {
+
+                _lockedButtons[PlayerPrefs.GetInt(s)].enabled  =  true;
+                _lockedImages[PlayerPrefs.GetInt(s)].SetActive(false);
+            }
+        }
+    }
+    public static void UnlouchAchivment(string name,int characterid)
+    {
+        if (!PlayerPrefs.HasKey(name))
+        {
+            PlayerPrefs.SetInt(name, characterid);
+        }
+    
+    }
     IEnumerator StartRankedMatch()
     {
         yield return new WaitForSeconds(2);
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
-            PhotonNetwork.LoadLevel(Random.Range(2, 4));
+            PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 4));
         }
    
     }
@@ -517,20 +554,19 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRoom(null);
           PhotonNetwork.CurrentRoom.IsOpen = false;
            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(Random.Range(2, 3));
+            PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 4));
         } 
     }
      IEnumerator Join2PMODE()
     {
         GameModes._2pMode = true;
-      //  yield return new WaitForSeconds(1f);
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
         {
             yield return null;
         }
         PhotonNetwork.OfflineMode = true;
-        PhotonNetwork.LoadLevel(Random.Range(2, 4));
+        PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 4));
 
 
     }

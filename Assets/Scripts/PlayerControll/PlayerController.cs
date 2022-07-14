@@ -77,7 +77,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [Header("ArcadeGame")]
     public GameObject _saveCbutt;
     public bool publishGameEnd;
-
+    public GameObject _retryButton;
+    public GameObject _arcadereward;
 
     [Header("PhotonaAvatarAndVoiceManager")]
     [SerializeField] private PhotonVoiceView _myVoice;
@@ -89,14 +90,19 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
  
     
     public bool _checkIfthereOther;
+
+    [Header("SpecialWeponProp")]
     [SerializeField] public GameObject _myRocket;
     [SerializeField] public GameObject _RocketOff;
     [SerializeField] public GameObject _RocketOn;
+    public float fireballspeed;
+    public AudioClip _fireballSoundClip;
     public bool _usedRocket;
     public bool _readyLunch;
     public List<GameObject> _modePlayers;
-  
-  
+    // [SerializeField] public GameObject _myFireBall;
+   
+    public bool _fireball;
     public bool _usingRock;
     private Vector3 _mypos;
 
@@ -194,7 +200,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
-                     Debug.Log("Drifting");
+                   
                  }
                  else if(_movingL.x < 0)
                  {
@@ -202,7 +208,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
-                     Debug.Log("Drifting");
+                    
                  }
              }
                  if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
@@ -270,22 +276,42 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private void RPCHiRocket()
     {
         _myRocket?.SetActive(true);
-        transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+        if (!_fireball)
+        {
+            
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 200, transform.rotation.z);
+        }
         _ball?.SetActive(false);
        
     }
     [PunRPC]
     private void RPCRocketOFF()
     {
-
-        _myRocket.SetActive(false);
+        if (!_fireball)
+        {
+            _myRocket.SetActive(false);
+        }
         _ball.SetActive(true);
     }
     IEnumerator readyLunch()
     {
-        yield return new WaitForSeconds(2);
-        _readyLunch = true;
+        if (_fireball)
+        {
+            UpdateSound(_fireballSoundClip);
+            yield return new WaitForSeconds(0.5f);
+            _myRocket.transform.parent = null;
+            _myRocket.transform.rotation = Quaternion.Euler(_myRocket.transform.rotation.x, -180, _myRocket.transform.rotation.z);
+            _myRocket.transform.position = new Vector3(_myRocket.transform.position.x + 0.4f, _myRocket.transform.position.y - 0.7f, _myRocket.transform.position.z);
+            _myRocket.GetComponent<ProjectileMover>().speed = fireballspeed;
+            _readyLunch = true;
+        }
+        else
+        {
+            yield return new WaitForSeconds(2);
+            _readyLunch = true;
+        }
          yield return new WaitForSeconds(1.5f);
+
           foreach (Transform pin in _mypins)
           {
                 pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
@@ -319,6 +345,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            
             
             _saveCbutt = leadercomp.FirstOrDefault(x => x.name == "save&continue").gameObject;
+            _retryButton = leadercomp.FirstOrDefault(x => x.name == "retry").gameObject;
+            _arcadereward = leadercomp.FirstOrDefault(x => x.name == "arcadereward").gameObject;
+            _arcadereward.SetActive(false);
+            _retryButton.SetActive(false);
             _saveCbutt.SetActive(false);
             _waitOtherPlayer = leadercomp.FirstOrDefault(x => x.name == "waitingotherplayer").gameObject;
             var playcanavas = _MyPlayCanavas.GetComponentsInChildren<Transform>().ToList();
@@ -479,7 +509,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             {
                 if (_readyLunch)
                 {
-                    _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                    if (!_fireball)
+                    {
+                        _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                    }
+                 
+                
                     Waitstate();
                     _readyLunch = false;
                    
@@ -974,7 +1009,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _trackBall = false;
         EventSystem.current.SetSelectedGameObject(_trackBallOnOf[1]);
     }
-      IEnumerator PostScore() {
+     IEnumerator PostScore() {
         // form data settings
         // field order doesn't matter, but field names must be correct
 
@@ -990,7 +1025,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             yield return request.SendWebRequest();
 
             if (request.isNetworkError || request.isHttpError) {
-                Debug.Log("Network Error");
+                
             }
         }
 
@@ -1002,8 +1037,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             _MyPlayCanavas.SetActive(false);
         }
-        
-          myleader.SetActive(true);
+        if (_saveCbutt.activeInHierarchy)
+        {
+            _saveCbutt.SetActive(false);
+        }
+
+           myleader.SetActive(true);
           _GoHomebutt.SetActive(true);
           _rankedPanel.SetActive(true);
           EventSystem.current.SetSelectedGameObject(_GoHomebutt);
@@ -1045,7 +1084,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 _rankedpointtxt.text = "0 ";
                 StartCoroutine(waitExit());
                 break;
-
+            case "arcade":
+                
+                _rankedstatetxt.text = "Congratulations you win!";
+                _rankedpointtxt.text = "+50 ";
+                PlayerPrefs.SetInt("rankedpoints", latpoints + 50);
+                break;
         }
         
         PlayerPrefs.Save();

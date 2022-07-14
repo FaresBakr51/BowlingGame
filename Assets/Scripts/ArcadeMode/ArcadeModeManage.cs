@@ -13,7 +13,7 @@ public class ArcadeModeManage : MonoBehaviour
     [SerializeField] private Image _previewbotImage;
     [SerializeField] private Image _previewplayerImage;
     [SerializeField] private Sprite[] _bowlerSprites;
-   
+    [SerializeField] private Sprite[] _bowlerSpritesAi;
     private bool _checkWinner;
     private bool _clicked;
     private void OnEnable()
@@ -29,25 +29,27 @@ public class ArcadeModeManage : MonoBehaviour
         if (GameModes._arcadeMode)
         {
             GameEventBus.UnSubscribe(GameEventType.arcademode, GetToNextAi);
+
         }
+    
     }
     void Start()
     {
         if (GameModes._arcadeMode)
         {
-          
+
             StartCoroutine(RunArcadeGame());
         }
     }
 
- 
+
     private void Update()
     {
         if (_currentAi == null || _currentPlayer == null) return;
         if (_currentAi._gameend && _currentPlayer._gameend && _checkWinner)
         {
 
-           
+
             CheckWinner();
             _checkWinner = false;
         }
@@ -55,34 +57,49 @@ public class ArcadeModeManage : MonoBehaviour
     public void GetToNextAi()
     {
         _checkWinner = true;
-      
+
     }
     private void CheckWinner()
     {
-     
-        if(_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
+
+        if (_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
         {
-            _currentPlayer._saveCbutt.SetActive(false);
-            _currentPlayer._GoHomebutt.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(_currentPlayer._GoHomebutt);
+            CheckState("win");
             //botwinner dont get next one 
         }
-        else if(_currentAi._scoreplayer.totalscre < _currentPlayer._scoreplayer.totalscre)
+        else if (_currentAi._scoreplayer.totalscre < _currentPlayer._scoreplayer.totalscre)
         {
-         
-            _currentPlayer._saveCbutt.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
+
+            CheckState("lose");
             //playerwinnget next
         }
         else
         {
-            _currentPlayer._saveCbutt.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
+            CheckState("draw");
             //draw go next
         }
 
-       
-       
+
+
+    }
+    private void CheckState(string state)
+    {
+        if (state == "win")
+        {
+            if (_currentPlayer._retryButton.activeInHierarchy) { _currentPlayer._retryButton.SetActive(false); }
+            _currentPlayer._saveCbutt.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
+        }
+        else
+        {
+            if (_currentPlayer._saveCbutt.activeInHierarchy)
+            {
+                _currentPlayer._saveCbutt.SetActive(false);
+            }
+           
+            _currentPlayer._retryButton.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_currentPlayer._retryButton);
+        }
     }
     private void ApplyNextAiButt()
     {
@@ -96,10 +113,45 @@ public class ArcadeModeManage : MonoBehaviour
                 PlayerPrefs.SetInt("ai", lastai + 1);
                 PlayerPrefs.Save();
                 GetAiNameDependOnIndex(PlayerPrefs.GetInt("ai"));
-                StartCoroutine(GetNextAiGame());
+                if (PlayerPrefs.GetInt("ai") == 7)
+                {
+
+                    SceneManager.LoadScene("battleRoyalScene");
+                }
+                else { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
                 _clicked = true;
             }
+            else
+            {
+                if (PlayerPrefs.HasKey("ai"))
+                {
+                    PlayerPrefs.DeleteKey("ai");
+                }
+                if (PlayerPrefs.HasKey("selectedai"))
+                {
+                    PlayerPrefs.DeleteKey("selectedai");
+                }
+                if (PlayerPrefs.HasKey("selectedplayerindx"))
+                {
+                    PlayerPrefs.DeleteKey("selectedplayerindx");
+                }
+                _currentPlayer.ShowRankedResult("arcade");
+
+                if (!PlayerPrefs.HasKey("isaiah"))
+                {
+                    _currentPlayer._arcadereward.SetActive(true);
+                    MainMenuAndNetworkManager.UnlouchAchivment("isaiah", 0);
+                }
+           
+               
+                //arcade mode finished and winn
+            }
         }
+    }
+  
+    private void Retry()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void GetAiNameDependOnIndex(int indx)
     {
@@ -131,15 +183,12 @@ public class ArcadeModeManage : MonoBehaviour
         }
         PlayerPrefs.Save();
     }
-    IEnumerator GetNextAiGame()
-    {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+
    IEnumerator RunArcadeGame()
     {
         _vsPanel.SetActive(true);
-        _previewbotImage.sprite = _bowlerSprites[PlayerPrefs.GetInt("ai", 0)];
+      
+        _previewbotImage.sprite = _bowlerSpritesAi[PlayerPrefs.GetInt("ai", 0)];
         _previewplayerImage.sprite = _bowlerSprites[PlayerPrefs.GetInt("selectedplayerindx",0)];
      
         yield return new WaitForSeconds(3f);
@@ -151,6 +200,7 @@ public class ArcadeModeManage : MonoBehaviour
         _currentAi = GameObject.FindGameObjectWithTag("Ai").GetComponent<AiController>();
         _currentPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         _currentPlayer._saveCbutt.GetComponent<Button>().onClick.AddListener(ApplyNextAiButt);
+        _currentPlayer._retryButton.GetComponent<Button>().onClick.AddListener(Retry);
     }
 
     

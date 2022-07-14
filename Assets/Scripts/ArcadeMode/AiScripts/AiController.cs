@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using Photon.Pun;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using BigRookGames.Weapons;
+
 public class AiController : MonoBehaviour
 {
     public GameObject _ball;
@@ -50,6 +52,7 @@ public class AiController : MonoBehaviour
     public bool _checkIfthereOther;
     [Header("ArcadeGame")]
     //public bool _canPlay;
+    public int shotType;
 
 
 
@@ -70,14 +73,17 @@ public class AiController : MonoBehaviour
     public float _driftvalue;
     public float _drifMinval;
     public float _driftMaxval;
-    [Header("RocketProp")]
+    [Header("SpecialWeponProp")]
     public GameObject _myRocket;
     public bool _usingRock;
     public bool _usedRocket;
     public bool _readyLunch;
+    public bool _infiniteRockets;
     private Vector3 _mypos;
     void Awake()
     {
+
+        shotType = Random.Range(0, 2);
         _mypos = this.transform.position;
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
@@ -99,12 +105,15 @@ public class AiController : MonoBehaviour
          
 
         }
+        
         _canhit = true;
     
     }
  
     private void Start()
     {
+
+
       
         if (_photonview.IsMine)
         {
@@ -129,7 +138,9 @@ public class AiController : MonoBehaviour
         _resetState = gameObject.AddComponent<AiResetState>();
         _playerAnim = GetComponent<Animator>();
         GetReady();
-     
+        CheckShotType();
+
+
     }
     public void RunRpc()
     {
@@ -153,54 +164,66 @@ public class AiController : MonoBehaviour
         _myRocket.SetActive(false);
         _ball.SetActive(true);
     }
+    public void CheckShotType()
+    {
+        shotType = Random.Range(0, 2);
+        if (shotType == 1)
+        {
+            if (!_usedRocket)
+            {
+                _usingRock = true;
+                transform.position = _mypos;
+                UpdateAnimator("shot", 2);
+
+                if (_photonview.IsMine)
+                {
+                    _photonview.RPC("RPCHiRocket", RpcTarget.All);
+                }
+                StartCoroutine(readyLunch());
+                _usedRocket = true;
+            }
+        }
+    }
+    IEnumerator readyLunch()
+    {
+        yield return new WaitForSeconds(2);
+        _readyLunch = true;
+        yield return new WaitForSeconds(1.5f);
+
+        foreach (Transform pin in _mypins)
+        {
+            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
+
+        }
+
+    }
     void Update()
     {
         if (_photonview.IsMine)
         {
-
-
-            //if (_gameend)
-            //{
-            //    //if (_MyPlayCanavas.activeInHierarchy)
-            //    //{
-            //    //    _MyPlayCanavas.SetActive(false);
-            //    //}
-            //    //if (!_GoHomebutt.activeInHierarchy)
-            //    //{
-            //    //    _GoHomebutt.SetActive(true);
-            //    //}
-            //    //if (!myleader.activeInHierarchy)
-            //    //{
-            //    //    myleader.SetActive(true);
-            //    //}
-            //    //EventSystem.current.SetSelectedGameObject(_GoHomebutt);
-
-            //}
             
             if (_canhit)
             {
-            
-                if (!_hookcalclated)
+                if (_readyLunch)
                 {
+                    _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                    Waitstate();
+                    _readyLunch = false;
 
-                    UpdateHookSlider();
                 }
-                if (_hookcalclated && !_powerval)
+                if (!_usingRock)
                 {
+                    if (!_hookcalclated)
+                    {
 
-                    UpdateGui();
+                        UpdateHookSlider();
+                    }
+                    if (_hookcalclated && !_powerval)
+                    {
+
+                        UpdateGui();
+                    }
                 }
-                //if (!_usingRock)
-                //{
-                //    if (!_gameend)
-                //    {
-                //        //inputdir = new Vector3(_movingL.x, 0, 0);
-                //        //transform.Translate(inputdir * Time.deltaTime);
-                //        //Vector3 clampedPosition = transform.position;
-                //        //clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
-                //        //transform.position = clampedPosition;
-                //    }
-                //}
 
             }
 

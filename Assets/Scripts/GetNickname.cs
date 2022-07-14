@@ -70,7 +70,7 @@ public class GetNickname : MonoBehaviour {
         using (UnityWebRequest request = UnityWebRequest.Post(server_url, form)) {
             yield return request.SendWebRequest();
             if (request.isNetworkError || request.isHttpError) {
-                Debug.Log("Network Error");
+               
                 yield break;
             }
 
