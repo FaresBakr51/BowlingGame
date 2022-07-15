@@ -1086,7 +1086,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 break;
             case "arcade":
                 
-                _rankedstatetxt.text = "Congratulations you win!";
+                _rankedstatetxt.text = "CONGRATULATIONS YOU WIN!";
                 _rankedpointtxt.text = "+50 ";
                 PlayerPrefs.SetInt("rankedpoints", latpoints + 50);
                 break;

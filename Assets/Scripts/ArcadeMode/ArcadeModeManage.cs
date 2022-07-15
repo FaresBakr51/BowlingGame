@@ -75,7 +75,7 @@ public class ArcadeModeManage : MonoBehaviour
         }
         else
         {
-            CheckState("draw");
+            CheckState("win");
             //draw go next
         }
 
@@ -86,9 +86,35 @@ public class ArcadeModeManage : MonoBehaviour
     {
         if (state == "win")
         {
-            if (_currentPlayer._retryButton.activeInHierarchy) { _currentPlayer._retryButton.SetActive(false); }
-            _currentPlayer._saveCbutt.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
+            if (PlayerPrefs.GetInt("ai") < 7)
+            {
+                if (_currentPlayer._retryButton.activeInHierarchy) { _currentPlayer._retryButton.SetActive(false); }
+                _currentPlayer._saveCbutt.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(_currentPlayer._saveCbutt);
+            }
+            else
+            {
+
+                if (PlayerPrefs.HasKey("ai"))
+                {
+                    PlayerPrefs.DeleteKey("ai");
+                }
+                if (PlayerPrefs.HasKey("selectedai"))
+                {
+                    PlayerPrefs.DeleteKey("selectedai");
+                }
+                if (PlayerPrefs.HasKey("selectedplayerindx"))
+                {
+                    PlayerPrefs.DeleteKey("selectedplayerindx");
+                }
+                _currentPlayer.ShowRankedResult("arcade");
+
+                if (!PlayerPrefs.HasKey("isaiah"))
+                {
+                    _currentPlayer._arcadereward.SetActive(true);
+                    MainMenuAndNetworkManager.UnlouchAchivment("isaiah", 0);
+                }
+            }
         }
         else
         {
@@ -121,31 +147,7 @@ public class ArcadeModeManage : MonoBehaviour
                 else { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
                 _clicked = true;
             }
-            else
-            {
-                if (PlayerPrefs.HasKey("ai"))
-                {
-                    PlayerPrefs.DeleteKey("ai");
-                }
-                if (PlayerPrefs.HasKey("selectedai"))
-                {
-                    PlayerPrefs.DeleteKey("selectedai");
-                }
-                if (PlayerPrefs.HasKey("selectedplayerindx"))
-                {
-                    PlayerPrefs.DeleteKey("selectedplayerindx");
-                }
-                _currentPlayer.ShowRankedResult("arcade");
-
-                if (!PlayerPrefs.HasKey("isaiah"))
-                {
-                    _currentPlayer._arcadereward.SetActive(true);
-                    MainMenuAndNetworkManager.UnlouchAchivment("isaiah", 0);
-                }
-           
-               
-                //arcade mode finished and winn
-            }
+         
         }
     }
   
