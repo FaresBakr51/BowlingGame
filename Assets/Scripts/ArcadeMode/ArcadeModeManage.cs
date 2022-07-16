@@ -62,12 +62,12 @@ public class ArcadeModeManage : MonoBehaviour
     private void CheckWinner()
     {
 
-        if (_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
+        if (_currentAi._scoreplayer.totalscre < _currentPlayer._scoreplayer.totalscre)
         {
             CheckState("win");
             //botwinner dont get next one 
         }
-        else if (_currentAi._scoreplayer.totalscre < _currentPlayer._scoreplayer.totalscre)
+        else if (_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
         {
 
             CheckState("lose");
@@ -75,7 +75,7 @@ public class ArcadeModeManage : MonoBehaviour
         }
         else
         {
-            CheckState("win");
+            CheckState("draw");
             //draw go next
         }
 

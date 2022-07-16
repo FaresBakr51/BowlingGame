@@ -271,6 +271,17 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""494ca615-96da-4647-bb10-ad76a2d9d86c"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""476269e4-21a4-442f-8eda-72df4ca673ba"",
                     ""path"": ""<XInputController>/buttonEast"",
                     ""interactions"": """",
