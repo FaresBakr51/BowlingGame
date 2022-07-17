@@ -492,6 +492,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     {
         if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("character"))
         {
+               _arcadegametxt.text = "NOW LOADING ...";
             GameModes._arcadeMode = true;
             _offlinemode = true;
             _mainPanel.SetActive(false);

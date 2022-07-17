@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameControls _gameactions;
     public bool _powerval;
     private bool _moveright;
-    private Vector3 _movingL;
+   [SerializeField] private Vector3 _movingL;
    
     public bool _calcScore;
     public bool _calcPower;
@@ -191,12 +191,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
        
         _gameactions.ButtonActions.moving.performed += cntxt =>{
 
+              if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
+              _movingL = cntxt.ReadValue<Vector2>();
+             }
              if (_driftBall)
              {
               
                 if (_movingL.x > 0)
                  {
-                    
+                    Debug.Log("drifiting");
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
@@ -204,16 +207,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                  }
                  else if(_movingL.x < 0)
                  {
-                   
+                    Debug.Log("drifiting");
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
                     
                  }
              }
-                 if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-              _movingL = cntxt.ReadValue<Vector2>();
-             }
+               
               
               };
            _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
@@ -352,8 +353,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             _saveCbutt.SetActive(false);
             _waitOtherPlayer = leadercomp.FirstOrDefault(x => x.name == "waitingotherplayer").gameObject;
             var playcanavas = _MyPlayCanavas.GetComponentsInChildren<Transform>().ToList();
-            _battleRoyalDescrypt = playcanavas.FirstOrDefault(x => x.name == "BattleRoyalDescrypt").gameObject;
-            _battleRoyalDescrypt.SetActive(false);
+         //   _battleRoyalDescrypt = playcanavas.FirstOrDefault(x => x.name == "BattleRoyalDescrypt").gameObject;
+            //_battleRoyalDescrypt.SetActive(false);
             if (GameModes._battleRoyale)
             {
                 _battleRoyalDescrypt.SetActive(true);

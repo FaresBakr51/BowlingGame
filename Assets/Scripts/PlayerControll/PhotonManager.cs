@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
 {
 
@@ -52,8 +53,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
   
     private void SetUpPlayer(){
         if(_pv.IsMine){
+            if(GameModes._arcadeMode && SceneManager.GetActiveScene().name == "battleRoyalScene"){
+
+                 _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[(_pv.Owner.ActorNumber-1)+6].transform.position,Quaternion.Euler(0,180,0),0);
             
-            _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[_pv.Owner.ActorNumber-1].transform.position,Quaternion.Euler(0,180,0),0);
+            }else{
+                  _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[_pv.Owner.ActorNumber-1].transform.position,Quaternion.Euler(0,180,0),0);
+            }
+          
             _myAvatarController = _myavatar.GetComponent<PlayerController>();
               _mytotalscore = GameObject.FindWithTag("totalscorecanavas");
             _myAvatarController._myManager = this.gameObject;
