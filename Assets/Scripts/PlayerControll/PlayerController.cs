@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
               
                 if (_movingL.x > 0)
                  {
-                    Debug.Log("drifiting");
+                   
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                  }
                  else if(_movingL.x < 0)
                  {
-                    Debug.Log("drifiting");
+                    
                      var rig = _ball.GetComponent<Rigidbody>();
                      rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
