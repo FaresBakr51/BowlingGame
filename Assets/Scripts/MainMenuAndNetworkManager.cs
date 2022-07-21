@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections.Generic;
 using System;
+using UnityEngine.EventSystems;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
@@ -85,7 +86,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                             }
                             
                         }
-
+                     
                       
                     }
                     else
@@ -99,6 +100,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                         }
 
                         _submenuButtons[i].SetActive(true);
+                        if (i == 2)
+                        {
+                            EventSystem.current.SetSelectedGameObject(_submenuButtons[i]);
+                        }
                     }
                 }
 
@@ -122,13 +127,19 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                     }
                     else
                     {
+                        
                         for (int k = 1; k < mainButtons.Length; k++)
                         {
                             mainButtons[k].SetActive(false);
 
                         }
 
+
                         _submenuButtons[i].SetActive(true);
+                        if (i == 0)
+                        {
+                            EventSystem.current.SetSelectedGameObject(_submenuButtons[i]);
+                        }
                     }
                 }
                 break;
@@ -532,6 +543,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             PlayerPrefs.SetInt(name, characterid);
         }
     
+    }
+  public void ExitApplication()
+    {
+        Application.Quit();
     }
     IEnumerator StartRankedMatch()
     {

@@ -183,8 +183,8 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ea6b3772-66ce-47fb-bad2-d37618b8ba4f"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""id"": ""57a95f3e-334a-4737-8936-52e3887155c2"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -238,19 +238,8 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b9442208-87e4-437c-bff5-9c46eca7d485"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""driftbar"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c0fb4417-6d52-470f-90ed-9d6e36f7545a"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""7674ac39-783d-4c5a-b6dd-f2e38aa0c7a7"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -279,6 +268,61 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""action"": ""moving"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""5ebd891f-eba1-469d-89f2-3595234a5217"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""25f94f4e-3255-40ca-beaf-5b2fb5186e07"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""bab2d4b6-1c7b-4c3d-ac4b-34f308304878"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2865de7c-cd10-4efb-a64e-f87a042bbaa2"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b6b2ea75-da7c-4ced-a4c5-c312dfe27957"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -326,19 +370,8 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""950a7a12-8770-422b-9519-4c34245bcc1f"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""powerupaction2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9eb6ce6e-0bb8-4834-b9a2-1aae9b20fb04"",
-                    ""path"": ""<Keyboard>/o"",
+                    ""id"": ""ba4b1aae-e873-452b-b5b1-add0ba684a56"",
+                    ""path"": ""<Keyboard>/numpad7"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -392,19 +425,8 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b819caa8-f0d2-486d-8ae0-39caf4cae4a6"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""driftbar2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""371cdec8-b355-4f23-9c26-be42a2ecce26"",
-                    ""path"": ""<Keyboard>/o"",
+                    ""id"": ""7ff644ad-e607-4c25-8253-9ae8cb609bad"",
+                    ""path"": ""<Keyboard>/numpad7"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -422,6 +444,61 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""action"": ""moving2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""5af59410-d30e-4667-a397-0d0ea327a452"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving2"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""661161b0-5441-4088-8ae8-be8b6eb740ea"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""8587afc0-1636-4243-9dde-21b70c1c59c4"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""675a816c-730a-4dc3-99c9-ef7aef7b30fc"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""d015976b-37ed-495f-ae65-3bb8c914ac35"",
+                    ""path"": ""<Keyboard>/numpad3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""moving2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
