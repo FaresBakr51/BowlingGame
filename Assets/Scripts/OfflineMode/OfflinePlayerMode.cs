@@ -28,12 +28,20 @@ public class OfflinePlayerMode : MonoBehaviour
     public bool _gamePaused;
     public InputSystemUIInputModule[] _mine;
     public EventSystem[] _events;
+
+    [Header("LockedCharacters")]
+    [SerializeField] private List<Button> _lockedButtons = new List<Button>();
+    [SerializeField] private List<Button> _lockedButtonsP2 = new List<Button>();
+    [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
+    [SerializeField] private List<GameObject> _lockedImagesP2 = new List<GameObject>();
+    [SerializeField] private 
     void Awake()
     {
 
-      
 
 
+        MainMenuAndNetworkManager.RetriveData(_lockedButtons, _lockedImages);
+        MainMenuAndNetworkManager.RetriveData(_lockedButtonsP2, _lockedImagesP2);
         if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
            _SelectorPane.SetActive(true);
                foreach(GameObject obj in _SelectionButtonsPlayer2){

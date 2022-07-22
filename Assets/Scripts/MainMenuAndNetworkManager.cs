@@ -56,15 +56,15 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private Text _arcadegametxt;
 
     [Header("Achivement")]
-    //  private IDictionary<string,int> _unlouckedCharacters = new Dictionary<string, int>();
-    [SerializeField] private List<string> _achivmentCharacters = new List<string>();
+   
+    [SerializeField] private readonly static List<string> _achivmentCharacters = new List<string>() { "isaiah" };
     [SerializeField] private List<Button> _lockedButtons= new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
-    public static Action<string,int>  _unlouckCharacterAcrtion;
-  
-    public override void OnEnable() => _unlouckCharacterAcrtion += UnlouchAchivment;
 
-    public override void OnDisable() => _unlouckCharacterAcrtion -= UnlouchAchivment;
+    public void TestAchivment()
+    {
+        UnlouchAchivment("isaiah", 0);
+    }
     public void ActiveSubMenu(string submenusName)
     {
         if (!_canActiveSub) return;
@@ -274,7 +274,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
       _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
       UdpateSoundSource(_playerAudio, _uiclips[0]);
-        RetriveData();
+        RetriveData(_lockedButtons,_lockedImages);
     }
    
     IEnumerator GetRankedPoints()
@@ -524,15 +524,15 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
       _mainPanel.SetActive(false);
     }
 
-    private void RetriveData()
+    public static  void RetriveData(List<Button> lockedButtons, List<GameObject> lockedImages)
     {
        foreach(string s in _achivmentCharacters)
         {
             if (PlayerPrefs.HasKey(s))
             {
 
-                _lockedButtons[PlayerPrefs.GetInt(s)].enabled  =  true;
-                _lockedImages[PlayerPrefs.GetInt(s)].SetActive(false);
+                lockedButtons[PlayerPrefs.GetInt(s)].enabled  =  true;
+                lockedImages[PlayerPrefs.GetInt(s)].SetActive(false);
             }
         }
     }
