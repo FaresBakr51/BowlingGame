@@ -35,11 +35,11 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
         if (playercontroller._followBall)
         {
            
-            if (playercontroller._camera.transform.position.z >= playercontroller._mypinsobj.transform.position.z + 7)
+            if (playercontroller._camera.transform.position.z >= playercontroller._mypinsobj.transform.position.z + 10)
             {
-                playercontroller._camera.transform.position = playercontroller._ball.transform.position + new Vector3(-2.1f, 1.5f, -3);
+                playercontroller._camera.transform.position = playercontroller._ball.transform.position + new Vector3(0f, 1f, 1f);
              
-                playercontroller._camera.transform.localEulerAngles = new Vector3(30, -135, playercontroller._camera.transform.localEulerAngles.z);
+                //playercontroller._camera.transform.localEulerAngles = new Vector3(30, -135, playercontroller._camera.transform.localEulerAngles.z);
             }
             else
             {

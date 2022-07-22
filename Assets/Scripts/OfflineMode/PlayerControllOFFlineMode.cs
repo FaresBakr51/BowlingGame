@@ -62,7 +62,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
    private bool _followBall;
    private Vector3 _mypos;
    private Vector3 _Cambos;
-    private Quaternion _camRot;
+ 
    public AudioSource _gameAudio;
    public AudioClip[] _gameClips;
    public AudioClip[] _FramesClips;
@@ -92,7 +92,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     [Header("BallControll")]
     public bool _driftBall;
     [SerializeField] private float _controllBallPower;
-
+    [SerializeField] private float _downForce;
     void Awake()
     {
            _mypos = this.transform.position;
@@ -122,14 +122,18 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     }
      void Start()
     {
-            CheckControlles();  
+        if (Application.platform == RuntimePlatform.WindowsPlayer)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        CheckControlles();  
          _GoHomebutt =  myleader.GetComponentInChildren<Button>().gameObject;
         _GoHomebutt.SetActive(false);
         _hookScroll.gameObject.SetActive(true);
         _playerAnim = GetComponent<Animator>();
          GetReady();
          _Cambos = _camera.transform.position;
-        _camRot = _camera.transform.rotation;
+    
 
     }
 
@@ -186,6 +190,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                       {
 
                           var rig = _ball.GetComponent<Rigidbody>();
+                          rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
+                          rig.AddTorque(-transform.forward * _downForce, ForceMode.Acceleration);
                           rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                           _driftBall = false;
 
@@ -194,6 +200,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                       {
 
                           var rig = _ball.GetComponent<Rigidbody>();
+                          rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
+                          rig.AddTorque(transform.forward * _downForce, ForceMode.Acceleration);
                           rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                           _driftBall = false;
 
@@ -303,6 +311,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                     {
 
                         var rig = _ball.GetComponent<Rigidbody>();
+                        rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
+                        rig.AddTorque(-transform.forward * _downForce, ForceMode.Acceleration);
                         rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                         _driftBall = false;
 
@@ -311,6 +321,8 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                     {
 
                         var rig = _ball.GetComponent<Rigidbody>();
+                        rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
+                        rig.AddTorque(transform.forward * _downForce, ForceMode.Acceleration);
                         rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                         _driftBall = false;
 
@@ -795,7 +807,7 @@ private void GetReady()
         _hookScroll.value = 0.5f;
         _camera.transform.position = _Cambos;
         _ball.transform.localPosition = _BallConstantPos;
-        _ball.transform.rotation = _camRot;
+     
          _ball.GetComponent<TrailRenderer>().enabled = false;
         if (_gameend)
         {

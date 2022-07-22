@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [Header("BallControll")]
     public bool _driftBall;
     [SerializeField] private float _controllBallPower;
-
+    [SerializeField] private float _downForce;
     [Header("ScoreMotions")]
 
     public IDictionary<int,AnimationClip> _DanceClips = new Dictionary<int, AnimationClip>();
@@ -174,8 +174,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             Destroy(_MyPlayCanavas);
 
         }
-
-    //    Cursor.lockState = CursorLockMode.Locked;
+        if (Application.platform == RuntimePlatform.WindowsPlayer)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
        
          _canhit = true;
         _myxpos = transform.position.x;
@@ -203,7 +205,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                  {
                    
                      var rig = _ball.GetComponent<Rigidbody>();
-                     rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
+                    rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
+                    rig.AddTorque(-transform.forward * _downForce, ForceMode.Acceleration);
+                    rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
                    
                  }
@@ -211,7 +215,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                  {
                     
                      var rig = _ball.GetComponent<Rigidbody>();
-                     rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
+                    rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
+                    rig.AddTorque(transform.forward * _downForce, ForceMode.Acceleration);
+                    rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                      _driftBall = false;
                     
                  }

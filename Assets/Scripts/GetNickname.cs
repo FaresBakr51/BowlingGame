@@ -33,8 +33,14 @@ public class GetNickname : MonoBehaviour {
 
     }
     void Awake() {
-     
-        StartCoroutine(GetUserNickname());
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            StartCoroutine(GetUserNickname());
+        }
+        else if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor )
+        {
+            PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
+        }
       
         
     }

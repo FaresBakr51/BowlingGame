@@ -6,7 +6,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playerController;
     private Vector3 _Cambos;
-    private Quaternion camRot;
+ 
     private Vector3 _mypos;
   
     private void Awake()
@@ -14,7 +14,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController = GetComponent<PlayerController>();
         _mypos = this.transform.position;
         _Cambos = playerController._camera.transform.position;
-        camRot = playerController._camera.transform.rotation;
+      
     }
     public void Handle(PlayerController _playercontroller)
     {
@@ -52,7 +52,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._ball.GetComponent<BallSound>()._hit = false;
         this.transform.position = _mypos;
         playerController._camera.transform.position = _Cambos;
-        playerController._camera.transform.rotation = camRot;
+       
         playerController._ball.GetComponent<TrailRenderer>().enabled = false;
        
         if (playerController._gameend)
