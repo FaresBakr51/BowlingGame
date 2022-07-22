@@ -69,13 +69,14 @@ public class ArcadeModeManage : MonoBehaviour
         }
         else if (_currentAi._scoreplayer.totalscre > _currentPlayer._scoreplayer.totalscre)
         {
-
-            CheckState("lose");
+            CheckState("win");
+            //CheckState("lose");
             //playerwinnget next
         }
         else
         {
-            CheckState("draw");
+            CheckState("win");
+            //   CheckState("draw");
             //draw go next
         }
 

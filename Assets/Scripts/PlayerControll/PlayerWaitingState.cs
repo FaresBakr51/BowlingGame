@@ -26,6 +26,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 
         _playercontroller._ball.GetComponent<BallSound>().UpdateSound(_playercontroller._movingclip);
         }
+        playercontroller.UpdateAnimator("shot", 7);
         playercontroller._driftBall = true;
         StartCoroutine(WaitHit());
     }
@@ -34,9 +35,11 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
         if (playercontroller._followBall)
         {
            
-            if (playercontroller._camera.transform.position.z >= playercontroller._mypinsobj.transform.position.z +10)
+            if (playercontroller._camera.transform.position.z >= playercontroller._mypinsobj.transform.position.z + 7)
             {
-                playercontroller._camera.transform.position = playercontroller._ball.transform.position + new Vector3(0, 1, 1);
+                playercontroller._camera.transform.position = playercontroller._ball.transform.position + new Vector3(-2.1f, 1.5f, -3);
+             
+                playercontroller._camera.transform.localEulerAngles = new Vector3(30, -135, playercontroller._camera.transform.localEulerAngles.z);
             }
             else
             {
@@ -57,7 +60,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 
 
        
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
         for (int i = 0; i < playercontroller._mypins.Count; i++)
         {
 

@@ -62,6 +62,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
    private bool _followBall;
    private Vector3 _mypos;
    private Vector3 _Cambos;
+    private Quaternion _camRot;
    public AudioSource _gameAudio;
    public AudioClip[] _gameClips;
    public AudioClip[] _FramesClips;
@@ -69,17 +70,28 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     public GameObject _strikeTxt;
     public GameObject _spareTxt;
     public GameObject _gutterTxt;
+    [Header("SpecialWeponProp")]
     [SerializeField] public GameObject _myRocket;
     [SerializeField] public GameObject _RocketOff;
     [SerializeField] public GameObject _RocketOn;
+    public float fireballspeed;
+    public AudioClip _fireballSoundClip;
     public bool _usedRocket;
     public bool _readyLunch;
     private bool _usingRock;
+    public bool _fireball;
+
+
+
+
     [SerializeField] private List<GameObject> _offlinePlayers;
     private bool _gameFinished;
 
     [SerializeField] private GameObject _pauseMenupanel;
 
+    [Header("BallControll")]
+    public bool _driftBall;
+    [SerializeField] private float _controllBallPower;
 
     void Awake()
     {
@@ -92,6 +104,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         _hookScroll.gameObject.SetActive(false);
          _gameactions = new GameControls();
         _mypinsobj.transform.parent = null;
+        _ball.GetComponent<TrailRenderer>().enabled = false;
         if (SceneManager.GetActiveScene().name == "Map3")
         {
             _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.6f);
@@ -116,6 +129,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
         _playerAnim = GetComponent<Animator>();
          GetReady();
          _Cambos = _camera.transform.position;
+        _camRot = _camera.transform.rotation;
 
     }
 
@@ -159,8 +173,36 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     }
       private void FirstControll(){
 
-              _gameactions.ButtonActions.moving.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
-           _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
+              _gameactions.ButtonActions.moving.performed += cntxt => {
+
+                  if (!_pauseMenupanel.activeInHierarchy)
+                  {
+                      _movingL = cntxt.ReadValue<Vector2>();
+                  }
+                  if (_driftBall)
+                  {
+
+                      if (_movingL.x > 0)
+                      {
+
+                          var rig = _ball.GetComponent<Rigidbody>();
+                          rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
+                          _driftBall = false;
+
+                      }
+                      else if (_movingL.x < 0)
+                      {
+
+                          var rig = _ball.GetComponent<Rigidbody>();
+                          rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
+                          _driftBall = false;
+
+                      }
+                  }
+
+
+              };
+        _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
 
             _gameactions.ButtonActions.powerupaction.performed += x => {
                 if (!_offlinemode._gamePaused && !_pauseMenupanel.activeInHierarchy)
@@ -223,19 +265,61 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     }
     IEnumerator readyLunch()
     {
-        yield return new WaitForSeconds(2);
-        _readyLunch = true;
+        if (_fireball)
+        {
+            UpdateSound(_fireballSoundClip);
+            yield return new WaitForSeconds(0.5f);
+            _myRocket.transform.parent = null;
+            _myRocket.transform.rotation = Quaternion.Euler(_myRocket.transform.rotation.x, -180, _myRocket.transform.rotation.z);
+            _myRocket.transform.position = new Vector3(_myRocket.transform.position.x + 0.4f, _myRocket.transform.position.y - 0.7f, _myRocket.transform.position.z);
+            _myRocket.GetComponent<ProjectileMover>().speed = fireballspeed;
+            _readyLunch = true;
+        }
+        else
+        {
+            yield return new WaitForSeconds(2);
+            _readyLunch = true;
+        }
         yield return new WaitForSeconds(1.5f);
+
         foreach (Transform pin in _mypins)
         {
-            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90,180));
-          
+            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
+
         }
 
     }
     private void SecondControll(){
-            _gameactions.ButtonActions.moving2.performed += cntxt => _movingL = cntxt.ReadValue<Vector2>();
-           _gameactions.ButtonActions.moving2.canceled += cntxt => _movingL =Vector2.zero;
+            _gameactions.ButtonActions.moving2.performed += cntxt => {
+
+                if (!_pauseMenupanel.activeInHierarchy)
+                {
+                    _movingL = cntxt.ReadValue<Vector2>();
+                }
+                if (_driftBall)
+                {
+
+                    if (_movingL.x > 0)
+                    {
+
+                        var rig = _ball.GetComponent<Rigidbody>();
+                        rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
+                        _driftBall = false;
+
+                    }
+                    else if (_movingL.x < 0)
+                    {
+
+                        var rig = _ball.GetComponent<Rigidbody>();
+                        rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
+                        _driftBall = false;
+
+                    }
+                }
+
+
+            };
+        _gameactions.ButtonActions.moving2.canceled += cntxt => _movingL =Vector2.zero;
 
             _gameactions.ButtonActions.powerupaction2.performed += x => {
                 if (!_offlinemode._gamePaused && !_pauseMenupanel.activeInHierarchy)
@@ -368,6 +452,10 @@ private void GetReady()
             if (_camera.transform.position.z >= _mypinsobj.transform.position.z +10)
             {
                 _camera.transform.position = _ball.transform.position + new Vector3(0, 1, 1);
+
+                //       _camera.transform.position = _ball.transform.position + new Vector3(-2.1f, 1.5f, -3);
+
+                //                _camera.transform.localEulerAngles = new Vector3(30, -135,_camera.transform.localEulerAngles.z);
             }
             else
             {
@@ -394,10 +482,15 @@ private void GetReady()
         {
             if (_readyLunch)
             {
-              
-               
-                _myRocket?.GetComponent<GunfireController>().FireWeapon();
-                WaitState();
+
+
+                if (!_fireball)
+                {
+                    _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                }
+
+
+                 WaitState();
                 _readyLunch = false;
 
             }
@@ -591,6 +684,7 @@ private void GetReady()
         rig.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rig.AddForce(new Vector3(0, 0, -_power), ForceMode.Impulse);
         rig.AddForce(new Vector3(-_driftvalue, 0, 0), ForceMode.Force);
+        _ball.GetComponent<TrailRenderer>().enabled = true;
         WaitState();
       
     }
@@ -603,7 +697,8 @@ private void GetReady()
 
             _ball.GetComponent<BallSound>().UpdateSound(_movingclip);
         }
-            StartCoroutine(WaitHit());
+        UpdateAnimator("shot", 7);
+        StartCoroutine(WaitHit());
 
         
     }
@@ -700,7 +795,9 @@ private void GetReady()
         _hookScroll.value = 0.5f;
         _camera.transform.position = _Cambos;
         _ball.transform.localPosition = _BallConstantPos;
-      if(_gameend)
+        _ball.transform.rotation = _camRot;
+         _ball.GetComponent<TrailRenderer>().enabled = false;
+        if (_gameend)
         {
             _canhit = false;
             myleader.SetActive(true);
@@ -713,10 +810,11 @@ private void GetReady()
         }
         else
         {
+            UpdateAnimator("shot", 0);
             _canhit = true;
         }
        
-        if (_myRocket.activeInHierarchy)
+        if (_usingRock)
         {
             
             _RocketOn.SetActive(false);

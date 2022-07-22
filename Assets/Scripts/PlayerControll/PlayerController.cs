@@ -154,6 +154,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          _gameactions = new GameControls();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
+        _ball.GetComponent<TrailRenderer>().enabled = false;
+       
         if (SceneManager.GetActiveScene().name == "Map4")
         {
             _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.5f);
