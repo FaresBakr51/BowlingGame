@@ -26,7 +26,12 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
 
         _playercontroller._ball.GetComponent<BallSound>().UpdateSound(_playercontroller._movingclip);
         }
-        playercontroller.UpdateAnimator("shot", 7);
+        if (!playercontroller._usingRock)
+        {
+
+            playercontroller.UpdateAnimator("shot", 7);
+        }
+      
         playercontroller._driftBall = true;
         StartCoroutine(WaitHit());
     }

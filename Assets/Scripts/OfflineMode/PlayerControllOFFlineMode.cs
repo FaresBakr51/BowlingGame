@@ -92,7 +92,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
     [Header("BallControll")]
     public bool _driftBall;
     [SerializeField] private float _controllBallPower;
-    [SerializeField] private float _downForce;
+    
     void Awake()
     {
            _mypos = this.transform.position;
@@ -190,8 +190,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                       {
 
                           var rig = _ball.GetComponent<Rigidbody>();
-                          rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
-                          rig.AddTorque(-transform.forward * _downForce, ForceMode.Acceleration);
+                     
                           rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                           _driftBall = false;
 
@@ -200,8 +199,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                       {
 
                           var rig = _ball.GetComponent<Rigidbody>();
-                          rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
-                          rig.AddTorque(transform.forward * _downForce, ForceMode.Acceleration);
+                       
                           rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                           _driftBall = false;
 
@@ -311,8 +309,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                     {
 
                         var rig = _ball.GetComponent<Rigidbody>();
-                        rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
-                        rig.AddTorque(-transform.forward * _downForce, ForceMode.Acceleration);
+                
                         rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
                         _driftBall = false;
 
@@ -321,8 +318,7 @@ public class PlayerControllOFFlineMode : MonoBehaviour
                     {
 
                         var rig = _ball.GetComponent<Rigidbody>();
-                        rig.AddForce(-transform.forward * _downForce, ForceMode.Impulse);
-                        rig.AddTorque(transform.forward * _downForce, ForceMode.Acceleration);
+                    
                         rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
                         _driftBall = false;
 
@@ -709,7 +705,13 @@ private void GetReady()
 
             _ball.GetComponent<BallSound>().UpdateSound(_movingclip);
         }
-        UpdateAnimator("shot", 7);
+        if (!_usingRock)
+        {
+
+            UpdateAnimator("shot", 7);
+        }
+
+       
         StartCoroutine(WaitHit());
 
         

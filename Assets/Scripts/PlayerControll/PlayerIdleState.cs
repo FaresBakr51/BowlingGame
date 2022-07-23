@@ -52,9 +52,9 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._ball.GetComponent<BallSound>()._hit = false;
         this.transform.position = _mypos;
         playerController._camera.transform.position = _Cambos;
-       
+      
         playerController._ball.GetComponent<TrailRenderer>().enabled = false;
-       
+     
         if (playerController._gameend)
         {
             if(playerController._scoreplayer.totalscre >= 300)
@@ -108,7 +108,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             }
             else
             {
-                playerController.UpdateAnimator("shot", 0);
+              
                 playerController._canhit = true;
              
             }
