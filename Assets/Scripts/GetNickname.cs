@@ -40,6 +40,7 @@ public class GetNickname : MonoBehaviour {
         else if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor )
         {
             PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
+            nickname = PhotonNetwork.LocalPlayer.NickName;
         }
       
         

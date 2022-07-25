@@ -327,7 +327,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &20138957
 GameObject:
@@ -1846,7 +1846,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &126187789
 PrefabInstance:
@@ -5498,9 +5498,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5568c3c22d6b2e446bee783cf5452ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preview: {fileID: 0}
+  _preview: {fileID: 1837574995}
   sprite: {fileID: 21300000, guid: 31df8337dc2b22d4d83fae38c57f102a, type: 3}
-  _chTxt: {fileID: 0}
+  _chTxt: {fileID: 1845972436}
   _name: Isaiah
 --- !u!114 &467829559
 MonoBehaviour:
@@ -9185,7 +9185,7 @@ MonoBehaviour:
         m_MethodName: set_sprite
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 21300000, guid: 8d53fa388596c1d49b5ae3a49b0ebdbd, type: 3}
+          m_ObjectArgument: {fileID: 21300000, guid: 10b6915b129c2ba408769711cd698d59, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -11924,10 +11924,7 @@ MonoBehaviour:
   _CurrentPlayers: []
   player1: {fileID: 0}
   player2: {fileID: 0}
-  _player1Firstchar: {fileID: 1719742110}
-  _player2Firstchar: {fileID: 1873571716}
   _SelectorPane: {fileID: 465848358}
-  _startButt: {fileID: 0}
   _SelectionButtonsPlayer1:
   - {fileID: 1719742110}
   - {fileID: 632527231}
@@ -11937,6 +11934,7 @@ MonoBehaviour:
   - {fileID: 802326864}
   - {fileID: 1712322392}
   - {fileID: 1205175521}
+  - {fileID: 1481362264}
   _SelectionButtonsPlayer2:
   - {fileID: 611843531}
   - {fileID: 1873571716}
@@ -11947,21 +11945,14 @@ MonoBehaviour:
   - {fileID: 421354940}
   - {fileID: 1302394908}
   - {fileID: 467829556}
-  - {fileID: 1837574992}
-  - {fileID: 1845972433}
-  - {fileID: 80308082}
   _soundOnOF:
   - {fileID: 499424899}
   - {fileID: 1304926258}
   _pauseMenupanel: {fileID: 645524432}
   pausefirstbutt: {fileID: 633718437}
   _gamePaused: 0
-  _mine:
-  - {fileID: 11560839}
-  - {fileID: 2044544745}
-  _events:
-  - {fileID: 11560840}
-  - {fileID: 2044544746}
+  _DefultEventSystem: {fileID: 0}
+  _selectionEventSystem: []
   _lockedButtons:
   - {fileID: 1481362267}
   _lockedButtonsP2:
@@ -11985,7 +11976,7 @@ Transform:
   - {fileID: 338874273}
   - {fileID: 304239906}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1166355635 stripped
 Transform:
@@ -15530,9 +15521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5568c3c22d6b2e446bee783cf5452ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preview: {fileID: 0}
+  _preview: {fileID: 1516452608}
   sprite: {fileID: 21300000, guid: 31df8337dc2b22d4d83fae38c57f102a, type: 3}
-  _chTxt: {fileID: 0}
+  _chTxt: {fileID: 1295882438}
   _name: Isaiah
 --- !u!114 &1481362267
 MonoBehaviour:
@@ -17449,7 +17440,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1690465166
 GameObject:
@@ -21053,7 +21044,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044544744}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 

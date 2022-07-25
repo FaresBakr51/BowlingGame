@@ -6,7 +6,7 @@ public class Pin : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("floor"))
         {
-           this.transform.rotation = Quaternion.Euler(Random.Range(90, 180), this.transform.rotation.y, Random.Range(90, 180));
+           this.transform.rotation = Quaternion.Euler(Random.Range(90, 270), Random.Range(90, 270), Random.Range(90, 270));
         }
     }
 }

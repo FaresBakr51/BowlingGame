@@ -108,7 +108,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             }
             else
             {
-              
+                playerController.UpdateAnimator("shot", 0);
                 playerController._canhit = true;
              
             }

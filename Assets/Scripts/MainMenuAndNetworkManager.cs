@@ -61,10 +61,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private List<Button> _lockedButtons= new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
 
-    public void TestAchivment()
-    {
-        UnlouchAchivment("isaiah", 0);
-    }
+ 
     public void ActiveSubMenu(string submenusName)
     {
         if (!_canActiveSub) return;
@@ -582,7 +579,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             yield return null;
         }
         PhotonNetwork.OfflineMode = true;
-        PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 4));
+        PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 3));
 
 
     }

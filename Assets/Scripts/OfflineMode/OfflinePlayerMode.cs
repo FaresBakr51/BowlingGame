@@ -9,45 +9,50 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 public class OfflinePlayerMode : MonoBehaviour
 {
-  [SerializeField] private Transform[] _spawnPoints;
-   [SerializeField] private GameObject[] _Cameras;
+    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private GameObject[] _Cameras;
     [SerializeField] private GameObject[] offlineModeobj;
- public GameObject[] _scoreBoard;
-  public List<GameObject> _controllcanavas = new List<GameObject>();
- public List<GameObject> _CurrentPlayers = new List<GameObject>();
- public GameObject player1,player2;
- public GameObject _player1Firstchar;
- public GameObject _player2Firstchar;
- public GameObject _SelectorPane;
- public GameObject _startButt;
- [SerializeField] private GameObject[] _SelectionButtonsPlayer1;
- [SerializeField] private GameObject[] _SelectionButtonsPlayer2;
+    public GameObject[] _scoreBoard;
+    public List<GameObject> _controllcanavas = new List<GameObject>();
+    public List<GameObject> _CurrentPlayers = new List<GameObject>();
+    public GameObject player1,player2;
+  //  public GameObject _player1Firstchar;
+//    public GameObject _player2Firstchar;
+    public GameObject _SelectorPane;
+    [SerializeField] private GameObject[] _SelectionButtonsPlayer1;
+    [SerializeField] private GameObject[] _SelectionButtonsPlayer2;
     [SerializeField] private GameObject[] _soundOnOF;
-     public GameObject _pauseMenupanel;
+    public GameObject _pauseMenupanel;
     public GameObject pausefirstbutt;
     public bool _gamePaused;
-    public InputSystemUIInputModule[] _mine;
-    public EventSystem[] _events;
+    [SerializeField] private GameObject _DefultEventSystem;
+    [SerializeField] private GameObject[] _selectionEventSystem;
+  //  public InputSystemUIInputModule[] _mine;
+//    public EventSystem[] _events;
 
     [Header("LockedCharacters")]
     [SerializeField] private List<Button> _lockedButtons = new List<Button>();
     [SerializeField] private List<Button> _lockedButtonsP2 = new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
     [SerializeField] private List<GameObject> _lockedImagesP2 = new List<GameObject>();
-    [SerializeField] private 
+
+  
     void Awake()
     {
 
 
-
+      
         MainMenuAndNetworkManager.RetriveData(_lockedButtons, _lockedImages);
         MainMenuAndNetworkManager.RetriveData(_lockedButtonsP2, _lockedImagesP2);
         if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
            _SelectorPane.SetActive(true);
-               foreach(GameObject obj in _SelectionButtonsPlayer2){
-        obj.SetActive(false);
-      }
-           EventSystem.current.SetSelectedGameObject(_player1Firstchar);
+            //         foreach(GameObject obj in _SelectionButtonsPlayer2){
+            //  obj.SetActive(false);
+            //}
+
+          
+            
+       //    EventSystem.current.SetSelectedGameObject(_player1Firstchar);
         }else{
 
           foreach(GameObject obj in offlineModeobj ){
@@ -59,22 +64,31 @@ public class OfflinePlayerMode : MonoBehaviour
 
 
     }
-
+    
     public void SelectCharacter1(GameObject pl){
        
-        _mine[0].enabled = false;
-        _events[0].enabled = false;
-        _events[1].enabled = true;
-        _mine[1].enabled = true;
+        //_mine[0].enabled = false;
+        //_events[0].enabled = false;
+        //_events[1].enabled = true;
+        //_mine[1].enabled = true;
         player2 = pl;
-        foreach (GameObject obj in _SelectionButtonsPlayer2){
-        obj.SetActive(true);
-      }
+      //  foreach (GameObject obj in _SelectionButtonsPlayer2){
+      //  obj.SetActive(true);
+      //}
         foreach (GameObject obj in _SelectionButtonsPlayer1)
         {
             obj.GetComponent<Button>().interactable = false;
         }
-        EventSystem.current.SetSelectedGameObject(_player2Firstchar);
+        if (player1 && player2 != null)
+        {
+            StartGame();
+        }
+        else
+        {
+          //  EventSystem.current.SetSelectedGameObject(_player2Firstchar);
+        }
+       
+
     }
     public void SelectCharacter2(GameObject pl2){
        
@@ -85,23 +99,37 @@ public class OfflinePlayerMode : MonoBehaviour
                 obj.GetComponent<Button>().interactable = false;
             }
       }
-        StartGame();
+      
+        if (player1 && player2 != null)
+        {
+            StartGame();
+        }
+        else
+        {
+           // EventSystem.current.SetSelectedGameObject(_player1Firstchar);
+        }
+
     }
     public void StartGame(){
 
-       
-      _SelectorPane.SetActive(false);
+    
+        _DefultEventSystem.SetActive(true);
+        foreach (GameObject obj in _selectionEventSystem)
+        {
+            obj.SetActive(false);
+        }
+        _SelectorPane.SetActive(false);
      
-    GameObject playerNum1=   Instantiate(player1,_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);
-        GameObject playerNum2= Instantiate(player2,_spawnPoints[1].transform.position,_spawnPoints[1].transform.rotation);
+        GameObject playerNum1=   Instantiate(player1,_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);
+         GameObject playerNum2= Instantiate(player2,_spawnPoints[1].transform.position,_spawnPoints[1].transform.rotation);
          _CurrentPlayers.Add(playerNum1);
-      _CurrentPlayers.Add(playerNum2);
-       SwitchControll();
-        _mine[0].enabled = true;
-        _events[0].enabled = true;
+         _CurrentPlayers.Add(playerNum2);
+          SwitchControll();
+        //_mine[0].enabled = true;
+        //_events[0].enabled = true;
        
-        _mine[1].enabled = false;
-        _events[1].enabled = false;
+        //_mine[1].enabled = false;
+        //_events[1].enabled = false;
     }
     public void Back(){
       SceneManager.LoadScene(0);
