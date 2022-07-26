@@ -256,18 +256,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
  
         _gameactions.Enable();
     }
-    public void RunRpcDance(GameObject obj, bool state)
+    public void RunRpcDance(bool state)
     {
 
         if (_photonview.IsMine)
         {
-            _photonview.RPC("RPCDance", RpcTarget.All, obj, state);
+            _photonview.RPC("RPCDance", RpcTarget.All, state);
         }
     }
     [PunRPC]
-    private void RPCDance(GameObject obj, bool state)
+    private void RPCDance(bool state)
     {
-        obj.SetActive(state);
+        _ball.SetActive(state);
     }
     public void RunRpc()
     {

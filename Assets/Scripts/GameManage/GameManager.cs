@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void OnSceneLoadingFinished(Scene lvl, LoadSceneMode mode)
     {
 
-        if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3" || lvl.name == "Map4")
+        if (lvl.name == "Map1" || lvl.name == "Map2" || lvl.name == "Map3" || lvl.name == "battleRoyalScene")
         {
             if(!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
                 if (GameModes._arcadeMode) return;

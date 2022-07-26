@@ -48,7 +48,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
                 if (!_listings[InGameRooms()]._inGame)
                 {
                     _listings[InGameRooms()].GetComponentInChildren<TextMeshProUGUI>().text = _listings[InGameRooms()].GetComponentInChildren<TextMeshProUGUI>().text + " (InGame)";
-                    _listings[InGameRooms()].GetComponent<RawImage>().color = Color.red;
+                    _listings[InGameRooms()].GetComponent<Image>().color = Color.red;
                     _listings[InGameRooms()]._inGame = true;
                 }
 
@@ -63,7 +63,7 @@ public class RoomListingMenu : MonoBehaviourPunCallbacks
                 if (!_listings[AnyBattleRooms()]._inGame)
                 {
                     _listings[AnyBattleRooms()].GetComponentInChildren<TextMeshProUGUI>().text = _listings[AnyBattleRooms()].GetComponentInChildren<TextMeshProUGUI>().text + " (RoyaleMode)";
-                    _listings[AnyBattleRooms()].GetComponent<RawImage>().color = Color.green;
+                    _listings[AnyBattleRooms()].GetComponent<Image>().color = Color.green;
                     _listings[AnyBattleRooms()]._inGame = true;
                 }
 

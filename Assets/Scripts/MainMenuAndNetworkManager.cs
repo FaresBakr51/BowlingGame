@@ -579,7 +579,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             yield return null;
         }
         PhotonNetwork.OfflineMode = true;
-        PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 3));
+        PhotonNetwork.LoadLevel(UnityEngine.Random.Range(2, 4));
 
 
     }

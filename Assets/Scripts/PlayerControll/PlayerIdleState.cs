@@ -95,7 +95,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             if (playerController._dance && !playerController._usingRock)
             {
 
-                playerController.RunRpcDance(playerController._ball, false);
+                playerController.RunRpcDance(false);
 
                 int rand = Random.Range(3, 7);
                 AnimationClip varclip;
@@ -147,7 +147,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
        
       
         playerController.UpdateAnimator("shot", 0);
-        playerController.RunRpcDance(playerController._ball, true);
+        playerController.RunRpcDance(true);
         if (playerController._dance) { playerController._dance = false; }
         playerController._canhit = true;
     }

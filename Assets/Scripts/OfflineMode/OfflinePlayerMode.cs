@@ -26,7 +26,7 @@ public class OfflinePlayerMode : MonoBehaviour
     public GameObject pausefirstbutt;
     public bool _gamePaused;
     [SerializeField] private GameObject _DefultEventSystem;
-    [SerializeField] private GameObject[] _selectionEventSystem;
+ 
   //  public InputSystemUIInputModule[] _mine;
 //    public EventSystem[] _events;
 
@@ -44,8 +44,10 @@ public class OfflinePlayerMode : MonoBehaviour
       
         MainMenuAndNetworkManager.RetriveData(_lockedButtons, _lockedImages);
         MainMenuAndNetworkManager.RetriveData(_lockedButtonsP2, _lockedImagesP2);
-        if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){ 
-           _SelectorPane.SetActive(true);
+        if (PhotonNetwork.OfflineMode == true && PhotonNetwork.InRoom == false){
+
+            _DefultEventSystem.SetActive(false);
+            _SelectorPane.SetActive(true);
             //         foreach(GameObject obj in _SelectionButtonsPlayer2){
             //  obj.SetActive(false);
             //}
@@ -113,11 +115,9 @@ public class OfflinePlayerMode : MonoBehaviour
     public void StartGame(){
 
     
+       
+     
         _DefultEventSystem.SetActive(true);
-        foreach (GameObject obj in _selectionEventSystem)
-        {
-            obj.SetActive(false);
-        }
         _SelectorPane.SetActive(false);
      
         GameObject playerNum1=   Instantiate(player1,_spawnPoints[0].transform.position,_spawnPoints[0].transform.rotation);

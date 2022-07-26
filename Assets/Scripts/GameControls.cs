@@ -37,9 +37,18 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""NavigateP2"",
+                    ""name"": ""NavigateP2Arcade"",
                     ""type"": ""Value"",
                     ""id"": ""1da28c6f-c4dc-4632-9a42-3ac3e74abc51"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""NavigateP2"",
+                    ""type"": ""Value"",
+                    ""id"": ""4953b2c0-bc96-44df-bc1f-268cdcd19269"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -624,20 +633,9 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NavigateP2"",
+                    ""action"": ""NavigateP2Arcade"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""6252b82e-8f35-40cf-8cd9-6da08fb841ce"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NavigateP2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""up"",
@@ -646,18 +644,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NavigateP2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""b7285511-2b48-4613-b4a8-a24b159152ce"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NavigateP2"",
+                    ""action"": ""NavigateP2Arcade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -668,18 +655,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NavigateP2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""9edc012e-3272-4961-9896-78b364a22e1b"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NavigateP2"",
+                    ""action"": ""NavigateP2Arcade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -690,18 +666,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NavigateP2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""04440d44-4cfa-4f14-ae61-2a9458be72f3"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NavigateP2"",
+                    ""action"": ""NavigateP2Arcade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -712,7 +677,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NavigateP2"",
+                    ""action"": ""NavigateP2Arcade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -924,6 +889,105 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                     ""action"": ""submitp1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""51b528e0-b70b-427f-a91e-f6945f3c81e9"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""42414f43-f01a-4cdc-8466-28d5f7f8030c"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d5159cfb-5e94-4f87-8679-6120dcfc4f11"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""f3fed27c-f9bd-430b-b7dc-09826149756b"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""d2014f8e-eb3d-41c9-a415-e983a15ea8cf"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""112e4625-de22-4c04-9b0a-48384439f255"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b8714876-5f99-4d2f-825f-9c6dbd85c2e2"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""7d51a01c-c7dd-44e6-ad5d-ae123b14acd6"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e3ba7c1d-2354-456f-93c8-2eda794f2cc8"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -933,6 +997,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
         // ButtonActions
         m_ButtonActions = asset.FindActionMap("ButtonActions", throwIfNotFound: true);
         m_ButtonActions_powerupaction = m_ButtonActions.FindAction("powerupaction", throwIfNotFound: true);
+        m_ButtonActions_NavigateP2Arcade = m_ButtonActions.FindAction("NavigateP2Arcade", throwIfNotFound: true);
         m_ButtonActions_NavigateP2 = m_ButtonActions.FindAction("NavigateP2", throwIfNotFound: true);
         m_ButtonActions_NavigateP1 = m_ButtonActions.FindAction("NavigateP1", throwIfNotFound: true);
         m_ButtonActions_submitp1 = m_ButtonActions.FindAction("submitp1", throwIfNotFound: true);
@@ -1006,6 +1071,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_ButtonActions;
     private IButtonActionsActions m_ButtonActionsActionsCallbackInterface;
     private readonly InputAction m_ButtonActions_powerupaction;
+    private readonly InputAction m_ButtonActions_NavigateP2Arcade;
     private readonly InputAction m_ButtonActions_NavigateP2;
     private readonly InputAction m_ButtonActions_NavigateP1;
     private readonly InputAction m_ButtonActions_submitp1;
@@ -1024,6 +1090,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
         private @GameControls m_Wrapper;
         public ButtonActionsActions(@GameControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @powerupaction => m_Wrapper.m_ButtonActions_powerupaction;
+        public InputAction @NavigateP2Arcade => m_Wrapper.m_ButtonActions_NavigateP2Arcade;
         public InputAction @NavigateP2 => m_Wrapper.m_ButtonActions_NavigateP2;
         public InputAction @NavigateP1 => m_Wrapper.m_ButtonActions_NavigateP1;
         public InputAction @submitp1 => m_Wrapper.m_ButtonActions_submitp1;
@@ -1049,6 +1116,9 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 @powerupaction.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPowerupaction;
                 @powerupaction.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPowerupaction;
                 @powerupaction.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnPowerupaction;
+                @NavigateP2Arcade.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigateP2Arcade;
+                @NavigateP2Arcade.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigateP2Arcade;
+                @NavigateP2Arcade.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigateP2Arcade;
                 @NavigateP2.started -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigateP2;
                 @NavigateP2.performed -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigateP2;
                 @NavigateP2.canceled -= m_Wrapper.m_ButtonActionsActionsCallbackInterface.OnNavigateP2;
@@ -1095,6 +1165,9 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 @powerupaction.started += instance.OnPowerupaction;
                 @powerupaction.performed += instance.OnPowerupaction;
                 @powerupaction.canceled += instance.OnPowerupaction;
+                @NavigateP2Arcade.started += instance.OnNavigateP2Arcade;
+                @NavigateP2Arcade.performed += instance.OnNavigateP2Arcade;
+                @NavigateP2Arcade.canceled += instance.OnNavigateP2Arcade;
                 @NavigateP2.started += instance.OnNavigateP2;
                 @NavigateP2.performed += instance.OnNavigateP2;
                 @NavigateP2.canceled += instance.OnNavigateP2;
@@ -1141,6 +1214,7 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
     public interface IButtonActionsActions
     {
         void OnPowerupaction(InputAction.CallbackContext context);
+        void OnNavigateP2Arcade(InputAction.CallbackContext context);
         void OnNavigateP2(InputAction.CallbackContext context);
         void OnNavigateP1(InputAction.CallbackContext context);
         void OnSubmitp1(InputAction.CallbackContext context);
