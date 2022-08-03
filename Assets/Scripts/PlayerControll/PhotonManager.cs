@@ -55,10 +55,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
         if(_pv.IsMine){
             if(GameModes._arcadeMode && SceneManager.GetActiveScene().name == "battleRoyalScene"){
 
-                 _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[(_pv.Owner.ActorNumber-1)+6].transform.position,Quaternion.Euler(0,180,0),0);
+                 _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("arcadech", "Paul"),_spawnPoints[(_pv.Owner.ActorNumber-1)+6].transform.position,Quaternion.Euler(0,180,0),0);
             
-            }else{
-                  _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"),_spawnPoints[_pv.Owner.ActorNumber-1].transform.position,Quaternion.Euler(0,180,0),0);
+            }else if (GameModes._arcadeMode){
+                  _myavatar =    PhotonNetwork.Instantiate(PlayerPrefs.GetString("arcadech", "Paul"),_spawnPoints[_pv.Owner.ActorNumber-1].transform.position,Quaternion.Euler(0,180,0),0);
+            }
+            else
+            {
+                _myavatar =  PhotonNetwork.Instantiate(PlayerPrefs.GetString("character", "Paul"), _spawnPoints[_pv.Owner.ActorNumber - 1].transform.position, Quaternion.Euler(0, 180, 0), 0);
             }
           
             _myAvatarController = _myavatar.GetComponent<PlayerController>();

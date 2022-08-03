@@ -57,7 +57,8 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
      
         if (playerController._gameend)
         {
-            if(playerController._scoreplayer.totalscre >= 300)
+            playerController.UpdateAnimator("shot", 0);
+            if (playerController._scoreplayer.totalscre >= 300)
             {
                 playerController.UpdateSound(playerController._gameClips[7]);
             }
@@ -66,23 +67,25 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             {
                playerController._MyPlayCanavas.SetActive(false);
             }
-         
+
             if (!GameModes._rankedMode && !GameModes._arcadeMode)
             {
                 playerController._GoHomebutt.SetActive(true);
                 playerController.myleader.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(playerController._GoHomebutt);
             }
-           
-            else if(GameModes._rankedMode)
+
+            else if (GameModes._rankedMode)
             {
-                if (!playerController._rankedPanel.activeInHierarchy){
+                if (!playerController._rankedPanel.activeInHierarchy)
+                {
                     playerController.CheckWinner();
                 }
-            }else if (GameModes._arcadeMode)
-            {
-
             }
+            //}else if (GameModes._arcadeMode)
+            //{
+            //    playerController.UpdateAnimator("shot", 0);
+            //}
            
         }
         else

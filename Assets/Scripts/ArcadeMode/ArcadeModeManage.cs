@@ -45,6 +45,7 @@ public class ArcadeModeManage : MonoBehaviour
 
     private void Update()
     {
+        if (!GameModes._arcadeMode) return;
         if (_currentAi == null || _currentPlayer == null) return;
         if (_currentAi._gameend && _currentPlayer._gameend && _checkWinner)
         {

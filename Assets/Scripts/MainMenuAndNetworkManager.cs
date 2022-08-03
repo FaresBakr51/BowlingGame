@@ -413,6 +413,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         if (GameModes._arcadeMode)
         {
             PlayerPrefs.SetInt("selectedplayerindx", GetPlayerSpriteInx(ch));
+            PlayerPrefs.SetString("arcadech", ch);
         }
         if (GameModes._rankedMode)
         {
@@ -498,7 +499,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     public void ContinueArcadeMatch()
     {
-        if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("character"))
+        if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("arcadech"))
         {
                _arcadegametxt.text = "NOW LOADING ...";
             GameModes._arcadeMode = true;
