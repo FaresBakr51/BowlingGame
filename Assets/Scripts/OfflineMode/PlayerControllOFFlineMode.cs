@@ -710,8 +710,8 @@ private void GetReady()
 
             UpdateAnimator("shot", 7);
         }
+       _driftBall = true;
 
-       
         StartCoroutine(WaitHit());
 
         

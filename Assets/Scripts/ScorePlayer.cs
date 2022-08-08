@@ -48,18 +48,18 @@ public class ScorePlayer : MonoBehaviourPunCallbacks {
 		   
 		}
 
-        if (GameModes._battleRoyale)
-        {
-			//if(!_scoreStrn.EndsWith("X "))
-   //         {
-			//	_playercontroll._gameend = true;
-			//	_playercontroll.ShowRankedResult("lose2");
-   //         }
-   //         else
-   //         {
-			//	_playercontroll._MyPlayCanavas.SetActive(true);
-   //         }
-        }
+   //     if (GameModes._battleRoyale)
+   //     {
+			////if(!_scoreStrn.EndsWith("X "))
+   ////         {
+			////	_playercontroll._gameend = true;
+			////	_playercontroll.ShowRankedResult("lose2");
+   ////         }
+   ////         else
+   ////         {
+			////	_playercontroll._MyPlayCanavas.SetActive(true);
+   ////         }
+   //     }
 		if (!_aiPlayer)
 		{
 			if (_scoreStrn.EndsWith("X "))

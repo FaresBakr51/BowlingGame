@@ -47,12 +47,17 @@ public class ArcadeModeManage : MonoBehaviour
     {
         if (!GameModes._arcadeMode) return;
         if (_currentAi == null || _currentPlayer == null) return;
+        
         if (_currentAi._gameend && _currentPlayer._gameend && _checkWinner)
         {
 
 
             CheckWinner();
             _checkWinner = false;
+        }
+        else if(!_currentAi._gameend && _currentPlayer._gameend && _checkWinner)
+        {
+            _currentPlayer._waitOtherPlayer.SetActive(true);
         }
     }
     public void GetToNextAi()
@@ -62,7 +67,10 @@ public class ArcadeModeManage : MonoBehaviour
     }
     private void CheckWinner()
     {
-
+        if (_currentPlayer._waitOtherPlayer.activeInHierarchy)
+        {
+            _currentPlayer._waitOtherPlayer.SetActive(false);
+        }
         if (_currentAi._scoreplayer.totalscre < _currentPlayer._scoreplayer.totalscre)
         {
             CheckState("win");

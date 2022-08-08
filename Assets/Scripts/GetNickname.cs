@@ -4,6 +4,9 @@ using UnityEngine.Networking;
 using System.Net.NetworkInformation;
 using UnityEngine.UI;
 using Photon.Pun;
+using TMPro;
+using UnityEngine.EventSystems;
+
 public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
@@ -11,49 +14,62 @@ public class GetNickname : MonoBehaviour {
     public  string device_id;
     public   string nickname;
     public GameObject _mynameSet;
-    [SerializeField] private InputField _NameInputfield;
-   
+    [SerializeField] private TMP_InputField _NameInputfield;
+    public bool _IGT;
+    public GameObject _MainPanel;
+    public GameObject _SetNamebutt;
 
     //---------------------------------------------------
     // Awake
     //---------------------------------------------------
     
     public void SetMyName(){
+        if (_NameInputfield.text != "")
+        {
+            nickname = _NameInputfield.text;
+            PhotonNetwork.LocalPlayer.NickName = nickname;
 
-        nickname = _NameInputfield.text;
-     PhotonNetwork.LocalPlayer.NickName = nickname;
-     StartCoroutine(ShowMyname());
-    }
-    IEnumerator ShowMyname(){
-        if(_NameInputfield.text != ""){
-        _mynameSet.SetActive(true);
-        yield return new WaitForSeconds(2);
-        _mynameSet.SetActive(false);
+            PlayerPrefs.SetString("myname", nickname);
+            PlayerPrefs.Save();
+            MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
         }
 
+  
     }
+
     void Awake() {
-        if (Application.platform == RuntimePlatform.Android)
+        if (!_IGT)
         {
-            StartCoroutine(GetUserNickname());
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                StartCoroutine(GetUserNickname());
+            }
+            else if ((Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)&&!_IGT)
+            {
+                Debug.Log("RandomBowler");
+                PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
+                nickname = PhotonNetwork.LocalPlayer.NickName;
+                MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+            }
         }
-        else if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor )
+        else
         {
-            PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
-            nickname = PhotonNetwork.LocalPlayer.NickName;
+            Debug.Log("igt");
+            if (PlayerPrefs.HasKey("myname"))
+            {
+                nickname = PlayerPrefs.GetString("myname");
+                PhotonNetwork.LocalPlayer.NickName = nickname;
+                MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+            }
+            else
+            {
+                _mynameSet.SetActive(true);
+                _MainPanel.SetActive(false);
+                EventSystem.current.SetSelectedGameObject(_SetNamebutt);
+
+            }
         }
-      
         
-    }
-    void Start(){
-
-
-      
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 
     //---------------------------------------------------
@@ -82,8 +98,8 @@ public class GetNickname : MonoBehaviour {
             }
 
             nickname = request.downloadHandler.text;
-         
             PhotonNetwork.LocalPlayer.NickName = nickname;
+            MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
            //  _pv.Owner.NickName = nickname;
           
         }

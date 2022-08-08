@@ -6,15 +6,17 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections.Generic;
-using System;
 using UnityEngine.EventSystems;
-
+//using InfinityGameTable;
+using System;
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
-  
-   
+    #region IGT
+    public static Action GetRankedPointsAction;
+    #endregion
 
- 
+
+
     public Button _playbutt;
     public Button _compettbutt;
     public GameObject _roomsPanel;
@@ -61,7 +63,14 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private List<Button> _lockedButtons= new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
 
- 
+    public override void OnEnable()
+    {
+        GetRankedPointsAction += LoadRankedPoints;
+    }
+    public override void OnDisable()
+    {
+        GetRankedPointsAction -= LoadRankedPoints;
+    }
     public void ActiveSubMenu(string submenusName)
     {
         if (!_canActiveSub) return;
@@ -263,17 +272,21 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         GameModes._arcadeMode = false;
         GameModes._battleRoyale = false;
         GameModes._2pMode = false;
-        StartCoroutine(GetRankedPoints());
+      //  StartCoroutine(GetRankedPoints());
        PhotonNetwork.OfflineMode = false;
        _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
          PhotonNetwork.ConnectUsingSettings();
         _offlinemode = false;
-      _mainPanel.SetActive(true);
+     // _mainPanel.SetActive(true);
       SetSelectedGameObject(_mainMenubuttns[0]);
       UdpateSoundSource(_playerAudio, _uiclips[0]);
         RetriveData(_lockedButtons,_lockedImages);
     }
-   
+
+     private void LoadRankedPoints()
+    {
+        StartCoroutine(GetRankedPoints());
+    }
     IEnumerator GetRankedPoints()
     {
         yield return new WaitForSeconds(3f);
@@ -544,7 +557,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
   public void ExitApplication()
     {
+        #region IGT
+        //InfinityGameTableHelper.QuitToDashboard();
+        #endregion
         Application.Quit();
+
     }
     IEnumerator StartRankedMatch()
     {

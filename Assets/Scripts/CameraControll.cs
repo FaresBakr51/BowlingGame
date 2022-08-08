@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class CameraControll : MonoBehaviour
 {
-    private Transform target;
+ 
     public Vector3 offset;
-
-    public void SetTarget(Transform target)
+    private void Awake()
     {
-        this.target = target;
-        gameObject.transform.position = target.position + offset;
+     
+        #region IGT
+        transform.position = new Vector3(transform.position.x, offset.y, transform.position.z);
+        #endregion
     }
+
 }

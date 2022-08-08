@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 using BigRookGames.Weapons;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -113,7 +114,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] private Text _rankedstatetxt;
     public bool _gameRankedFinished;
     public RankedModeState _rankedMode;
-    [SerializeField] private GameObject _waitOtherPlayer;
+    public GameObject _waitOtherPlayer;
 
     [Header("BattleRoyal")]
     public float _timerAfk;
@@ -138,6 +139,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private int keys = 3;
     public bool _dance;
 
+    [Header("TouchInputs")]
+    public bool IGT;
+
+    public Image _filledImage;
+    private bool _startCheck;
+    public float force;
+    [SerializeField] private float minPower;
+    [SerializeField] private float maxPower;
     private void Awake()
     {
       for(int i = 0; i < _danceClips.Length; i++)
@@ -180,7 +189,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
        
          _canhit = true;
         _myxpos = transform.position.x;
+
     }
+ 
      public void UpdateSound(AudioClip clip){
 
      
@@ -231,30 +242,34 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         };
         _gameactions.ButtonActions.Rocket2.performed += r =>
         {
-           
-            if (_canhit && !GameModes._battleRoyale)
-            {
-                if (!_usedRocket)
-                {
 
-                    if (!_gamePaused && _battleStart)
-                    {
-                        _usingRock = true;
-                        transform.position = _mypos;
-                        UpdateAnimator("shot", 2);
-
-                        if (_photonview.IsMine)
-                        {
-                            _photonview.RPC("RPCHiRocket", RpcTarget.All);
-                        }
-                        StartCoroutine(readyLunch());
-                        _usedRocket = true;
-                    }
-                }
-            }
+            LunchRocket();
         };
  
         _gameactions.Enable();
+    }
+    public void LunchRocket()
+    {
+        if (_canhit && !GameModes._battleRoyale)
+        {
+            if (!_usedRocket)
+            {
+
+                if (!_gamePaused && _battleStart)
+                {
+                    _usingRock = true;
+                    transform.position = _mypos;
+                    UpdateAnimator("shot", 2);
+
+                    if (_photonview.IsMine)
+                    {
+                        _photonview.RPC("RPCHiRocket", RpcTarget.All);
+                    }
+                    StartCoroutine(readyLunch());
+                    _usedRocket = true;
+                }
+            }
+        }
     }
     public void RunRpcDance(bool state)
     {
@@ -393,11 +408,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             _rankedMode = gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
+          
         }
       
     }
- 
- 
+    //IEnumerator TestRanked()
+    //{
+    //    yield return new WaitForSeconds(4f);
+    //    _scoreplayer.totalscre = Random.Range(100, 200);
+    //    _gameend = true;
+    //}
+  
     private void CheckControlles(){
 
        
@@ -423,21 +444,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     }
                 }
             };
-             _gameactions.ButtonActions.powerupaction.performed += x => {
+      
+                _gameactions.ButtonActions.powerupaction.performed += x => {
                
                  if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
                  if(_canhit && _ball.activeInHierarchy && _battleStart)
                      {
                      if(_hookcalclated){
                           if(_calcPower && !_trackBall){
-                                 GetPowerValue();
+                                    if (!IGT)
+                                    {
+                                        GetPowerValue();
+                                    }
+                           
                            }
                      }
                    }
                }
            };
-           
-          _gameactions.ButtonActions.driftbar.performed += y => {
+        
+            _gameactions.ButtonActions.driftbar.performed += y => {
            
               if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               if(_canhit && _ball.activeInHierarchy && _battleStart)
@@ -451,24 +477,73 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
           };
         
            }
-           
+       // #region IGT
+        //_gameactions.ButtonActions.IGTpowerAction.performed += val =>
+        //{
+
+
+        //    if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
+        //    {
+        //        if (_canhit && _ball.activeInHierarchy && _battleStart)
+        //        {
+        //            if (_hookcalclated)
+        //            {
+        //                if (_calcPower && !_trackBall && !_startCheck)
+        //                {
+
+        //                    //value = val.ReadValue<Vector2>();
+        //                    //if (value.y > 0)
+        //                    //{
+        //                    //    _startCheck = true;
+                               
+        //                    //    _slidertime += Time.deltaTime;
+        //                    //    _powerSlider.value = Mathf.Lerp(_powerSlider.minValue, _powerSlider.maxValue, _slidertime / 0.1f);
+        //                    //}
+        //                }
+        //            }
+        //        }
+        
+        //    }
+        //};
+
+        //_gameactions.ButtonActions.IGTpowerAction.canceled += x =>
+        //{
+
+
+        //    if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
+        //    {
+        //        if (_canhit && _ball.activeInHierarchy && _battleStart)
+        //        {
+        //            if (_hookcalclated)
+        //            {
+        //                if (_calcPower && !_trackBall)
+        //                {
+        //                 //   GetPowerValue();
+        //                    Debug.Log("CANCLED");
+        //                }
+        //            }
+        //        }
+
+        //    }
+
+        //};
+        //#endregion
 
     }
-  
 
 
     void Update()
     {
-       
 
-       /*  if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
-          
-            _isspeakingButt.SetActive(true);
-            _notSpeakingButt.SetActive(false);
-        }else{
-              _isspeakingButt.SetActive(false);
-            _notSpeakingButt.SetActive(true);
-        } */
+      
+        /*  if(_myVoice.RecorderInUse.IsCurrentlyTransmitting){
+
+             _isspeakingButt.SetActive(true);
+             _notSpeakingButt.SetActive(false);
+         }else{
+               _isspeakingButt.SetActive(false);
+             _notSpeakingButt.SetActive(true);
+         } */
         if (_photonview.IsMine)
         {
             if (_trackBall)
@@ -511,6 +586,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
            
             if (_canhit)
             {
+               
                 if (_readyLunch)
                 {
                     if (!_fireball)
@@ -530,12 +606,40 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                        _hookScroll.gameObject.SetActive(false);
                 }
                 if(_hookcalclated  && !_powerval){
+                  
+                    if (!IGT)
+                    {
+                        UpdateGui();
+                    }
+                  
+                    else
+                    {
+                        if (_startCheck)
+                        {
+                            if (Input.GetMouseButtonUp(0))
+                            {
+
+                                Debug.Log("Touch Up");
+                               GetPowerValue();
+                            }
+                        }
+                        if (Input.GetMouseButton(0))
+                        {
+                            Debug.Log("HOLDINGGG");
+                            force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 400);
+                            _filledImage.fillAmount = force /100;
+                            _startCheck = true;
+                        }
                  
-                    UpdateGui();
+
+                    }
+
                 }
+
+            
                 if (!_usingRock)
                 {
-                    if (!_gamePaused)
+                    if (!_gamePaused && !_hookcalclated)
                     {
                         inputdir = new Vector3(_movingL.x, 0, 0);
                         transform.Translate(inputdir * Time.deltaTime);
@@ -654,6 +758,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void UpdateGui()
     {
+      
         if(_powerSlider.value == _powerSlider.maxValue){
 
             _ControllPower = true;
@@ -683,11 +788,65 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         yield return new WaitForSeconds(0.5f);
          _calcPower = true;
     }
-    private void GetPowerValue(){
-          _powerval = true;
-           _power = _powerSlider.value;
+    private void GetPowerValue() {
+        if (_powerval) return;
+        if (_startCheck) { _startCheck = false; }
+
+        if (!IGT)
+        {
+            _powerval = true;
+            _power = _powerSlider.value;
+        }
+        else
+        {
+            var powerval = _filledImage.fillAmount.ToString("F1");
+            GetActualPowerVal(float.Parse(powerval));
+            Debug.Log(powerval);
+        }
           BowlState();
     }
+    private void GetActualPowerVal(float val)
+    {
+       // Debug.Log(val);
+        switch (val)
+        {
+            case 0f:
+                _power = minPower;
+                break;
+            case 0.1f:
+                _power = minPower + 10;
+                break;
+            case 0.2f:
+                _power = minPower + 20;
+                break;
+            case 0.3f:
+                _power = minPower + 30;
+                break;
+            case 0.4f:
+                _power = minPower + 40;
+                break;
+            case 0.5f:
+                _power = minPower + 50;
+                break;
+            case 0.6f:
+                _power = minPower + 55;
+                break;
+            case 0.7f:
+                _power = minPower + 60;
+                break;
+            case 0.8f:
+                _power = minPower + 65;
+                break;
+            case 0.9f:
+                _power = minPower + 70;
+                break;
+            case 1:
+                _power = minPower + 75;
+                break;
+        }
+
+    }
+    
     private void UpdateHookSlider()
     {
          if(_moveright == false){

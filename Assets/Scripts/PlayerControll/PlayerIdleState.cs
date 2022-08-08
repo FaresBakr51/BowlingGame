@@ -9,7 +9,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
  
     private Vector3 _mypos;
   
-    private void Awake()
+    private void Start()
     {
         playerController = GetComponent<PlayerController>();
         _mypos = this.transform.position;
@@ -90,6 +90,10 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         else
         {
+            if (playerController.IGT)
+            {
+                playerController.force = 0;
+            }
             playerController._MyPlayCanavas.SetActive(true);
             if (GameModes._battleRoyale)
             {
