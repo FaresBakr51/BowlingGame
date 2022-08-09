@@ -408,7 +408,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
       if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
         PhotonNetwork.JoinLobby();
       }
-      
+        Debug.Log("ConnectedToMaster");
         PhotonNetwork.AutomaticallySyncScene = true;
         _playbutt.enabled = true;
         _compettbutt.enabled = true;
@@ -478,11 +478,13 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             if (!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
             {
+                GameModes._rankedMode = false;
                 _mainPanel.SetActive(true);
                 SetSelectedGameObject(_mainMenubuttns[1]);
             }
             else
             {
+              
                 _WAITINPanel.SetActive(true);
                 SetSelectedGameObject(_mainMenubuttns[7]);
                 PhotonNetwork.JoinRandomRoom(null, 2);
