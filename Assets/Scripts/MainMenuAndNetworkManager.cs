@@ -479,7 +479,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             if (!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
             {
                 _mainPanel.SetActive(true);
-                SetSelectedGameObject(_mainMenubuttns[0]);
+                SetSelectedGameObject(_mainMenubuttns[1]);
             }
             else
             {
@@ -558,7 +558,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
   public void ExitApplication()
     {
         #region IGT
-        //InfinityGameTableHelper.QuitToDashboard();
+        
+    //    InfinityGameTableHelper.QuitToDashboard();
         #endregion
         Application.Quit();
 

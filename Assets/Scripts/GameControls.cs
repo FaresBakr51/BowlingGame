@@ -221,17 +221,6 @@ public partial class @GameControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""66c86c41-ca89-4f74-928c-f9b1b685786e"",
-                    ""path"": ""<Mouse>/delta/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""powerupaction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""334ff061-416d-4509-ae08-c24c1d5735e0"",
                     ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",

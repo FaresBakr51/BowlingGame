@@ -408,17 +408,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             _rankedMode = gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
-          
+            StartCoroutine(TestRanked());
         }
       
     }
-    //IEnumerator TestRanked()
-    //{
-    //    yield return new WaitForSeconds(4f);
-    //    _scoreplayer.totalscre = Random.Range(100, 200);
-    //    _gameend = true;
-    //}
-  
+    IEnumerator TestRanked()
+    {
+        yield return new WaitForSeconds(4f);
+        _scoreplayer.totalscre = Random.Range(100, 200);
+        _gameend = true;
+    }
+
     private void CheckControlles(){
 
        
@@ -626,7 +626,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                         if (Input.GetMouseButton(0))
                         {
                             Debug.Log("HOLDINGGG");
-                            force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 400);
+                            force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 300);
                             _filledImage.fillAmount = force /100;
                             _startCheck = true;
                         }
