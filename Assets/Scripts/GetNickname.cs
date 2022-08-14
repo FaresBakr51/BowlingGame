@@ -2,11 +2,10 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Net.NetworkInformation;
-using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
 using UnityEngine.EventSystems;
-
+using Steamworks;
 public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
@@ -17,18 +16,45 @@ public class GetNickname : MonoBehaviour {
     [SerializeField] private TMP_InputField _NameInputfield;
     public bool _IGT;
     public GameObject _MainPanel;
-    public GameObject _SetNamebutt;
+   // public GameObject _SetNamebutt;
+    public GameObject steamApply;
 
     //---------------------------------------------------
     // Awake
     //---------------------------------------------------
-    
-    public void SetMyName(){
+    private void OnEnable()
+    {
+        GameEventBus.Subscribe(GameEventType.steamBuild, SteamSetupName);
+        GameEventBus.Subscribe(GameEventType.IGTbuild, IGTSetUpName);
+        GameEventBus.Subscribe(GameEventType.PolyCadebuild, SetRandomNames);
+    }
+    private void OnDisable()
+    {
+        GameEventBus.UnSubscribe(GameEventType.steamBuild, SteamSetupName);
+        GameEventBus.UnSubscribe(GameEventType.IGTbuild, IGTSetUpName);
+        GameEventBus.UnSubscribe(GameEventType.PolyCadebuild, SetRandomNames);
+    }
+    private void SteamSetupName()
+    {
+        steamApply.SetActive(true);
+        
+        if (!SteamManager.Initialized) return;
+        string name = SteamFriends.GetPersonaName();
+        SetName(name);
+    }
+    private void IGTSetUpName()
+    {
+        Debug.Log("IGTSETUP");
+    }
+    private void SetRandomNames()
+    {
+        SetName("Bowler" + Random.Range(100, 10000));
+    }
+    public void SetMyNameFromGame(){
         if (_NameInputfield.text != "")
         {
             nickname = _NameInputfield.text;
             PhotonNetwork.LocalPlayer.NickName = nickname;
-
             PlayerPrefs.SetString("myname", nickname);
             PlayerPrefs.Save();
             MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
@@ -36,42 +62,49 @@ public class GetNickname : MonoBehaviour {
 
   
     }
-
+ 
     void Awake() {
-        if (!_IGT)
-        {
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                StartCoroutine(GetUserNickname());
-            }
-            else if ((Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)&&!_IGT)
-            {
-                Debug.Log("RandomBowler");
-                PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
-                nickname = PhotonNetwork.LocalPlayer.NickName;
-                MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
-            }
-        }
-        else
-        {
-            Debug.Log("igt");
-            if (PlayerPrefs.HasKey("myname"))
-            {
-                nickname = PlayerPrefs.GetString("myname");
-                PhotonNetwork.LocalPlayer.NickName = nickname;
-                MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
-            }
-            else
-            {
-                _mynameSet.SetActive(true);
-                _MainPanel.SetActive(false);
-                EventSystem.current.SetSelectedGameObject(_SetNamebutt);
+        //if (!_IGT)
+        //{
+        //    if (Application.platform == RuntimePlatform.Android)
+        //    {
+        //        StartCoroutine(GetUserNickname());
+        //    }
+        //    else if ((Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)&&!_IGT)
+        //    {
+        //        Debug.Log("RandomBowler");
+        //        PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
+        //        nickname = PhotonNetwork.LocalPlayer.NickName;
+        //        MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.Log("igt");
+        //    if (PlayerPrefs.HasKey("myname"))
+        //    {
+        //        nickname = PlayerPrefs.GetString("myname");
+        //        PhotonNetwork.LocalPlayer.NickName = nickname;
+        //        MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+        //    }
+        //    else
+        //    {
+        //        _mynameSet.SetActive(true);
+        //        _MainPanel.SetActive(false);
+        //        EventSystem.current.SetSelectedGameObject(_SetNamebutt);
 
-            }
-        }
+        //    }
+        //}
         
     }
 
+    public void SetName(string name)
+    {
+
+        nickname = name;
+        PhotonNetwork.LocalPlayer.NickName = nickname;
+        MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+    }
     //---------------------------------------------------
     // Get User Nickname
     //

@@ -2905,6 +2905,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0998b4a3b91fe40811e60ab5b9d51a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gamePlatform: 6
+  buildname: steam
   _playbutt: {fileID: 1892607150}
   _compettbutt: {fileID: 1995165541}
   _roomsPanel: {fileID: 1917312302}
@@ -3988,7 +3990,7 @@ MonoBehaviour:
   _NameInputfield: {fileID: 3512972}
   _IGT: 0
   _MainPanel: {fileID: 122975009}
-  _SetNamebutt: {fileID: 0}
+  steamApply: {fileID: 1528964650}
 --- !u!4 &731182798
 Transform:
   m_ObjectHideFlags: 0
@@ -8387,6 +8389,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1528964650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1528964652}
+  - component: {fileID: 1528964651}
+  m_Layer: 0
+  m_Name: SteamManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1528964651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528964650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1528964652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528964650}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 724.4803, y: 204.42352, z: -39.50006}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1548575705
 GameObject:
   m_ObjectHideFlags: 0
@@ -11246,7 +11292,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 731182797}
         m_TargetAssemblyTypeName: GetNickname, Assembly-CSharp
-        m_MethodName: SetMyName
+        m_MethodName: SetMyNameFromGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

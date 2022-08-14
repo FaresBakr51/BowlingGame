@@ -9,13 +9,27 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 //using InfinityGameTable;
 using System;
+using UnityEngine.Events;
+
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
-    #region IGT
+
+    [Header("PlatformEvents")]
     public static Action GetRankedPointsAction;
-    #endregion
 
-
+   // public static event Action SteamEvents;
+  //  public static event Action IGTEvents;
+ //   public static event Action PolyCadeBuild;
+    
+  //  private Dictionary<string, Action> platformActions = new Dictionary<string, Action>();
+    [Header("Plaftorms")]
+    public GameEventType gamePlatform;
+    public string buildname;
+    //public GameObject steamApply;
+    [SerializeField]
+  
+ //   private readonly List<string> platformnames = new List<string>() { "steam","IGT","PolyCade" };
+ //   private bool Initialized => platformTypes.Count > 0;
 
     public Button _playbutt;
     public Button _compettbutt;
@@ -65,6 +79,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnEnable()
     {
+     
         GetRankedPointsAction += LoadRankedPoints;
     }
     public override void OnDisable()
@@ -267,6 +282,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
         void Start()
     {
+        BuildPlatform(gamePlatform);
         AudioListener.volume = 1;
         GameModes._rankedMode = false;
         GameModes._arcadeMode = false;
@@ -604,5 +620,15 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
 
     }
+
+    #region PlatformsChanges
+
+    
+    private void BuildPlatform(GameEventType pname)
+    {
+        GameEventBus.Publish(pname);
+
+    }
+    #endregion
 
 }

@@ -6,14 +6,14 @@ public class CameraControll : MonoBehaviour
 {
  
     public Vector3 offset;
-    public bool IGT;
-    private void Awake()
-    {
+    public bool SetIGTCAM;
 
-        #region IGT
-        if (!IGT) return;
-        transform.position = new Vector3(transform.position.x, offset.y, transform.position.z);
-        #endregion
+    private void Start()
+    {
+        if (SetIGTCAM)
+        {
+            transform.position = new Vector3(transform.position.x, offset.y, transform.position.z);
+        }
     }
 
 }
