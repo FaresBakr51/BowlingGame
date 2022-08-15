@@ -10,6 +10,7 @@ public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
 
+    [ExposeField]
     public  string device_id;
     public   string nickname;
     public GameObject _mynameSet;
