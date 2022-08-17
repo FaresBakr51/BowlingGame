@@ -5,15 +5,16 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 
 
 //[CreateAssetMenu(fileName ="new test",menuName = "Test")]
 public class TestEditor : ScriptableObject
 {
- 
 
+#if UNITY_EDITOR
+    public Button _addbutt;
     [MenuItem("New TestNote/Creat New Test")]
     public static void CreatNewTest()
     {
@@ -28,5 +29,5 @@ public class TestEditor : ScriptableObject
 
     }
 
-
+#endif
 }

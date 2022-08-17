@@ -5,20 +5,23 @@ using System.Net.NetworkInformation;
 using Photon.Pun;
 using TMPro;
 using UnityEngine.EventSystems;
-using Steamworks;
+
+
+//using Steamworks;
 public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
 
-    [ExposeField]
+   
     public  string device_id;
     public   string nickname;
     public GameObject _mynameSet;
     [SerializeField] private TMP_InputField _NameInputfield;
     public bool _IGT;
     public GameObject _MainPanel;
-   // public GameObject _SetNamebutt;
+    public GameObject _SetNamebutt;
     public GameObject steamApply;
+
 
     //---------------------------------------------------
     // Awake
@@ -28,19 +31,38 @@ public class GetNickname : MonoBehaviour {
         GameEventBus.Subscribe(GameEventType.steamBuild, SteamSetupName);
         GameEventBus.Subscribe(GameEventType.IGTbuild, IGTSetUpName);
         GameEventBus.Subscribe(GameEventType.PolyCadebuild, SetRandomNames);
+        GameEventBus.Subscribe(GameEventType.XboxBuild, SetNameMenu);
     }
     private void OnDisable()
     {
         GameEventBus.UnSubscribe(GameEventType.steamBuild, SteamSetupName);
         GameEventBus.UnSubscribe(GameEventType.IGTbuild, IGTSetUpName);
         GameEventBus.UnSubscribe(GameEventType.PolyCadebuild, SetRandomNames);
+        GameEventBus.UnSubscribe(GameEventType.XboxBuild, SetNameMenu);
+    }
+
+    private void SetNameMenu()
+    {
+        if (PlayerPrefs.HasKey("myname"))
+        {
+            nickname = PlayerPrefs.GetString("myname");
+            PhotonNetwork.LocalPlayer.NickName = nickname;
+            MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+        }
+        else
+        {
+            _mynameSet.SetActive(true);
+            _MainPanel.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(_SetNamebutt);
+
+        }
     }
     private void SteamSetupName()
     {
         steamApply.SetActive(true);
         
         if (!SteamManager.Initialized) return;
-        string name = SteamFriends.GetPersonaName();
+       // string name = SteamFriends.GetPersonaName();
         SetName(name);
     }
     private void IGTSetUpName()
@@ -58,7 +80,11 @@ public class GetNickname : MonoBehaviour {
             PhotonNetwork.LocalPlayer.NickName = nickname;
             PlayerPrefs.SetString("myname", nickname);
             PlayerPrefs.Save();
+
             MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+            MainMenuAndNetworkManager.Instance._setNamePanel.SetActive(false);
+            MainMenuAndNetworkManager.Instance._mainPanel.SetActive(true);
+            MainMenuAndNetworkManager.Instance.SetSelectedGameObject(MainMenuAndNetworkManager.Instance.mainButtons[0]);
         }
 
   

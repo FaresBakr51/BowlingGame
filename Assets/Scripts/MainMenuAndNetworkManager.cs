@@ -7,38 +7,29 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+
 //using InfinityGameTable;
 using System;
 using UnityEngine.Events;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
-
+    public static MainMenuAndNetworkManager Instance;
     [Header("PlatformEvents")]
     public static Action GetRankedPointsAction;
-
-   // public static event Action SteamEvents;
-  //  public static event Action IGTEvents;
- //   public static event Action PolyCadeBuild;
-    
-  //  private Dictionary<string, Action> platformActions = new Dictionary<string, Action>();
     [Header("Plaftorms")]
     public GameEventType gamePlatform;
-    public string buildname;
-    //public GameObject steamApply;
-    [SerializeField]
-  
- //   private readonly List<string> platformnames = new List<string>() { "steam","IGT","PolyCade" };
- //   private bool Initialized => platformTypes.Count > 0;
 
+    
+
+    [Header("Panels&Buttons")]
+    public GameObject _setNamePanel;
+    public GameObject _mainPanel;
+    [SerializeField] private GameObject _leaderBoardPanel;
+    public GameObject[] _mainMenubuttns;
     public Button _playbutt;
     public Button _compettbutt;
     public GameObject _roomsPanel;
-    
-    [SerializeField] private GameObject _mainPanel;
-    [SerializeField] private GameObject _leaderBoardPanel;
-    public GameObject[] _mainMenubuttns;
-
 
     [Header("MainButtonsActions")] 
     public int indx;
@@ -79,8 +70,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnEnable()
     {
-     
-        GetRankedPointsAction += LoadRankedPoints;
+        Instance = this;
+           GetRankedPointsAction += LoadRankedPoints;
     }
     public override void OnDisable()
     {
@@ -294,7 +285,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
          PhotonNetwork.ConnectUsingSettings();
         _offlinemode = false;
      // _mainPanel.SetActive(true);
-      SetSelectedGameObject(_mainMenubuttns[0]);
+     // SetSelectedGameObject(_mainMenubuttns[0]);
       UdpateSoundSource(_playerAudio, _uiclips[0]);
         RetriveData(_lockedButtons,_lockedImages);
     }
