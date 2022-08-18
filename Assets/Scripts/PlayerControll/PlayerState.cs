@@ -6,6 +6,7 @@ public interface PlayerState
 public interface PinNotify{
     void Moved();
 }
+
 public struct GameModes
 {
 

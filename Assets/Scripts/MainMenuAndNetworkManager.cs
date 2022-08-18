@@ -10,9 +10,8 @@ using UnityEngine.EventSystems;
 
 //using InfinityGameTable;
 using System;
-using UnityEngine.Events;
 
-public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
+public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks,IConnectionCallbacks
 {
     public static MainMenuAndNetworkManager Instance;
     [Header("PlatformEvents")]
@@ -67,10 +66,12 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private List<Button> _lockedButtons= new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
 
+
+    private bool joinlobby;
     public override void OnEnable()
     {
         Instance = this;
-           GetRankedPointsAction += LoadRankedPoints;
+        GetRankedPointsAction += LoadRankedPoints;
     }
     public override void OnDisable()
     {
@@ -409,17 +410,6 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
 
 
-    //public override void OnConnected()
-    //{
-
-    //    if (!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false)
-    //    {
-    //        Debug.Log("Not InLobby joining");
-    //        PhotonNetwork.JoinLobby();
-    //    }
-    //    Debug.Log("Connected To Server");
-    //    PhotonNetwork.AutomaticallySyncScene = true;
-    //}
 
     public override void OnConnectedToMaster()
     {
@@ -432,13 +422,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Joined");
         }
-        Debug.Log("ConnectedToMaster");
+
         PhotonNetwork.AutomaticallySyncScene = true;
     }
-    private void Update()
-    {
-        Debug.Log(PhotonNetwork.NetworkClientState);
-    }
+
     public void SelectCharacter(string ch){
 
        PlayerPrefs.SetString("character",ch);
@@ -486,7 +473,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             else
             {
 
-                if (!PhotonNetwork.IsConnected)//!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected)
+                if (!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected)
                 {
 
                     _mainPanel.SetActive(true);
@@ -500,7 +487,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            if (PhotonNetwork.InRoom)//!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
+            if (!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
             {
                 GameModes._rankedMode = false;
                 _mainPanel.SetActive(true);
