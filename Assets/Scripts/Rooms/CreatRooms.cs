@@ -17,15 +17,13 @@ public class CreatRooms : MonoBehaviourPunCallbacks
 
     public void OnCreatRoom(){
         if (GameModes._rankedMode) return;
-       if(!PhotonNetwork.IsConnected)
-       return;
-       if(!PhotonNetwork.InLobby)
-       return;
+        if (!PhotonNetwork.IsConnected) return;
+      //  if (!PhotonNetwork.InLobby) return;
         RoomOptions roomOptions = new RoomOptions();
         
         roomOptions.MaxPlayers = 8;
         roomOptions.CleanupCacheOnLeave = false;
-          PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname,roomOptions,TypedLobby.Default);
+       PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname,roomOptions,TypedLobby.Default);
       
         
     }
@@ -35,8 +33,8 @@ public class CreatRooms : MonoBehaviourPunCallbacks
         GameModes._battleRoyale = true;
         if (!PhotonNetwork.IsConnected)
             return;
-        if (!PhotonNetwork.InLobby)
-            return;
+      //  if (!PhotonNetwork.InLobby)
+     //       return;
         if (GameModes._battleRoyale)
         {
             RoomOptions roomOptions = new RoomOptions();

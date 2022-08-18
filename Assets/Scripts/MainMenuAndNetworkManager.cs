@@ -27,8 +27,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public GameObject _mainPanel;
     [SerializeField] private GameObject _leaderBoardPanel;
     public GameObject[] _mainMenubuttns;
-    public Button _playbutt;
-    public Button _compettbutt;
+  
     public GameObject _roomsPanel;
 
     [Header("MainButtonsActions")] 
@@ -59,7 +58,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     [Header("ArcadePanel")]
     [SerializeField] private GameObject _arcadePanel;
-    [SerializeField] private GameObject _massegepanel;
+  //  [SerializeField] private GameObject _massegepanel;
     [SerializeField] private Text _arcadegametxt;
 
     [Header("Achivement")]
@@ -281,7 +280,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         GameModes._2pMode = false;
       //  StartCoroutine(GetRankedPoints());
        PhotonNetwork.OfflineMode = false;
-       _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
+    //   _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
+    
          PhotonNetwork.ConnectUsingSettings();
         _offlinemode = false;
      // _mainPanel.SetActive(true);
@@ -409,19 +409,36 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
 
 
+    //public override void OnConnected()
+    //{
+
+    //    if (!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false)
+    //    {
+    //        Debug.Log("Not InLobby joining");
+    //        PhotonNetwork.JoinLobby();
+    //    }
+    //    Debug.Log("Connected To Server");
+    //    PhotonNetwork.AutomaticallySyncScene = true;
+    //}
 
     public override void OnConnectedToMaster()
     {
-      if(!PhotonNetwork.InLobby && PhotonNetwork.OfflineMode == false){
-        PhotonNetwork.JoinLobby();
-      }
+        if (!PhotonNetwork.InLobby && !PhotonNetwork.OfflineMode)
+        {
+            Debug.Log("Not InLobby joining");
+            PhotonNetwork.JoinLobby();
+        }
+        else
+        {
+            Debug.Log("Joined");
+        }
         Debug.Log("ConnectedToMaster");
         PhotonNetwork.AutomaticallySyncScene = true;
-        _playbutt.enabled = true;
-        _compettbutt.enabled = true;
-  
     }
-   
+    private void Update()
+    {
+        Debug.Log(PhotonNetwork.NetworkClientState);
+    }
     public void SelectCharacter(string ch){
 
        PlayerPrefs.SetString("character",ch);
@@ -469,7 +486,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
             else
             {
 
-                if (!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected)
+                if (!PhotonNetwork.IsConnected)//!PhotonNetwork.InLobby || !PhotonNetwork.IsConnected)
                 {
 
                     _mainPanel.SetActive(true);
@@ -483,7 +500,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            if (!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
+            if (PhotonNetwork.InRoom)//!PhotonNetwork.InLobby || PhotonNetwork.InRoom)
             {
                 GameModes._rankedMode = false;
                 _mainPanel.SetActive(true);

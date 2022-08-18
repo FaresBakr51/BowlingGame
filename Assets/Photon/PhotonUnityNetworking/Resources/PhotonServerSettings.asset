@@ -16,10 +16,10 @@ MonoBehaviour:
     AppIdRealtime: 413793e4-5d5f-4cef-b3a2-866a780db94d
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 74447fb2-20ee-42c5-aa1a-fa2c002ffa93
+    AppIdVoice: 
     AppVersion: 8
     UseNameServer: 1
-    FixedRegion: us
+    FixedRegion: 
     Server: 
     Port: 0
     ProxyServer: 
@@ -27,47 +27,13 @@ MonoBehaviour:
     EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
-    NetworkLogging: 5
-  DevRegion: eu
+    NetworkLogging: 1
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
-  RpcList:
-  - ClickRpc
-  - DestroyRpc
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - RpcChangeSCoreval
-  - RpcTest
-  - RpcGetName
-  - RpcChangeRoom
-  - RpcLeader
-  - CantHearYou
-  - ChangeColour
-  - HeresWhy
-  - RpcSharetotalScore
-  - RPC_IFinished
-  - RPCHiRocket
-  - RPCRocketOFF
-  - CheckSpawnPoint
-  - Takenspawn
-  - RpcShareScore
-  - ShareText
-  - ResetPinsRunCounter
-  - RpcShareName
-  - ShareTimer
-  - SharePlatform
-  - SetInfo
-  - RpcShareplaftorm
-  - RPCDance
-  - RunRpcHash
-  - RPCSendMyCh
-  - RPCSendtoClient
-  - RPCSendToMaster
-  - RPCRunRankedGame
-  - ResetPinsRunCounterAi
+  RpcList: []
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0
