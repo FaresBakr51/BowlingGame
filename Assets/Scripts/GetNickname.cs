@@ -32,6 +32,7 @@ public class GetNickname : MonoBehaviour {
         GameEventBus.Subscribe(GameEventType.IGTbuild, IGTSetUpName);
         GameEventBus.Subscribe(GameEventType.PolyCadebuild, SetRandomNames);
         GameEventBus.Subscribe(GameEventType.XboxBuild, SetNameMenu);
+        GameEventBus.Subscribe(GameEventType.ArcadeBuild, SetServerArcadeName);
     }
     private void OnDisable()
     {
@@ -39,8 +40,13 @@ public class GetNickname : MonoBehaviour {
         GameEventBus.UnSubscribe(GameEventType.IGTbuild, IGTSetUpName);
         GameEventBus.UnSubscribe(GameEventType.PolyCadebuild, SetRandomNames);
         GameEventBus.UnSubscribe(GameEventType.XboxBuild, SetNameMenu);
+        GameEventBus.UnSubscribe(GameEventType.ArcadeBuild, SetServerArcadeName);
     }
 
+    private void SetServerArcadeName()
+    {
+        StartCoroutine(GetUserNickname());
+    }
     private void SetNameMenu()
     {
         if (PlayerPrefs.HasKey("myname"))
@@ -90,40 +96,7 @@ public class GetNickname : MonoBehaviour {
   
     }
  
-    void Awake() {
-        //if (!_IGT)
-        //{
-        //    if (Application.platform == RuntimePlatform.Android)
-        //    {
-        //        StartCoroutine(GetUserNickname());
-        //    }
-        //    else if ((Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)&&!_IGT)
-        //    {
-        //        Debug.Log("RandomBowler");
-        //        PhotonNetwork.LocalPlayer.NickName = "Bowler" + Random.Range(100, 10000);
-        //        nickname = PhotonNetwork.LocalPlayer.NickName;
-        //        MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.Log("igt");
-        //    if (PlayerPrefs.HasKey("myname"))
-        //    {
-        //        nickname = PlayerPrefs.GetString("myname");
-        //        PhotonNetwork.LocalPlayer.NickName = nickname;
-        //        MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
-        //    }
-        //    else
-        //    {
-        //        _mynameSet.SetActive(true);
-        //        _MainPanel.SetActive(false);
-        //        EventSystem.current.SetSelectedGameObject(_SetNamebutt);
 
-        //    }
-        //}
-        
-    }
 
     public void SetName(string name)
     {

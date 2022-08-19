@@ -408,16 +408,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             _rankedMode = gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
-            StartCoroutine(TestRanked());
+          //  StartCoroutine(TestRanked());
         }
       
     }
-    IEnumerator TestRanked()
-    {
-        yield return new WaitForSeconds(4f);
-        _scoreplayer.totalscre = Random.Range(100, 200);
-        _gameend = true;
-    }
+    //IEnumerator TestRanked()
+    //{
+    //    yield return new WaitForSeconds(4f);
+    //    _scoreplayer.totalscre = Random.Range(100, 200);
+    //    _gameend = true;
+    //}
 
     private void CheckControlles(){
 

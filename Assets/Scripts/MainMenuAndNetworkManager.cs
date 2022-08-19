@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 //using InfinityGameTable;
 using System;
 
-public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks,IConnectionCallbacks
+public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
     public static MainMenuAndNetworkManager Instance;
     [Header("PlatformEvents")]
@@ -72,10 +72,12 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks,IConnectionCa
     {
         Instance = this;
         GetRankedPointsAction += LoadRankedPoints;
+        PhotonNetwork.AddCallbackTarget(this);
     }
     public override void OnDisable()
     {
         GetRankedPointsAction -= LoadRankedPoints;
+        PhotonNetwork.RemoveCallbackTarget(this);
     }
     public void ActiveSubMenu(string submenusName)
     {
@@ -271,36 +273,26 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks,IConnectionCa
 
     }
 
-        void Start()
+    void Start()
     {
-        BuildPlatform(gamePlatform);
         AudioListener.volume = 1;
         GameModes._rankedMode = false;
         GameModes._arcadeMode = false;
         GameModes._battleRoyale = false;
         GameModes._2pMode = false;
-      //  StartCoroutine(GetRankedPoints());
-       PhotonNetwork.OfflineMode = false;
-    //   _mainMenubuttns[0].GetComponentInChildren<Image>().enabled =true;
-    
-         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.OfflineMode = false;
+        PhotonNetwork.ConnectUsingSettings();
         _offlinemode = false;
-     // _mainPanel.SetActive(true);
-     // SetSelectedGameObject(_mainMenubuttns[0]);
-      UdpateSoundSource(_playerAudio, _uiclips[0]);
+        UdpateSoundSource(_playerAudio, _uiclips[0]);
         RetriveData(_lockedButtons,_lockedImages);
     }
 
      private void LoadRankedPoints()
     {
-        StartCoroutine(GetRankedPoints());
-    }
-    IEnumerator GetRankedPoints()
-    {
-        yield return new WaitForSeconds(3f);
         _totalRankedPoints = PlayerPrefs.GetInt("rankedpoints", 0);
         _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + " / " + _totalRankedPoints.ToString();
     }
+
     public void CreatRankedMatch()
     {
         GameModes._rankedMode = true;
@@ -422,7 +414,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks,IConnectionCa
         {
             Debug.Log("Joined");
         }
-
+        BuildPlatform(gamePlatform);
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
