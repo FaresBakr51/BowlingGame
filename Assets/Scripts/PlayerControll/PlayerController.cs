@@ -408,7 +408,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             _rankedMode = gameObject.AddComponent<RankedModeState>();
             _rankedMode.GameMode(this);
-          //  StartCoroutine(TestRanked());
+         //   StartCoroutine(TestRanked());
         }
       
     }

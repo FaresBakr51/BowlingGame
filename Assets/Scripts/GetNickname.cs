@@ -7,7 +7,9 @@ using TMPro;
 using UnityEngine.EventSystems;
 
 
-//using Steamworks;
+#if UNITY_WIN
+using Steamworks;
+#endif
 public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
@@ -68,7 +70,9 @@ public class GetNickname : MonoBehaviour {
         steamApply.SetActive(true);
         
         if (!SteamManager.Initialized) return;
-       // string name = SteamFriends.GetPersonaName();
+#if UNITY_WIN
+         string name = SteamFriends.GetPersonaName();
+#endif
         SetName(name);
     }
     private void IGTSetUpName()
@@ -116,7 +120,7 @@ public class GetNickname : MonoBehaviour {
     //---------------------------------------------------
     IEnumerator GetUserNickname() {
         GetDeviceID();
-
+        Debug.Log("Iniziatlizing Player NickName From iiRcade Server ..");
         yield return new WaitForSeconds(2f);
         // Form Data Settings
         WWWForm form = new WWWForm();

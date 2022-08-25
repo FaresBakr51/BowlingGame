@@ -105,7 +105,7 @@ PlayerSettings:
   xboxEnableFitness: 0
   visibleInBackground: 1
   allowFullscreenSwitch: 1
-  fullscreenMode: 1
+  fullscreenMode: 3
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -775,11 +775,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: 33437Rukus-Dev.BashSportsOnlineBowling
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: Assets/WSATestCertificate.pfx
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: CN=9F484C66-58A5-47CA-9A48-FE1FFFF4712E
-  metroCertificateIssuer: CN=9F484C66-58A5-47CA-9A48-FE1FFFF4712E
-  metroCertificateNotAfter: 007445a269d2d901
+  metroCertificateSubject: 9F484C66-58A5-47CA-9A48-FE1FFFF4712E
+  metroCertificateIssuer: 9F484C66-58A5-47CA-9A48-FE1FFFF4712E
+  metroCertificateNotAfter: 000203426ad2d901
   metroApplicationDescription: BashSportsOnlineBowling
   wsaImages: {}
   metroTileShortName: BowlingGameProjectMobilePlatform
@@ -795,7 +795,8 @@ PlayerSettings:
   metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628, a: 1}
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities: {}
-  metroTargetDeviceFamilies: {}
+  metroTargetDeviceFamilies:
+    Xbox: False
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 
