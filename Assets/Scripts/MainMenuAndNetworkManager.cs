@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 
 //using InfinityGameTable;
 using System;
+using System.Threading.Tasks;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
@@ -560,7 +561,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         }
     
     }
-  public void ExitApplication()
+
+
+    public void ExitApplication()
     {
         #region IGT
         

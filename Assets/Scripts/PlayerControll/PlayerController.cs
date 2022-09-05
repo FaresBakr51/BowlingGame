@@ -433,11 +433,25 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     {
                         if (_canhit && _ball.activeInHierarchy && _battleStart)
                         {
+                            
                             if (_hookcalclated)
                             {
                                 if (_calcPower)
                                 {
-                                    GetPowerValue();
+
+                                  Vector2 v =  e.ReadValue<Vector2>();
+                                    if(v.y <= 0)
+                                    {
+                                        _power = _powerSlider.minValue ;
+                                    }else if(v.y == 1)
+                                    {
+                                        _power = _powerSlider.minValue + Mathf.Abs(v.y + (((_powerSlider.minValue - _powerSlider.maxValue) /2 ) -1));
+                                    }else if(v.y > 1)
+                                    {
+                                        _power = _powerSlider.maxValue ;
+                                    }
+
+                                    BowlState();
                                 }
                             }
                         }
