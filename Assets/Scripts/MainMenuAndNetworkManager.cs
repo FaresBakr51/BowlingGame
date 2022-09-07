@@ -95,7 +95,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
                         for (int k = 0; k < mainButtons.Length; k++)
                         {
-                            if (k != 2)
+                            if (k != 1)//for not 2p 1 else 2
                             {
                                 mainButtons[k].SetActive(true);
                             }

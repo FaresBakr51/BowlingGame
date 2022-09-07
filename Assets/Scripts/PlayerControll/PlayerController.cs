@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public int _trackScore;
     public int _checkCond;
     [Header("TrackBall")]
-    [SerializeField] private bool _trackBall;
+    [SerializeField] public bool _trackBall;
     [SerializeField] private GameObject[] _trackBallOnOf;
 
 
@@ -424,40 +424,40 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
        
         if (!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode &&PhotonNetwork.InRoom )){
 
-            _gameactions.ButtonActions.trackBall.performed += e =>
-            {
-                if (_trackBall)
-                {
+            //_gameactions.ButtonActions.trackBall.performed += e =>
+            //{
+            //    if (_trackBall)
+            //    {
                    
-                    if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
-                    {
-                        if (_canhit && _ball.activeInHierarchy && _battleStart)
-                        {
+            //        if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
+            //        {
+            //            if (_canhit && _ball.activeInHierarchy && _battleStart)
+            //            {
                             
-                            if (_hookcalclated)
-                            {
-                                if (_calcPower)
-                                {
+            //                if (_hookcalclated)
+            //                {
+            //                    if (_calcPower)
+            //                    {
 
-                                  Vector2 v =  e.ReadValue<Vector2>();
-                                    if(v.y <= 0)
-                                    {
-                                        _power = _powerSlider.minValue ;
-                                    }else if(v.y == 1)
-                                    {
-                                        _power = _powerSlider.minValue + Mathf.Abs(v.y + (((_powerSlider.minValue - _powerSlider.maxValue) /2 ) -1));
-                                    }else if(v.y > 1)
-                                    {
-                                        _power = _powerSlider.maxValue ;
-                                    }
+            //                      Vector2 v =  e.ReadValue<Vector2>();
+            //                        if(v.y <= 0)
+            //                        {
+            //                            _power = _powerSlider.minValue ;
+            //                        }else if(v.y == 1)
+            //                        {
+            //                            _power = _powerSlider.minValue + Mathf.Abs(v.y + (((_powerSlider.minValue - _powerSlider.maxValue) /2 ) -1));
+            //                        }else if(v.y > 1)
+            //                        {
+            //                            _power = _powerSlider.maxValue ;
+            //                        }
 
-                                    BowlState();
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+            //                        BowlState();
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //};
       
                 _gameactions.ButtonActions.powerupaction.performed += x => {
                
@@ -482,7 +482,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
               if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               if(_canhit && _ball.activeInHierarchy && _battleStart)
                   {
-                  if(_hookcalclated == false){
+                  if(_hookcalclated == false && !_trackBall){
                       GetDriftValue();
                     _hookcalclated = true;
                    }
@@ -562,6 +562,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             if (_trackBall)
             {
+               // _hookScroll.gameObject.SetActive(false);
                 _powerSlider.gameObject.SetActive(false);
             }
             else
@@ -614,21 +615,34 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                    
                 }
                 if(!_hookcalclated){
-
-                    UpdateHookSlider();
+                    if (!_trackBall)
+                    {
+                        UpdateHookSlider();
+                    }
+                    else
+                    {
+                        UpdateHookSlider();
+                        var inp = Input.GetAxis("Mouse Y");
+                        if(inp > 0)
+                        {
+                            GetDriftValue();
+                        }
+                    }
                 }else{
                        _hookScroll.gameObject.SetActive(false);
                 }
                 if(_hookcalclated  && !_powerval){
                   
-                    if (!IGT)
+                    if (!IGT && !_trackBall)
                     {
                         UpdateGui();
                     }
                   
-                    else
+                    else if(IGT || _trackBall)
                     {
-                        if (_startCheck)
+                        if (_trackBall) { _filledImage.gameObject.SetActive(false); }
+                        Debug.Log("Getting Mouse Controll");
+                        if (_startCheck && IGT)
                         {
                             if (Input.GetMouseButtonUp(0))
                             {
@@ -637,12 +651,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                                GetPowerValue();
                             }
                         }
-                        if (Input.GetMouseButton(0))
+                        if (IGT)
                         {
-                            Debug.Log("HOLDINGGG");
-                            force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 300);
-                            _filledImage.fillAmount = force /100;
-                            _startCheck = true;
+                            if (Input.GetMouseButton(0))
+                            {
+                                Debug.Log("HOLDINGGG");
+                                force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 300);
+                                _filledImage.fillAmount = force / 100;
+                                _startCheck = true;
+                            }
+                        }else if (_trackBall)
+                        {
+                            force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 1000);
+
+                            _filledImage.fillAmount = force;/// 10;
+                            if(force > 0)
+                            {
+                                GetPowerValue();
+                            }
+                          
+                          //  _startCheck = true;
                         }
                  
 
@@ -806,16 +834,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         if (_powerval) return;
         if (_startCheck) { _startCheck = false; }
 
-        if (!IGT)
+        if (!IGT &&!_trackBall)
         {
             _powerval = true;
             _power = _powerSlider.value;
         }
-        else
+        else if(IGT || _trackBall)
         {
             var powerval = _filledImage.fillAmount.ToString("F1");
             GetActualPowerVal(float.Parse(powerval));
             Debug.Log(powerval);
+            
         }
           BowlState();
     }
