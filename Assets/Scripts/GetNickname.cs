@@ -6,10 +6,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine.EventSystems;
 
-
-#if UNITY_WIN
 using Steamworks;
-#endif
 public class GetNickname : MonoBehaviour {
 
     string server_url = "http://score.iircade.com/ranking/get_nickname.php";
@@ -70,9 +67,8 @@ public class GetNickname : MonoBehaviour {
         steamApply.SetActive(true);
         
         if (!SteamManager.Initialized) return;
-#if UNITY_WIN
-         string name = SteamFriends.GetPersonaName();
-#endif
+        string name = SteamFriends.GetPersonaName();
+
         SetName(name);
     }
     private void IGTSetUpName()

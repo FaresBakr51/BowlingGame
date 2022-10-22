@@ -35,7 +35,17 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
         {
             transform.position = new Vector3(transform.position.x, 0, transform.position.z);
             this.transform.Translate(Vector3.forward * Time.deltaTime * playercontroller._speed);
-            
+            if (playercontroller.waitingPUSH)
+            {
+                var pow = Input.GetAxis("Mouse Y");
+                if (pow > 0)
+                {
+                    Debug.Log("WaitingPush");
+                    playercontroller._power = playercontroller.presistencePower;
+                    playercontroller.waitingPUSH = false;
+                }
+
+            }
         }
     }
    
@@ -51,7 +61,8 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
        
         var rig = playercontroller._ball.GetComponent<Rigidbody>();
         rig.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        rig.AddForce(new Vector3(0, 0, -playercontroller._power),ForceMode.Impulse);
+
+        rig.AddForce(new Vector3(0, 0, -playercontroller._power), ForceMode.Impulse);
         rig.AddForce(new Vector3(-playercontroller._driftvalue, 0, 0),ForceMode.Force);
         playercontroller._ball.GetComponent<TrailRenderer>().enabled = true;
         GameEventBus.Publish(GameEventType.waiting);

@@ -9883,9 +9883,14 @@ MonoBehaviour:
   _trackScore: 0
   _checkCond: 0
   _trackBall: 0
+  _waitTrackBall: 0
   _trackBallOnOf:
   - {fileID: 7751622486485404463}
   - {fileID: 5224237571843120135}
+  _trackBallImage: {fileID: 0}
+  _progressPowerUi: {fileID: 0}
+  presistencePower: 0
+  waitingPUSH: 0
   _driftBall: 0
   _controllBallPower: 12
   _danceClips:
@@ -9898,7 +9903,7 @@ MonoBehaviour:
   _filledImage: {fileID: 1672803074977189063}
   force: 0
   minPower: 225
-  maxPower: 0
+  maxPower: 300
 --- !u!114 &5390521927711420151
 MonoBehaviour:
   m_ObjectHideFlags: 0

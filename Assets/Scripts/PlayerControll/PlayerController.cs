@@ -126,8 +126,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public int _checkCond;
     [Header("TrackBall")]
     [SerializeField] public bool _trackBall;
+    public bool _waitTrackBall;
     [SerializeField] private GameObject[] _trackBallOnOf;
-
+    public Image _trackBallImage;
+    [SerializeField] private GameObject _progressPowerUi;
+    public float presistencePower;
+    public bool waitingPUSH;
 
     [Header("BallControll")]
     public bool _driftBall;
@@ -139,12 +143,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private int keys = 3;
     public bool _dance;
 
+
+
+
     [Header("TouchInputs")]
     public bool IGT;
 
     public Image _filledImage;
     private bool _startCheck;
     public float force;
+
+
+
     [SerializeField] private float minPower;
     [SerializeField] private float maxPower;
     private void Awake()
@@ -482,7 +492,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
               if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
               if(_canhit && _ball.activeInHierarchy && _battleStart)
                   {
-                  if(_hookcalclated == false && !_trackBall){
+                  if(_hookcalclated == false) { // && !_trackBall){
                       GetDriftValue();
                     _hookcalclated = true;
                    }
@@ -615,20 +625,24 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                    
                 }
                 if(!_hookcalclated){
-                    if (!_trackBall)
-                    {
-                        UpdateHookSlider();
-                    }
-                    else
-                    {
-                        UpdateHookSlider();
-                        var inp = Input.GetAxis("Mouse Y");
-                        if(inp > 0)
-                        {
-                            GetDriftValue();
-                        }
-                    }
-                }else{
+
+
+                    UpdateHookSlider();
+                    //if (!_trackBall)
+                    //{
+                    //    UpdateHookSlider();
+                    //}
+                    //else
+                    //{
+                    //    UpdateHookSlider();
+                    //    var inp = Input.GetAxis("Mouse Y");
+                    //    if(inp > 0)
+                    //    {
+                    //        GetDriftValue();
+                    //    }
+                    //}
+                }
+                else{
                        _hookScroll.gameObject.SetActive(false);
                 }
                 if(_hookcalclated  && !_powerval){
@@ -640,8 +654,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                   
                     else if(IGT || _trackBall)
                     {
-                        if (_trackBall) { _filledImage.gameObject.SetActive(false); }
-                        Debug.Log("Getting Mouse Controll");
+                     //   if (_trackBall) { _filledImage.gameObject.SetActive(false); }
+                      
                         if (_startCheck && IGT)
                         {
                             if (Input.GetMouseButtonUp(0))
@@ -662,21 +676,28 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                             }
                         }else if (_trackBall)
                         {
-                            force += (Input.GetAxis("Mouse Y") * Time.deltaTime * 1000);
-
-                            _filledImage.fillAmount = force;/// 10;
-                            if(force > 0)
+                            
+                            if(Input.GetAxis("Mouse Y") > 0)
                             {
-                                GetPowerValue();
+                                force += (Input.GetAxis("Mouse Y") * Time.deltaTime);
+                                _trackBallImage.fillAmount = force;
+                                if (!_waitTrackBall)
+                                {
+
+                                    StartCoroutine(WaitTrackBall());
+                                    _waitTrackBall = true;
+                                }
                             }
-                          
-                          //  _startCheck = true;
+                           
+
+                         
+
                         }
-                 
+
+
+                        }
 
                     }
-
-                }
 
             
                 if (!_usingRock)
@@ -750,7 +771,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
 
     }
- 
+    IEnumerator WaitTrackBall()
+    {
+        
+        yield return new WaitForSeconds(0.3f);
+        GetPowerValue();
+       
+    }
     IEnumerator waitReady()
     {
         ResetPins();
@@ -841,52 +868,69 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         else if(IGT || _trackBall)
         {
-            var powerval = _filledImage.fillAmount.ToString("F1");
-            GetActualPowerVal(float.Parse(powerval));
-            Debug.Log(powerval);
             
+
+            if (!_trackBall)
+            {
+                _waitTrackBall = false;
+                //igt
+                var powerval1 = _filledImage.fillAmount.ToString("F1");
+                _power = GetActualPowerVal(float.Parse(powerval1));
+            }
+            else
+            {
+                //trackball
+                var powerval2 = _trackBallImage.fillAmount.ToString("F1");
+                presistencePower =GetActualPowerVal(float.Parse(powerval2));
+                waitingPUSH = true;
+                Debug.Log(_trackBallImage.fillAmount.ToString("F1"));
+                Debug.Log(presistencePower);
+            }
+
         }
           BowlState();
     }
-    private void GetActualPowerVal(float val)
+
+    private float GetActualPowerVal(float val)
     {
        // Debug.Log(val);
         switch (val)
         {
             case 0f:
-                _power = minPower;
-                break;
+                return minPower;
+                
             case 0.1f:
-                _power = minPower + 10;
-                break;
+                return minPower + 10;
+               
             case 0.2f:
-                _power = minPower + 20;
-                break;
+                return minPower + 20;
+                
             case 0.3f:
-                _power = minPower + 30;
-                break;
+                return minPower + 30;
+                
             case 0.4f:
-                _power = minPower + 40;
-                break;
+                return minPower + 40;
+               
             case 0.5f:
-                _power = minPower + 50;
-                break;
+                return minPower + 50;
+               
             case 0.6f:
-                _power = minPower + 55;
-                break;
+                return minPower + 55;
+               
             case 0.7f:
-                _power = minPower + 60;
-                break;
+                return minPower + 60;
+               
             case 0.8f:
-                _power = minPower + 65;
-                break;
+                return minPower + 65;
+            
             case 0.9f:
-                _power = minPower + 70;
-                break;
+                return minPower + 70;
+                
             case 1:
-                _power = minPower + 75;
-                break;
+                return minPower + 75;
+                
         }
+        return minPower;
 
     }
     
@@ -1167,6 +1211,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
  
     }
+
+    #region Settings
     public void Resume(){
 
         _pauseMenupanel.SetActive(false);
@@ -1208,14 +1254,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public void TrackBallOn()
     {
         _trackBall = true;
+        _progressPowerUi.SetActive(true);
+        _power = 0;
         EventSystem.current.SetSelectedGameObject(_trackBallOnOf[0]);
     }
     public void TrackBallOff()
     {
         _trackBall = false;
+        _progressPowerUi.SetActive(false);
         EventSystem.current.SetSelectedGameObject(_trackBallOnOf[1]);
     }
-     IEnumerator PostScore() {
+    #endregion
+    IEnumerator PostScore() {
         // form data settings
         // field order doesn't matter, but field names must be correct
 

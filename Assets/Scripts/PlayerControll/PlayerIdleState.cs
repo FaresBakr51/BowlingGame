@@ -52,7 +52,22 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._ball.GetComponent<BallSound>()._hit = false;
         this.transform.position = _mypos;
         playerController._camera.transform.position = _Cambos;
-        if (playerController.IGT || playerController._trackBall) { playerController._filledImage.fillAmount = 0; playerController.force = 0; }
+        if (playerController.IGT || playerController._trackBall)
+        {
+
+            if (playerController.IGT)
+            {
+                playerController._filledImage.fillAmount = 0;
+            }
+            else if (playerController._trackBall)
+            {
+                playerController.waitingPUSH = false;
+                playerController._waitTrackBall = false;
+                playerController._trackBallImage.fillAmount = 0;
+            }
+            playerController.force = 0;
+        }
+
         playerController._ball.GetComponent<TrailRenderer>().enabled = false;
      
         if (playerController._gameend)
@@ -90,10 +105,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
         else
         {
-            if (playerController.IGT)
-            {
-                playerController.force = 0;
-            }
+
             playerController._MyPlayCanavas.SetActive(true);
             if (GameModes._battleRoyale)
             {
