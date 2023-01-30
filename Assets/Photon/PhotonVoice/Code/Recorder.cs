@@ -1923,7 +1923,7 @@ namespace Photon.Voice.Unity
                 return;
             }
             #endif
-            this.photonMicChangeNotifier = Platform.CreateAudioInChangeNotifier(this.PhotonMicrophoneChangeDetected, this.Logger);
+          //  this.photonMicChangeNotifier = Platform.CreateAudioInChangeNotifier(this.PhotonMicrophoneChangeDetected, this.Logger);
             if (this.photonMicChangeNotifier.IsSupported)
             {
                 if (this.photonMicChangeNotifier.Error == null)
@@ -2502,16 +2502,17 @@ namespace Photon.Voice.Unity
 
         private static IDeviceEnumerator CreatePhotonDeviceEnumerator(VoiceLogger voiceLogger)
         {
-            IDeviceEnumerator enumerator = Platform.CreateAudioInEnumerator(voiceLogger);
-            if (!enumerator.IsSupported && voiceLogger.IsWarningEnabled)
-            {
-                voiceLogger.LogWarning("PhotonMicrophonesEnumerator is not supported on this platform {0}.", CurrentPlatform);
-            }
-            else if (enumerator.Error != null && voiceLogger.IsErrorEnabled)
-            {
-                voiceLogger.LogError(enumerator.Error);
-            }
-            return enumerator;
+            //IDeviceEnumerator enumerator = Platform.CreateAudioInEnumerator(voiceLogger);
+            //if (!enumerator.IsSupported && voiceLogger.IsWarningEnabled)
+            //{
+            //    voiceLogger.LogWarning("PhotonMicrophonesEnumerator is not supported on this platform {0}.", CurrentPlatform);
+            //}
+            //else if (enumerator.Error != null && voiceLogger.IsErrorEnabled)
+            //{
+            //    voiceLogger.LogError(enumerator.Error);
+            //}
+            //return enumerator;
+            return null;
         }
 
         #endregion

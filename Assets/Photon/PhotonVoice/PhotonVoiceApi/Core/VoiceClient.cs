@@ -282,10 +282,10 @@ namespace Photon.Voice
                 switch (sampleType)
                 {
                     case AudioSampleType.Float:
-                        encoder = Platform.CreateDefaultAudioEncoder<float>(logger, voiceInfo);
+                       // encoder = Platform.CreateDefaultAudioEncoder<float>(logger, voiceInfo);
                         break;
                     case AudioSampleType.Short:
-                        encoder = Platform.CreateDefaultAudioEncoder<short>(logger, voiceInfo);
+                     //   encoder = Platform.CreateDefaultAudioEncoder<short>(logger, voiceInfo);
                         break;
                 }    
             }
