@@ -115,13 +115,13 @@ public class GetNickname : MonoBehaviour {
     //
     //---------------------------------------------------
     IEnumerator GetUserNickname() {
-        GetDeviceID();
+    //    GetDeviceID();
         Debug.Log("Iniziatlizing Player NickName From iiRcade Server ..");
         yield return new WaitForSeconds(2f);
         // Form Data Settings
         WWWForm form = new WWWForm();
         form.AddField("request", "get");
-        form.AddField("device_id", device_id);
+//        form.AddField("device_id", device_id);
 
         using (UnityWebRequest request = UnityWebRequest.Post(server_url, form)) {
             yield return request.SendWebRequest();

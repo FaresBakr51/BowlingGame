@@ -67,7 +67,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private List<Button> _lockedButtons= new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
 
-
+    [Header("SubscriptionButtons")]
+    [SerializeField] private GameObject fullgameButton;
+    [SerializeField] private GameObject weeklyButton;
     private bool joinlobby;
     public override void OnEnable()
     {
@@ -191,14 +193,23 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     public void PlayNextMainButtAnimation()
     {
-        if (indx >= mainButtons.Length - 1)
+       
+        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
         {
-            _canActiveSub = true;
-        }
-        else
-        {
-            mainButtons[indx].SetActive(true);
-            indx++;
+          
+            if (indx >= mainButtons.Length - 1)
+            {
+                _canActiveSub = true;
+                fullgameButton.SetActive(false);
+                weeklyButton.SetActive(false);
+            }
+            else
+            {
+                Debug.Log("Playing Next");
+                mainButtons[indx].SetActive(true);
+                indx++;
+            }
+          
         }
     }
     public void ShowCredits(){
