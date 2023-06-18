@@ -21,12 +21,15 @@ public class GetNickname : MonoBehaviour {
     public GameObject _SetNamebutt;
     public GameObject steamApply;
 
+    [SerializeField] private DBManager _dbManager;
+
 
     //---------------------------------------------------
     // Awake
     //---------------------------------------------------
     private void OnEnable()
     {
+        Debug.Log(DBManager.GenerateRandomTokent());
         GameEventBus.Subscribe(GameEventType.steamBuild, SteamSetupName);
         GameEventBus.Subscribe(GameEventType.IGTbuild, IGTSetUpName);
         GameEventBus.Subscribe(GameEventType.PolyCadebuild, SetRandomNames);
@@ -52,14 +55,17 @@ public class GetNickname : MonoBehaviour {
         {
             nickname = PlayerPrefs.GetString("myname");
             PhotonNetwork.LocalPlayer.NickName = nickname;
+            StartCoroutine(_dbManager.GetPlayerMainData(nickname,"token"));
             MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+            //get user data token
         }
         else
         {
             _mynameSet.SetActive(true);
             _MainPanel.SetActive(false);
             EventSystem.current.SetSelectedGameObject(_SetNamebutt);
-
+           
+            //registernew user
         }
     }
     private void SteamSetupName()
@@ -86,6 +92,7 @@ public class GetNickname : MonoBehaviour {
             PhotonNetwork.LocalPlayer.NickName = nickname;
             PlayerPrefs.SetString("myname", nickname);
             PlayerPrefs.Save();
+            StartCoroutine(_dbManager.CheckIfUsernameExists(nickname));
 
             MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
             MainMenuAndNetworkManager.Instance._setNamePanel.SetActive(false);

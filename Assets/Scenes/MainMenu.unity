@@ -3992,6 +3992,7 @@ MonoBehaviour:
   _MainPanel: {fileID: 122975009}
   _SetNamebutt: {fileID: 1993113780}
   steamApply: {fileID: 1528964650}
+  _dbManager: {fileID: 2013082898}
 --- !u!4 &731182798
 Transform:
   m_ObjectHideFlags: 0
@@ -6963,19 +6964,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1140239566}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 607783805}
-        m_TargetAssemblyTypeName: MainMenuAndNetworkManager, Assembly-CSharp
-        m_MethodName: ExitApplication
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1140239566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7023,12 +7012,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1140239563}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b79b5624d944058bd39aad2b90fb275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productId: com.gamefullSubscription
+  productId: com.gamefullsubscription
   buttonType: 0
   consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls:
@@ -7047,9 +7039,10 @@ MonoBehaviour:
   onPurchaseFailed:
     m_PersistentCalls:
       m_Calls: []
-  titleText: {fileID: 0}
-  descriptionText: {fileID: 0}
-  priceText: {fileID: 0}
+  onProductFetched:
+    m_PersistentCalls:
+      m_Calls: []
+  button: {fileID: 1140239565}
 --- !u!1 &1151149943
 GameObject:
   m_ObjectHideFlags: 0
@@ -9345,6 +9338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75fb991c0ef56fa479168de0a99c270d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dbManager: {fileID: 2013082898}
 --- !u!4 &1633186506
 Transform:
   m_ObjectHideFlags: 0
@@ -10088,7 +10082,7 @@ GameObject:
   - component: {fileID: 1776342929}
   - component: {fileID: 1776342928}
   - component: {fileID: 1776342927}
-  - component: {fileID: 1776342926}
+  - component: {fileID: 1776342930}
   m_Layer: 5
   m_Name: UnlocukWeekly
   m_TagString: Untagged
@@ -10117,42 +10111,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 252}
   m_SizeDelta: {x: 650, y: 120}
   m_Pivot: {x: 1, y: 0}
---- !u!114 &1776342926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1776342924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  productId: com.gameSubscription
-  buttonType: 0
-  consumePurchase: 1
-  onPurchaseComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1633186505}
-        m_TargetAssemblyTypeName: SubscriptionManager, Assembly-CSharp
-        m_MethodName: OnSubscriptionComplete
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onPurchaseFailed:
-    m_PersistentCalls:
-      m_Calls: []
-  titleText: {fileID: 0}
-  descriptionText: {fileID: 0}
-  priceText: {fileID: 0}
 --- !u!114 &1776342927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10196,19 +10154,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1776342928}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 607783805}
-        m_TargetAssemblyTypeName: MainMenuAndNetworkManager, Assembly-CSharp
-        m_MethodName: ExitApplication
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1776342928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10247,6 +10193,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776342924}
   m_CullTransparentMesh: 1
+--- !u!114 &1776342930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776342924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b79b5624d944058bd39aad2b90fb275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: com.gameweeklysubscription
+  buttonType: 0
+  consumePurchase: 1
+  onTransactionsRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  onPurchaseComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1633186505}
+        m_TargetAssemblyTypeName: SubscriptionManager, Assembly-CSharp
+        m_MethodName: OnSubscriptionComplete
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onPurchaseFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  onProductFetched:
+    m_PersistentCalls:
+      m_Calls: []
+  button: {fileID: 1776342927}
 --- !u!1 &1807972314
 GameObject:
   m_ObjectHideFlags: 0
@@ -11131,6 +11117,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: solo
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1633186505}
+        m_TargetAssemblyTypeName: SubscriptionManager, Assembly-CSharp
+        m_MethodName: LoadInterstitialAd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1892607151
@@ -12450,6 +12448,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005508254}
   m_CullTransparentMesh: 1
+--- !u!1 &2013082897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2013082899}
+  - component: {fileID: 2013082898}
+  m_Layer: 0
+  m_Name: DB
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2013082898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013082897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8274937bbd03c3c4a939c446ef2be90c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2013082899
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013082897}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1379.1298, y: 898.199, z: -7.9936523}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2016495769
 GameObject:
   m_ObjectHideFlags: 0

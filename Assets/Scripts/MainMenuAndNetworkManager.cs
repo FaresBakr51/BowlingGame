@@ -73,9 +73,19 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     private bool joinlobby;
     public override void OnEnable()
     {
+        CheckPurchaseButtonsState();
         Instance = this;
         GetRankedPointsAction += LoadRankedPoints;
         PhotonNetwork.AddCallbackTarget(this);
+    }
+    public void CheckPurchaseButtonsState()
+    {
+        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
+        {
+
+            fullgameButton.SetActive(false);
+            weeklyButton.SetActive(false);
+        }
     }
     public override void OnDisable()
     {
@@ -88,38 +98,41 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         switch (submenusName)
         {
             case "online":
-                
-                for (int i = 2; i < _submenuButtons.Length; i++)
+
+                if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
                 {
-                    if (_submenuButtons[i].activeInHierarchy)
+                    for (int i = 2; i < _submenuButtons.Length; i++)
                     {
-                        _submenuButtons[i].SetActive(false);
+                        if (_submenuButtons[i].activeInHierarchy)
+                        {
+                            _submenuButtons[i].SetActive(false);
 
-                        for (int k = 0; k < mainButtons.Length; k++)
-                        {
-                            if (k != 2)//for not 2p 1 else 2
+                            for (int k = 0; k < mainButtons.Length; k++)
                             {
-                                mainButtons[k].SetActive(true);
-                            }
-                            
-                        }
-                     
-                      
-                    }
-                    else
-                    {
-                        for (int k = 0; k < mainButtons.Length; k++)
-                        {
-                            if (k != mainButtons.Length -4) // for 2p -4
-                            {
-                                mainButtons[k].SetActive(false);
-                            }
-                        }
+                                if (k != 2)//for not 2p 1 else 2
+                                {
+                                    mainButtons[k].SetActive(true);
+                                }
 
-                        _submenuButtons[i].SetActive(true);
-                        if (i == 2)
+                            }
+
+
+                        }
+                        else
                         {
-                            EventSystem.current.SetSelectedGameObject(_submenuButtons[i]);
+                            for (int k = 0; k < mainButtons.Length; k++)
+                            {
+                                if (k != mainButtons.Length - 4) // for 2p -4
+                                {
+                                    mainButtons[k].SetActive(false);
+                                }
+                            }
+
+                            _submenuButtons[i].SetActive(true);
+                            if (i == 2)
+                            {
+                                EventSystem.current.SetSelectedGameObject(_submenuButtons[i]);
+                            }
                         }
                     }
                 }
@@ -194,14 +207,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public void PlayNextMainButtAnimation()
     {
        
-        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
-        {
-          
+       
             if (indx >= mainButtons.Length - 1)
             {
                 _canActiveSub = true;
-                fullgameButton.SetActive(false);
-                weeklyButton.SetActive(false);
+
             }
             else
             {
@@ -209,8 +219,6 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
                 mainButtons[indx].SetActive(true);
                 indx++;
             }
-          
-        }
     }
     public void ShowCredits(){
 
@@ -459,8 +467,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     public void playersmode(){
 
- //    PhotonNetwork.Disconnect();
-     StartCoroutine(Join2PMODE());
+        //    PhotonNetwork.Disconnect();
+        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
+        {
+            StartCoroutine(Join2PMODE());
+        }
    }
    private void CheckGameMode(){
 
