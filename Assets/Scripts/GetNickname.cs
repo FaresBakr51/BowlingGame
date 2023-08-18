@@ -55,7 +55,11 @@ public class GetNickname : MonoBehaviour {
         {
             nickname = PlayerPrefs.GetString("myname");
             PhotonNetwork.LocalPlayer.NickName = nickname;
-            StartCoroutine(_dbManager.GetPlayerMainData(nickname,"token"));
+            if (PlayerPrefs.GetInt("gameweekly") == 0 && PlayerPrefs.GetInt("gamefull") == 0)
+            {
+                StartCoroutine(_dbManager.GetData("Users", nickname, "tokenData"));
+            }
+          
             MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
             //get user data token
         }
@@ -94,10 +98,10 @@ public class GetNickname : MonoBehaviour {
             PlayerPrefs.Save();
             StartCoroutine(_dbManager.CheckIfUsernameExists(nickname));
 
-            MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
-            MainMenuAndNetworkManager.Instance._setNamePanel.SetActive(false);
-            MainMenuAndNetworkManager.Instance._mainPanel.SetActive(true);
-            MainMenuAndNetworkManager.Instance.SetSelectedGameObject(MainMenuAndNetworkManager.Instance.mainButtons[0]);
+            //MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+            //MainMenuAndNetworkManager.Instance._setNamePanel.SetActive(false);
+            //MainMenuAndNetworkManager.Instance._mainPanel.SetActive(true);
+            //MainMenuAndNetworkManager.Instance.SetSelectedGameObject(MainMenuAndNetworkManager.Instance.mainButtons[0]);
         }
 
   

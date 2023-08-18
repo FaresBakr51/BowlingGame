@@ -67,9 +67,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private List<Button> _lockedButtons= new List<Button>();
     [SerializeField] private List<GameObject> _lockedImages = new List<GameObject>();
 
-    [Header("SubscriptionButtons")]
-    [SerializeField] private GameObject fullgameButton;
-    [SerializeField] private GameObject weeklyButton;
+ 
     private bool joinlobby;
     public override void OnEnable()
     {
@@ -80,12 +78,12 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     public void CheckPurchaseButtonsState()
     {
-        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
-        {
+        //if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
+        //{
 
-            fullgameButton.SetActive(false);
-            weeklyButton.SetActive(false);
-        }
+        //    fullgameButton.SetActive(false);
+        //    weeklyButton.SetActive(false);
+        //}
     }
     public override void OnDisable()
     {
@@ -295,6 +293,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        Debug.Log("Connecting Master");
         AudioListener.volume = 1;
         GameModes._rankedMode = false;
         GameModes._arcadeMode = false;
@@ -303,6 +302,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.OfflineMode = false;
         PhotonNetwork.ConnectUsingSettings();
         _offlinemode = false;
+        if (PhotonNetwork.IsConnected)
+        {
+            BuildPlatform(gamePlatform);
+        }
         UdpateSoundSource(_playerAudio, _uiclips[0]);
         RetriveData(_lockedButtons,_lockedImages);
     }
@@ -521,6 +524,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
    }
     public void CreatArcadeMatch()
     {
+        if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
         GameModes._arcadeMode = true;
         if (PlayerPrefs.HasKey("ai"))
         {
@@ -540,6 +544,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     public void ContinueArcadeMatch()
     {
+        if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
         if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("arcadech"))
         {
                _arcadegametxt.text = "NOW LOADING ...";

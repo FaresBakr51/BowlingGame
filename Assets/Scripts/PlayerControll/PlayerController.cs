@@ -555,7 +555,26 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     }
 
+    public void PowerUpAction()
+    {
+        if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
+        {
+            if (_canhit && _ball.activeInHierarchy && _battleStart)
+            {
+                if (_hookcalclated)
+                {
+                    if (_calcPower && !_trackBall)
+                    {
+                        if (!IGT)
+                        {
+                            GetPowerValue();
+                        }
 
+                    }
+                }
+            }
+        }
+    }
     void Update()
     {
 

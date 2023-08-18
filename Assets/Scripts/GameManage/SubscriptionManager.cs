@@ -3,6 +3,11 @@ using System;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using Photon.Pun;
+using TMPro;
+public enum SubscriptionType
+{
+    weekly, Full
+}
 
 public class SubscriptionManager : MonoBehaviour
 {
@@ -22,50 +27,105 @@ public class SubscriptionManager : MonoBehaviour
     private static System.DateTime startDate;
     private static System.DateTime today;
 
-
+    public static TokenSubscription MyToken;
+    [Header("SubscriptionButtons")]
+    [SerializeField] private GameObject fullgameButton;
+    [SerializeField] private GameObject weeklyButton;
+    [SerializeField] private GameObject restoreButton;
+    [SerializeField] private TMP_InputField tokenTxt;
+    [SerializeField] private TextMeshProUGUI restoreTxterror;
+    public static Action<bool> SubsButtonsState;
+    private void OnEnable()
+    {
+        SubsButtonsState += SetSubsButtonsState;
+        fullgameButton.SetActive(false);
+        weeklyButton.SetActive(false);
+        restoreButton.SetActive(false);
+    }
+    private void OnDisable()
+    {
+        SubsButtonsState -= SetSubsButtonsState;
+    }
     private void Start()
     {
-        if(PlayerPrefs.GetInt("gameweekly", 0) == 1)
+        if (PlayerPrefs.GetInt("gameweekly", 0) == 1)
         {
             CheckDate();
         }
     }
-    void SetStartDate()
+    void StartWeekSubscriptionDate(bool continu)
     {
-        if (PlayerPrefs.HasKey("DateInitialized"))
+        if (!continu)
         {
-            startDate = System.Convert.ToDateTime(PlayerPrefs.GetString("DateInitialized"));
-            if (GetDaysPassed() >= 7)
+            if (PlayerPrefs.HasKey("DateInitialized"))
             {
-                PlayerPrefs.SetInt("gameweekly", 0);
-                PlayerPrefs.DeleteKey("DateInitialized");
+                startDate = System.Convert.ToDateTime(PlayerPrefs.GetString("DateInitialized"));
+                if (GetDaysPassed(startDate) >= 7)
+                {
+                    PlayerPrefs.SetInt("gameweekly", 0);
+                    dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(new TokenSubscription()));
+                    PlayerPrefs.DeleteKey("DateInitialized");
+                }
+            }
+            else //otherwise...
+            {
+                startDate = System.DateTime.UtcNow; //save the start date ->
+                PlayerPrefs.SetString("DateInitialized", startDate.ToString());
             }
         }
-        else //otherwise...
+        else
         {
-            startDate = System.DateTime.Now; //save the start date ->
-            PlayerPrefs.SetString("DateInitialized", startDate.ToString());
+            
+            PlayerPrefs.SetString("DateInitialized", MyToken.purchasetime.ToString());
+            if (GetDaysPassed(System.Convert.ToDateTime(MyToken.purchasetime.ToString())) >= 7)
+            {
+                PlayerPrefs.SetInt("gameweekly", 0);
+                dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(new TokenSubscription()));
+                PlayerPrefs.DeleteKey("DateInitialized");
+                restoreTxterror.text = "Subscription Expired !";
+                SubsButtonsState?.Invoke(true);
+            }
+
+            //if (GetTotalMinutesPassed(System.Convert.ToDateTime(MyToken.purchasetime.ToString())) >= 1)
+            //{
+            //    Debug.Log(MyToken.purchasetime.ToString());
+            //    Debug.Log(GetTotalMinutesPassed(System.Convert.ToDateTime(MyToken.purchasetime.ToString())));
+            //    Debug.Log("Test Passed Minut Passed since last continued data saved from new machine");
+            //    PlayerPrefs.SetInt("gameweekly", 0);
+            //    dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(new TokenSubscription()));
+            //    PlayerPrefs.DeleteKey("DateInitialized");
+            //    restoreTxterror.text = "Subscription Expired !";
+            //    SubsButtonsState?.Invoke(true);
+            //}
         }
       
     }
-
-    private void CheckDate()
+   
+    [ContextMenu("TestRemoveWeeklySubscribtion")]
+    public void RemoveWeeklySubscription()
+    {
+        PlayerPrefs.SetInt("gameweekly", 0);
+        dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(new TokenSubscription()));
+        PlayerPrefs.DeleteKey("DateInitialized");
+    }
+    public void CheckDate()
     {
         if (PlayerPrefs.HasKey("DateInitialized"))
         {
             startDate = System.Convert.ToDateTime(PlayerPrefs.GetString("DateInitialized"));
-            Debug.Log(GetDaysPassed());
-            if (GetDaysPassed() >= 7)
+            Debug.Log(GetDaysPassed(startDate));
+            if (GetDaysPassed(startDate) >= 7)
             {
                 PlayerPrefs.SetInt("gameweekly", 0);
+                dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(new TokenSubscription()));
                 PlayerPrefs.DeleteKey("DateInitialized");
             }
         }
     }
-    public static double GetDaysPassed()
+    public static double GetDaysPassed(DateTime startDate)
     {
-        today = System.DateTime.Now;
-
+        today = System.DateTime.UtcNow;
+     
         //days between today and start date -->
         System.TimeSpan elapsed = today.Subtract(startDate);
 
@@ -73,30 +133,67 @@ public class SubscriptionManager : MonoBehaviour
 
         return days;
     }
+    //public static double GetTotalMinutesPassed(DateTime startDate)
+    //{
+    //    today = System.DateTime.UtcNow;
+    //    Debug.Log("Today time " + today);
+    //    //days between today and start date -->
+    //    System.TimeSpan elapsed = today.Subtract(startDate);
+
+    //    double days = elapsed.TotalMinutes;
+
+    //    return days;
+
+    //}
 
     public void OnSubscriptionComplete(Product product)
     {
-        if(product.definition.id == "com.gameweeklysubscription")
+        string randToken = DBManager.GenerateRandomTokent();
+        TokenSubscription tokenSubscription;
+        if (product.definition.id == "com.gameweeklysubscription")
         {
+            tokenSubscription = new TokenSubscription("weekly", DateTime.UtcNow.ToString(), randToken);
+            MyToken = tokenSubscription;
+            dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(tokenSubscription));
             //unlouck game
-            PlayerPrefs.SetInt("gameweekly", 1);
-            SetStartDate();
-           StartCoroutine(dbManager.CheckIfTokenExist(DBManager.GenerateRandomTokent()));
-        
-            MainMenuAndNetworkManager.Instance.CheckPurchaseButtonsState();
+            ActiveSpecifecSubscription(SubscriptionType.weekly,false);
 
         }
         if (product.definition.id == "com.gamefullsubscription")
         {
-            //unlouck game
-           
-            PlayerPrefs.SetInt("gamefull", 1);
-            MainMenuAndNetworkManager.Instance.CheckPurchaseButtonsState();
+            //unlouckfull  game
 
+
+            tokenSubscription = new TokenSubscription("full", DateTime.UtcNow.ToString(), randToken);
+            MyToken = tokenSubscription;
+            dbManager.RegisterToken(PhotonNetwork.LocalPlayer.NickName, JsonUtility.ToJson(tokenSubscription));
+            ActiveSpecifecSubscription(SubscriptionType.Full,false);
         }
+      
+    }
+    public void ActiveSpecifecSubscription(SubscriptionType type,bool contin)
+    {
+      
+        switch (type)
+        {
+            case SubscriptionType.Full:
+                PlayerPrefs.SetInt("gamefull", 1);
+                SubsButtonsState?.Invoke(false);
+                break;
+            case SubscriptionType.weekly:
+                PlayerPrefs.SetInt("gameweekly", 1);
+                SubsButtonsState?.Invoke(false);
+                StartWeekSubscriptionDate(contin);
+                break;
+        }
+      
+
     }
     
-
+    public static bool ISLocalUserRegistered()
+    {
+        return PlayerPrefs.GetInt("gamefull") == 1 || PlayerPrefs.GetInt("gameweekly") == 1;
+    }
 
     public void LoadInterstitialAd()
     {
@@ -147,6 +244,44 @@ public class SubscriptionManager : MonoBehaviour
                 Debug.LogError("Interstitial ad is not ready yet.");
             }
         
+    }
+    public void ShowRestoreButt()
+    {
+        if (MyToken != null)
+        {
+            tokenTxt.text = MyToken.token;
+            Debug.Log(tokenTxt.text);
+            Debug.Log(MyToken.token);
+            //check if token is valid
+        }
+    }
+    public void RestoreButt()
+    {
+        if (tokenTxt.text != "")
+        {
+            if (tokenTxt.text == MyToken.token)
+            {
+
+                if (MyToken.tokenkey == "weekly")
+                {
+                    restoreTxterror.text = "Restored Success !";
+                    ActiveSpecifecSubscription(SubscriptionType.weekly, true);
+                  
+                }
+                else
+                {
+                    restoreTxterror.text = "Restored Success !";
+                    ActiveSpecifecSubscription(SubscriptionType.Full, false);
+                   
+                }
+            }
+        }
+    }
+    public void SetSubsButtonsState(bool state)
+    {
+        fullgameButton.SetActive(state);
+        weeklyButton.SetActive(state);
+        restoreButton.SetActive(state);
     }
 }
 
