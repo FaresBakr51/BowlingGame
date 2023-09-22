@@ -97,7 +97,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             case "online":
 
-                if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
+                if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1 || gamePlatform != GameEventType.AndroidBuild)
                 {
                     for (int i = 2; i < _submenuButtons.Length; i++)
                     {
@@ -471,7 +471,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public void playersmode(){
 
         //    PhotonNetwork.Disconnect();
-        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
+        if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1 || gamePlatform != GameEventType.AndroidBuild)
         {
             StartCoroutine(Join2PMODE());
         }
@@ -524,7 +524,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
    }
     public void CreatArcadeMatch()
     {
+#if !UNITY_WEBGL
         if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
+#endif
         GameModes._arcadeMode = true;
         if (PlayerPrefs.HasKey("ai"))
         {
@@ -544,7 +546,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     public void ContinueArcadeMatch()
     {
-        if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
+       #if !UNITY_WEBGL
+       if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
+      #endif
         if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("arcadech"))
         {
                _arcadegametxt.text = "NOW LOADING ...";

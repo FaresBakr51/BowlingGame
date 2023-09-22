@@ -21,7 +21,9 @@ public class GetNickname : MonoBehaviour {
     public GameObject _SetNamebutt;
     public GameObject steamApply;
 
-    [SerializeField] private DBManager _dbManager;
+#if !UNITY_WEBGL 
+[SerializeField] private DBManager _dbManager;
+#endif
 
 
     //---------------------------------------------------
@@ -29,7 +31,7 @@ public class GetNickname : MonoBehaviour {
     //---------------------------------------------------
     private void OnEnable()
     {
-        Debug.Log(DBManager.GenerateRandomTokent());
+       // Debug.Log(DBManager.GenerateRandomTokent());
         GameEventBus.Subscribe(GameEventType.steamBuild, SteamSetupName);
         GameEventBus.Subscribe(GameEventType.IGTbuild, IGTSetUpName);
         GameEventBus.Subscribe(GameEventType.PolyCadebuild, SetRandomNames);
@@ -55,9 +57,11 @@ public class GetNickname : MonoBehaviour {
         {
             nickname = PlayerPrefs.GetString("myname");
             PhotonNetwork.LocalPlayer.NickName = nickname;
-            if (PlayerPrefs.GetInt("gameweekly") == 0 && PlayerPrefs.GetInt("gamefull") == 0)
+            if (PlayerPrefs.GetInt("gameweekly") == 0 && PlayerPrefs.GetInt("gamefull") == 0 && MainMenuAndNetworkManager.Instance.gamePlatform == GameEventType.AndroidBuild)
             {
+                #if !UNITY_WEBGL
                 StartCoroutine(_dbManager.GetData("Users", nickname, "tokenData"));
+             #endif
             }
           
             MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
@@ -96,12 +100,12 @@ public class GetNickname : MonoBehaviour {
             PhotonNetwork.LocalPlayer.NickName = nickname;
             PlayerPrefs.SetString("myname", nickname);
             PlayerPrefs.Save();
-            StartCoroutine(_dbManager.CheckIfUsernameExists(nickname));
+            //    StartCoroutine(_dbManager.CheckIfUsernameExists(nickname));
 
-            //MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
-            //MainMenuAndNetworkManager.Instance._setNamePanel.SetActive(false);
-            //MainMenuAndNetworkManager.Instance._mainPanel.SetActive(true);
-            //MainMenuAndNetworkManager.Instance.SetSelectedGameObject(MainMenuAndNetworkManager.Instance.mainButtons[0]);
+            MainMenuAndNetworkManager.GetRankedPointsAction?.Invoke();
+            MainMenuAndNetworkManager.Instance._setNamePanel.SetActive(false);
+            MainMenuAndNetworkManager.Instance._mainPanel.SetActive(true);
+            MainMenuAndNetworkManager.Instance.SetSelectedGameObject(MainMenuAndNetworkManager.Instance.mainButtons[0]);
         }
 
   

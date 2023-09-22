@@ -12,8 +12,11 @@ public enum SubscriptionType
 public class SubscriptionManager : MonoBehaviour
 {
 
+#if !UNITY_WEBGL
+#if !UNITY_WEBGL
     [SerializeField]
     private DBManager dbManager;
+#endif
     [Header("Ads")]
 #if UNITY_ANDROID
     private string _adUnitId = "ca-app-pub-6154394693784009/7974347180";
@@ -27,7 +30,9 @@ public class SubscriptionManager : MonoBehaviour
     private static System.DateTime startDate;
     private static System.DateTime today;
 
-    public static TokenSubscription MyToken;
+#if !UNITY_WEBGL
+  public static TokenSubscription MyToken;
+#endif
     [Header("SubscriptionButtons")]
     [SerializeField] private GameObject fullgameButton;
     [SerializeField] private GameObject weeklyButton;
@@ -197,6 +202,7 @@ public class SubscriptionManager : MonoBehaviour
 
     public void LoadInterstitialAd()
     {
+        if (!MainMenuAndNetworkManager.Instance || MainMenuAndNetworkManager.Instance.gamePlatform != GameEventType.AndroidBuild) return;
         // Clean up the old ad before loading a new one.
         if (PlayerPrefs.GetInt("gamefull", 0) != 1 && PlayerPrefs.GetInt("gameweekly", 0) != 1)
         {
@@ -283,5 +289,6 @@ public class SubscriptionManager : MonoBehaviour
         weeklyButton.SetActive(state);
         restoreButton.SetActive(state);
     }
+#endif
 }
 

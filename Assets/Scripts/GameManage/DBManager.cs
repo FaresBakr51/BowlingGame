@@ -1,11 +1,14 @@
+#if !UNITY_WEBGL
 using Firebase.Database;
+#endif
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
-
+#if !UNITY_WEBGL
 public class DBManager : MonoBehaviour
 {
+    
     private DatabaseReference DbReference;
     private void OnEnable()
     {
@@ -192,3 +195,4 @@ public class TokenSubscription
     }
     public TokenSubscription() { }
 }
+#endif
