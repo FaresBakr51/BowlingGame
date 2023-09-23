@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.EventSystems;
+
+#if !UNITY_WEBGL
 using Photon.Voice.PUN;
+#endif
 using UnityEngine.Networking;
 using BigRookGames.Weapons;
 using System.Linq;
@@ -82,7 +85,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _arcadereward;
 
     [Header("PhotonaAvatarAndVoiceManager")]
+    #if !UNITY_WEBGL
     [SerializeField] private PhotonVoiceView _myVoice;
+#endif
     public GameObject _isspeakingButt;
     public GameObject _notSpeakingButt;
     public GameObject _myManager;
