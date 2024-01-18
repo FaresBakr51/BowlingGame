@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
     private GameObject _player;
+
+    [SerializeField] private List<GameObject> _players = new List<GameObject>();
+
+    public List<GameObject> GamePlayers { get { return _players; } }
     private void Awake()
     {
         
@@ -66,9 +70,15 @@ public class GameManager : MonoBehaviourPunCallbacks
      private void CreatPlayer(){
         GameObject avatar =    PhotonNetwork.Instantiate("PhotonNetworkAvatar",transform.position,transform.rotation, 0);
         _player = avatar;
+        RPCAddPlayer(_player);
 
 
-    } 
+    }
+    [PunRPC]
+    private void RPCAddPlayer(GameObject player)
+    {
+        _players.Add(player);
+    }
 
   
    

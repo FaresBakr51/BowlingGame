@@ -37,8 +37,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     private bool _offlinemode;
    
     [SerializeField] private GameObject[] _submenuButtons;
-    public GameObject[] _CharacterButtons;
-    private bool _canActiveSub;
+   // public GameObject[] _CharacterButtons;
+     [SerializeField] private bool _canActiveSub;
     [Header("RankedPanel")]
     [SerializeField] private GameObject _WAITINPanel;
     public static int _totalRankedPoints;
@@ -202,6 +202,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         source.PlayOneShot(clip);
     }
 
+
+   /**
+    * Old Vers
+    */
     public void PlayNextMainButtAnimation()
     {
        
@@ -444,9 +448,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     public void SelectCharacter(string ch){
 
        PlayerPrefs.SetString("character",ch);
-       foreach(GameObject obj in _CharacterButtons){
-         obj.GetComponent<Button>().interactable = true;
-       }
+       //foreach(GameObject obj in _CharacterButtons){
+       //  obj.GetComponent<Button>().interactable = true;
+       //}
      
         SetSelectedGameObject(_mainMenubuttns[0]);
         if (GameModes._arcadeMode)

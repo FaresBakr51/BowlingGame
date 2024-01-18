@@ -1,21 +1,42 @@
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
+using TMPro;
+
 public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
 {
     public AudioSource _audiosource;
     public AudioClip _clip;
     public bool _hit;
     private Rigidbody _rig;
-    private PhotonView _pv;
     Vector3 _netpos;
     Quaternion _netrot;
+    [SerializeField] private TextMeshProUGUI ping;
+    [SerializeField] private float RTT;
+
+    /**
+     * lag compensation
+     * */
+
+    Vector3 latestPos;
+    Quaternion latestRot;
+    float currentTime = 0;
+    double currentPacketTime = 0;
+    double lastPacketTime = 0;
+    Vector3 positionAtLastPacket = Vector3.zero;
+    Quaternion rotationAtLastPacket = Quaternion.identity;
+    public float teleportIfFarDistance;
     void Awake()
 
     {
-        _pv = GetComponent<PhotonView>();
+      
         _rig = GetComponent<Rigidbody>();
         
       
+    }
+    void Update()
+    {
+        ping.text = PhotonNetwork.GetPing().ToString();
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -30,14 +51,15 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
         if(!PhotonNetwork.OfflineMode){ 
       if (!photonView.IsMine)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _netpos, Time.deltaTime * 2000);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, _netrot, Time.deltaTime * 100);
-                //transform.position = Vector3.MoveTowards(transform.position, _netpos, Time.deltaTime * 600);
-                //transform.rotation = Quaternion.RotateTowards(transform.rotation, _netrot, Time.deltaTime * 600);
+                double timetoreachgoal = currentPacketTime - lastPacketTime;
+                currentTime += Time.deltaTime;
+                transform.position = Vector3.Lerp(positionAtLastPacket, latestPos,(float)(currentTime/timetoreachgoal));
+                transform.rotation = Quaternion.Lerp(rotationAtLastPacket, latestRot,  (float)(currentTime / timetoreachgoal));
 
-
-                //    transform.position = Vector3.Lerp(transform.position, _netpos,  0.5f);
-                //  transform.rotation = Quaternion.RotateTowards(transform.rotation, _netrot,720f * Time.deltaTime);
+                if (Vector3.Distance(transform.position, latestPos) > teleportIfFarDistance)
+                {
+                    transform.position = latestPos;
+                }
             }
         }
     }
@@ -51,33 +73,21 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
     {
         if (stream.IsWriting)
         {
-
-            stream.SendNext(_rig.position);
-            stream.SendNext(_rig.rotation);
-            stream.SendNext(_rig.velocity);
-            //stream.SendNext(transform.position);
-            //stream.SendNext(transform.rotation);
-            // stream.SendNext(_rig.velocity);
-            //    stream.SendNext(this.transform.position);
-            //stream.SendNext(this.transform.rotation);
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
         }
         else if (stream.IsReading)
         {
-             _netpos = (Vector3)stream.ReceiveNext();
-            _netrot = (Quaternion)stream.ReceiveNext();
-            _rig.velocity = (Vector3)stream.ReceiveNext();
-
-            float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-            _netpos += _rig.velocity * lag;
-            //_netpos = (Vector3)stream.ReceiveNext();
-            //_netrot = (Quaternion)stream.ReceiveNext();
-            //  _rig.velocity = (Vector3)stream.ReceiveNext();
-
-            //float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
-            //_netpos += (this._rig.velocity * lag);
-            //_netpos = (Vector3) stream.ReceiveNext();
-            //_netrot = (Quaternion) stream.ReceiveNext();
-
+            latestPos = (Vector3)stream.ReceiveNext();//recived pos
+            latestRot = (Quaternion)stream.ReceiveNext();//recived rot
+            print("Current  Pos = " + transform.position + "  recived Pos = " + latestPos);
+           
+            //data recived
+            currentTime = 0;
+            lastPacketTime = currentPacketTime;
+            currentPacketTime = info.SentServerTime;//time the messeage gets from server
+            positionAtLastPacket = transform.position;//get recived pos at packet time
+            rotationAtLastPacket = transform.rotation;//get recived Rot at packet time
         }
 
     }

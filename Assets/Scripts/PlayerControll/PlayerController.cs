@@ -5,14 +5,15 @@ using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 
-#if !UNITY_WEBGL
-using Photon.Voice.PUN;
-#endif
+//#if !UNITY_WEBGL
+//using Photon.Voice.PUN;
+//#endif
 using UnityEngine.Networking;
 using BigRookGames.Weapons;
 using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using Special;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -85,9 +86,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject _arcadereward;
 
     [Header("PhotonaAvatarAndVoiceManager")]
-    #if !UNITY_WEBGL
-    [SerializeField] private PhotonVoiceView _myVoice;
-#endif
+//    #if !UNITY_WEBGL
+//    [SerializeField] private PhotonVoiceView _myVoice;
+//#endif
     public GameObject _isspeakingButt;
     public GameObject _notSpeakingButt;
     public GameObject _myManager;
@@ -106,6 +107,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public bool _usedRocket;
     public bool _readyLunch;
     public List<GameObject> _modePlayers;
+    [SerializeField] private Transform wallPos;
     // [SerializeField] public GameObject _myFireBall;
    
     public bool _fireball;
@@ -172,13 +174,23 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         //  _myVoice = GetComponent<PhotonVoiceView>();
         _mypos = this.transform.position;
+        
         _powerSlider.gameObject.SetActive(false);
         _hookScroll.gameObject.SetActive(false);
          _gameactions = new GameControls();
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
         _ball.GetComponent<TrailRenderer>().enabled = false;
-       
+
+        foreach (Transform transform in GetComponentInChildren<Transform>())
+        {
+            if (transform.name == "spawnWallPoint")//get player wall point
+            {
+                wallPos = transform;
+                transform.parent = null;
+                break;
+            }
+        }
         if (SceneManager.GetActiveScene().name == "Map4")
         {
             _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.5f);
@@ -265,26 +277,29 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     public void LunchRocket()
     {
-        if (_canhit && !GameModes._battleRoyale)
-        {
-            if (!_usedRocket)
-            {
+        //if (_canhit && !GameModes._battleRoyale)
+        //{
+        //    if (!_usedRocket)
+        //    {
 
-                if (!_gamePaused && _battleStart)
-                {
-                    _usingRock = true;
-                    transform.position = _mypos;
-                    UpdateAnimator("shot", 2);
+        //        if (!_gamePaused && _battleStart)
+        //        {
+        //            _usingRock = true;
+        //            transform.position = _mypos;
+        //            UpdateAnimator("shot", 2);
 
-                    if (_photonview.IsMine)
-                    {
-                        _photonview.RPC("RPCHiRocket", RpcTarget.All);
-                    }
-                    StartCoroutine(readyLunch());
-                    _usedRocket = true;
-                }
-            }
-        }
+        //            if (_photonview.IsMine)
+        //            {
+        //                _photonview.RPC("RPCHiRocket", RpcTarget.All);
+        //            }
+        //            StartCoroutine(readyLunch());
+        //            _usedRocket = true;
+        //        }
+        //    }
+        //}
+        SpecialBase speical = GetComponent<SpecialBase>();
+        speical.SpawnAbility(photonView, wallPos);
+
     }
     public void RunRpcDance(bool state)
     {
