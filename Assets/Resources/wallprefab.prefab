@@ -7576,6 +7576,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7705361620799047974}
   - component: {fileID: 7705361620798657508}
+  - component: {fileID: 7713030510211385963}
   m_Layer: 0
   m_Name: wallprefab
   m_TagString: Untagged
@@ -7620,10 +7621,39 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 7745052222748536764}
+  - {fileID: 7745052224057810794}
+  - {fileID: 7745052222909364350}
+  - {fileID: 7745052239086816504}
+  - {fileID: 7745052236570470698}
+  - {fileID: 7745052236755703050}
+  - {fileID: 7745052238662366208}
+  - {fileID: 7745052237379116970}
+  - {fileID: 7745052222162068974}
+  - {fileID: 7745052224189813916}
+  - {fileID: 7745052222472097750}
+  - {fileID: 7745052238628908404}
+  - {fileID: 7745052238091148262}
+  - {fileID: 7745052236519384058}
+  - {fileID: 7745052236041079320}
+  - {fileID: 7745052236230551150}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &7713030510211385963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705361620798559494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05111c014b81f964f8f55fee6c28142f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Destroyed: 0
 --- !u!1 &7705361620798559496
 GameObject:
   m_ObjectHideFlags: 0
@@ -8801,7 +8831,7 @@ GameObject:
   - component: {fileID: 7745052224189813916}
   m_Layer: 0
   m_Name: Chunk10
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8872,7 +8902,7 @@ GameObject:
   - component: {fileID: 7745052222472097750}
   m_Layer: 0
   m_Name: Chunk11
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8943,7 +8973,7 @@ GameObject:
   - component: {fileID: 7745052238628908404}
   m_Layer: 0
   m_Name: Chunk12
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9012,7 +9042,7 @@ GameObject:
   - component: {fileID: 7745052238091148262}
   m_Layer: 0
   m_Name: Chunk13
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9082,7 +9112,7 @@ GameObject:
   - component: {fileID: 7745052236755703050}
   m_Layer: 0
   m_Name: Chunk6
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9151,7 +9181,7 @@ GameObject:
   - component: {fileID: 7745052238662366208}
   m_Layer: 0
   m_Name: Chunk7
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9221,7 +9251,7 @@ GameObject:
   - component: {fileID: 7745052237379116970}
   m_Layer: 0
   m_Name: Chunk8
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9291,7 +9321,7 @@ GameObject:
   - component: {fileID: 7745052222162068974}
   m_Layer: 0
   m_Name: Chunk9
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9362,7 +9392,7 @@ GameObject:
   - component: {fileID: 7745052224057810794}
   m_Layer: 0
   m_Name: Chunk2
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9433,7 +9463,7 @@ GameObject:
   - component: {fileID: 7745052222909364350}
   m_Layer: 0
   m_Name: Chunk3
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9504,7 +9534,7 @@ GameObject:
   - component: {fileID: 7745052239086816504}
   m_Layer: 0
   m_Name: Chunk4
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9576,7 +9606,7 @@ GameObject:
   - component: {fileID: 7745052236570470698}
   m_Layer: 0
   m_Name: Chunk5
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9890,7 +9920,7 @@ GameObject:
   - component: {fileID: 7745052222748536764}
   m_Layer: 0
   m_Name: Chunk1
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11125,7 +11155,7 @@ GameObject:
   - component: {fileID: 7745052236519384058}
   m_Layer: 0
   m_Name: Chunk14
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11196,7 +11226,7 @@ GameObject:
   - component: {fileID: 7745052236041079320}
   m_Layer: 0
   m_Name: Chunk15
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11267,7 +11297,7 @@ GameObject:
   - component: {fileID: 7745052236230551150}
   m_Layer: 0
   m_Name: Chunk16
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

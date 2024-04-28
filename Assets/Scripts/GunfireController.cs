@@ -37,6 +37,11 @@ namespace BigRookGames.Weapons
         [SerializeField] private float timeLastFired;
 
         [SerializeField] private GameObject _projectilePrefab;
+
+
+
+        public PlayerController myPlayer;
+        public AiController aicontroller;
         private void Start()
         {
             if(source != null) source.clip = GunShotClip;
@@ -87,10 +92,20 @@ namespace BigRookGames.Weapons
             if ((!PhotonNetwork.OfflineMode || (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)))
             {
                 GameObject newProjectile = PhotonNetwork.Instantiate("projectilePrefab", muzzlePosition.transform.position, muzzlePosition.transform.rotation);
+                newProjectile.GetComponent<ProjectileController>().myPlayer = myPlayer;
+                if (aicontroller)
+                {
+                    newProjectile.GetComponent<ProjectileController>().aiplayer = aicontroller;
+                }
             }
             else if (PhotonNetwork.OfflineMode && !PhotonNetwork.InRoom)
             {
                 GameObject newProjectile = Instantiate(_projectilePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation);
+                newProjectile.GetComponent<ProjectileController>().myPlayer = myPlayer;
+                if (aicontroller)
+                {
+                    newProjectile.GetComponent<ProjectileController>().aiplayer = aicontroller;
+                }
             }
 
             // --- Disable any gameobjects, if needed ---
@@ -137,6 +152,15 @@ namespace BigRookGames.Weapons
         {
             reloadSource.Play();
             projectileToDisableOnFire.SetActive(true);
+        }
+
+        public void SetPlayer(PlayerController player)
+        {
+            myPlayer = player;
+        }
+        public void SetAi(AiController controller)
+        {
+            aicontroller = controller;
         }
     }
 }

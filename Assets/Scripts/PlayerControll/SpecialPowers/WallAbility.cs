@@ -22,7 +22,7 @@ namespace Special
             {
                 Debug.Log("Spawning Wall");
                 int rand = Random.Range(0, wallPoints.Count);
-                Debug.Log(wallPoints[rand].transform.position);
+                Debug.Log(wallPoints[rand].transform);
                 Debug.Log(point.position);
                 if (point)
                 {
@@ -31,7 +31,7 @@ namespace Special
                         Debug.Log("Same as player wall point Removing !!");
                         //same as the player wall point
 
-                      //  wallPoints.Remove(wallPoints[rand]);//remove it from the list
+                         wallPoints.Remove(wallPoints[rand]);//remove it from the list
                         if (wallPoints.Count > 0)
                         {
                             rand = Random.Range(0, wallPoints.Count);

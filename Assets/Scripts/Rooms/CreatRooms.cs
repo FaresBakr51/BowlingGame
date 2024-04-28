@@ -23,7 +23,7 @@ public class CreatRooms : MonoBehaviourPunCallbacks
         
         roomOptions.MaxPlayers = 8;
         roomOptions.CleanupCacheOnLeave = false;
-       PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname,roomOptions,TypedLobby.Default);
+       PhotonNetwork.JoinOrCreateRoom(PhotonNetwork.LocalPlayer.NickName,roomOptions,TypedLobby.Default);
       
         
     }
@@ -39,7 +39,7 @@ public class CreatRooms : MonoBehaviourPunCallbacks
         {
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = 15;
-            PhotonNetwork.JoinOrCreateRoom(_getMyName.nickname, roomOptions, TypedLobby.Default);
+            PhotonNetwork.JoinOrCreateRoom(PhotonNetwork.LocalPlayer.NickName, roomOptions, TypedLobby.Default);
         }
     }
 

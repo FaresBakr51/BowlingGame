@@ -6395,6 +6395,8 @@ MonoBehaviour:
   projectileToDisableOnFire: {fileID: 1802767606239812374}
   timeLastFired: 0
   _projectilePrefab: {fileID: 0}
+  myPlayer: {fileID: 0}
+  aicontroller: {fileID: 0}
 --- !u!82 &4490302567436846001
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6768,7 +6770,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 50
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f1cc23f99c8fe9f469d769dfd2628d7b, type: 2}
   m_sharedMaterial: {fileID: -3540173704702481013, guid: f1cc23f99c8fe9f469d769dfd2628d7b, type: 2}
@@ -6795,7 +6797,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9143,12 +9145,13 @@ MonoBehaviour:
   _RocketOn: {fileID: 1715891211}
   fireballspeed: 0
   _fireballSoundClip: {fileID: 0}
-  _usedRocket: 0
+  usedAbility: 0
   _readyLunch: 0
   _modePlayers: []
   wallPos: {fileID: 0}
   _fireball: 0
   _usingRock: 0
+  _mypos: {x: 0, y: 0, z: 0}
   _rankedPanel: {fileID: 0}
   _rankedpointtxt: {fileID: 0}
   _rankedstatetxt: {fileID: 0}

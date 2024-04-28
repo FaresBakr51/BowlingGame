@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 4160226971539183702}
   m_Layer: 0
   m_Name: projectilePrefab
-  m_TagString: Untagged
+  m_TagString: projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -239,6 +239,8 @@ MonoBehaviour:
   projectileMesh: {fileID: 7375337548765109680}
   inFlightAudioSource: {fileID: 136168842684345051}
   disableOnHit: {fileID: 4361980691020798282}
+  myPlayer: {fileID: 0}
+  aiplayer: {fileID: 0}
 --- !u!54 &91128310120046435
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
     }
     void Update()
     {
-        ping.text = PhotonNetwork.GetPing().ToString();
+        //ping.text = PhotonNetwork.GetPing().ToString();
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -80,7 +80,7 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
         {
             latestPos = (Vector3)stream.ReceiveNext();//recived pos
             latestRot = (Quaternion)stream.ReceiveNext();//recived rot
-            print("Current  Pos = " + transform.position + "  recived Pos = " + latestPos);
+          //  print("Current  Pos = " + transform.position + "  recived Pos = " + latestPos);
            
             //data recived
             currentTime = 0;

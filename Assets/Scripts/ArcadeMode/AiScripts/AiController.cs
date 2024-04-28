@@ -87,6 +87,15 @@ public class AiController : MonoBehaviour
         _mypos = this.transform.position;
         _photonview = GetComponent<PhotonView>();
         _mypinsobj.transform.parent = null;
+
+        foreach (Transform tr in GetComponentsInChildren<Transform>())
+        {
+            if (tr.name == "spawnWallPoint")//get player wall point
+            {
+                tr.parent = null;
+                break;
+            }
+        }
         if (SceneManager.GetActiveScene().name == "Map4")
         {
             _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.5f);
@@ -188,13 +197,13 @@ public class AiController : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         _readyLunch = true;
-        yield return new WaitForSeconds(1.5f);
+        //yield return new WaitForSeconds(1.5f);
 
-        foreach (Transform pin in _mypins)
-        {
-            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
+        //foreach (Transform pin in _mypins)
+        //{
+        //    pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
 
-        }
+        //}
 
     }
     void Update()
@@ -206,8 +215,9 @@ public class AiController : MonoBehaviour
             {
                 if (_readyLunch)
                 {
+                    _myRocket?.GetComponent<GunfireController>().SetAi(this);
                     _myRocket?.GetComponent<GunfireController>().FireWeapon();
-                    Waitstate();
+                    //Waitstate();
                     _readyLunch = false;
 
                 }
@@ -255,6 +265,16 @@ public class AiController : MonoBehaviour
 
             StartCoroutine(waitReady());
         }
+
+    }
+    public void GetAllPinsDown()
+    {
+        foreach (Transform pin in _mypins)
+        {
+            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
+
+        }
+        Waitstate();
 
     }
     IEnumerator waitReady()

@@ -14,6 +14,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using Special;
+using BackEnd;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -104,7 +105,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     [SerializeField] public GameObject _RocketOn;
     public float fireballspeed;
     public AudioClip _fireballSoundClip;
-    public bool _usedRocket;
+    public bool usedAbility;
     public bool _readyLunch;
     public List<GameObject> _modePlayers;
     [SerializeField] private Transform wallPos;
@@ -112,8 +113,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
    
     public bool _fireball;
     public bool _usingRock;
-    private Vector3 _mypos;
-
+    public Vector3 _mypos;
+    
 
     [Header("RankedMode")]
     public GameObject _rankedPanel;
@@ -182,12 +183,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         _mypinsobj.transform.parent = null;
         _ball.GetComponent<TrailRenderer>().enabled = false;
 
-        foreach (Transform transform in GetComponentInChildren<Transform>())
+        foreach (Transform tr in GetComponentsInChildren<Transform>())
         {
-            if (transform.name == "spawnWallPoint")//get player wall point
+            if (tr.name == "spawnWallPoint")//get player wall point
             {
-                wallPos = transform;
-                transform.parent = null;
+                tr.parent = null;
+                wallPos = tr;
+              
                 break;
             }
         }
@@ -277,28 +279,29 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     public void LunchRocket()
     {
-        //if (_canhit && !GameModes._battleRoyale)
-        //{
-        //    if (!_usedRocket)
-        //    {
+        if (_canhit && !GameModes._battleRoyale)
+        {
+            if (!usedAbility)
+            {
 
-        //        if (!_gamePaused && _battleStart)
-        //        {
-        //            _usingRock = true;
-        //            transform.position = _mypos;
-        //            UpdateAnimator("shot", 2);
+                if (!_gamePaused && _battleStart)
+                {
+                    //_usingRock = true;
+                    //transform.position = _mypos;
+                    //UpdateAnimator("shot", 2);
 
-        //            if (_photonview.IsMine)
-        //            {
-        //                _photonview.RPC("RPCHiRocket", RpcTarget.All);
-        //            }
-        //            StartCoroutine(readyLunch());
-        //            _usedRocket = true;
-        //        }
-        //    }
-        //}
-        SpecialBase speical = GetComponent<SpecialBase>();
-        speical.SpawnAbility(photonView, wallPos);
+                    //if (_photonview.IsMine)
+                    //{
+                    //    _photonview.RPC("RPCHiRocket", RpcTarget.All);
+                    //}
+                    //StartCoroutine(readyLunch());
+                    SpecialBase speical = GetComponent<SpecialBase>();
+                    speical.SpawnAbility(photonView, wallPos);
+                    usedAbility = true;
+                }
+            }
+        }
+
 
     }
     public void RunRpcDance(bool state)
@@ -321,8 +324,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             _photonview.RPC("RPCRocketOFF", RpcTarget.All);
         }
     }
+    public void HitRocket()
+    {
+        if (_photonview.IsMine)
+        {
+            _photonview.RPC("RPCHiRocket", RpcTarget.All);
+        }
+         StartCoroutine(readyLunch());
+    }
     [PunRPC]
-    private void RPCHiRocket()
+    public void RPCHiRocket()
     {
         _myRocket?.SetActive(true);
         if (!_fireball)
@@ -351,6 +362,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             _myRocket.transform.parent = null;
             _myRocket.transform.rotation = Quaternion.Euler(_myRocket.transform.rotation.x, -180, _myRocket.transform.rotation.z);
             _myRocket.transform.position = new Vector3(_myRocket.transform.position.x + 0.4f, _myRocket.transform.position.y - 0.7f, _myRocket.transform.position.z);
+            _myRocket.GetComponent<ProjectileMover>().myPlayer = this;
             _myRocket.GetComponent<ProjectileMover>().speed = fireballspeed;
             _readyLunch = true;
         }
@@ -359,16 +371,25 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             yield return new WaitForSeconds(2);
             _readyLunch = true;
         }
-         yield return new WaitForSeconds(1.5f);
+         //yield return new WaitForSeconds(1.5f);
 
-          foreach (Transform pin in _mypins)
-          {
-                pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
+         // foreach (Transform pin in _mypins)
+         // {
+         //       pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
                 
-          }
+         // }
         
     }
+    public void GetAllPinsDown()
+    {
+        foreach (Transform pin in _mypins)
+        {
+            pin.transform.rotation = Quaternion.Euler(pin.rotation.x, pin.rotation.y, Random.Range(90, 180));
 
+        }
+        Waitstate();
+
+    }
     public override void OnDisable()
     {
         GameEventBus.UnSubscribe(GameEventType.leaderboard, CheckOtherHit);
@@ -655,11 +676,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 {
                     if (!_fireball)
                     {
+                        _myRocket?.GetComponent<GunfireController>().SetPlayer(this);
                         _myRocket?.GetComponent<GunfireController>().FireWeapon();
+                       
                     }
                  
                 
-                    Waitstate();
+                   // Waitstate();
                     _readyLunch = false;
                    
                 }
@@ -771,8 +794,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          
        }
     }
-   
-    private void Waitstate()
+
+    public void Waitstate()
     {
         _playercontext.Transition(_waitingState);
     }
@@ -1388,6 +1411,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         
         PlayerPrefs.Save();
+        StartCoroutine(DataBaseManager.AddIndividualDataToUser(DataBaseManager.UserID, PhotonNetwork.LocalPlayer.NickName, "playerData", "rankedPoints", latpoints));
         StartCoroutine(PostScore());
     }
     IEnumerator waitExit()

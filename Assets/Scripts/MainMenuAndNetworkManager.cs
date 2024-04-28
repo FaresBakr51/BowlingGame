@@ -11,6 +11,7 @@ using UnityEngine.EventSystems;
 //using InfinityGameTable;
 using System;
 using System.Threading.Tasks;
+using BackEnd;
 
 public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 {
@@ -20,8 +21,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     [Header("Plaftorms")]
     public GameEventType gamePlatform;
 
-    
 
+    [Header("AuthPanels")]
+    [SerializeField] private GameObject loginPanel;
     [Header("Panels&Buttons")]
     public GameObject _setNamePanel;
     public GameObject _mainPanel;
@@ -75,7 +77,9 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         Instance = this;
         GetRankedPointsAction += LoadRankedPoints;
         PhotonNetwork.AddCallbackTarget(this);
+        DataBaseManager.SuccessSignIn.AddListener(SuccessLogin);
     }
+
     public void CheckPurchaseButtonsState()
     {
         //if (PlayerPrefs.GetInt("gamefull", 0) == 1 || PlayerPrefs.GetInt("gameweekly", 0) == 1)
@@ -89,6 +93,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     {
         GetRankedPointsAction -= LoadRankedPoints;
         PhotonNetwork.RemoveCallbackTarget(this);
+        DataBaseManager.SuccessSignIn.RemoveListener(SuccessLogin);
     }
     public void ActiveSubMenu(string submenusName)
     {
@@ -304,19 +309,24 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         GameModes._battleRoyale = false;
         GameModes._2pMode = false;
         PhotonNetwork.OfflineMode = false;
-        PhotonNetwork.ConnectUsingSettings();
-        _offlinemode = false;
-        if (PhotonNetwork.IsConnected)
+
+        if(DataBaseManager.Instance && DataBaseManager.UserName !="" && DataBaseManager.playerData != null)
         {
-            BuildPlatform(gamePlatform);
+            SuccessLogin();
         }
-        UdpateSoundSource(_playerAudio, _uiclips[0]);
-        RetriveData(_lockedButtons,_lockedImages);
+        //PhotonNetwork.ConnectUsingSettings();
+        //_offlinemode = false;
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    BuildPlatform(gamePlatform);
+        //}
+        //UdpateSoundSource(_playerAudio, _uiclips[0]);
+        //RetriveData(_lockedButtons,_lockedImages);
     }
 
      private void LoadRankedPoints()
     {
-        _totalRankedPoints = PlayerPrefs.GetInt("rankedpoints", 0);
+        _totalRankedPoints = DataBaseManager.playerData.rankedPoints;//PlayerPrefs.GetInt("rankedpoints", 0);
         _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + " / " + _totalRankedPoints.ToString();
     }
 
@@ -441,7 +451,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Joined");
         }
-        BuildPlatform(gamePlatform);
+     
+       // BuildPlatform(gamePlatform);
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
@@ -528,9 +539,11 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
    }
     public void CreatArcadeMatch()
     {
-#if !UNITY_WEBGL
-        if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
-#endif
+//#if !UNITY_WEBGL
+//        if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
+//#endif
+
+        Debug.Log("create arcade");
         GameModes._arcadeMode = true;
         if (PlayerPrefs.HasKey("ai"))
         {
@@ -550,9 +563,10 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     }
     public void ContinueArcadeMatch()
     {
-       #if !UNITY_WEBGL
-       if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
-      #endif
+//       #if !UNITY_WEBGL
+//       if (!SubscriptionManager.ISLocalUserRegistered() || gamePlatform != GameEventType.XboxBuild) return;
+//#endif
+        Debug.Log("Continue arcade");
         if (PlayerPrefs.HasKey("selectedai") && PlayerPrefs.HasKey("arcadech"))
         {
                _arcadegametxt.text = "NOW LOADING ...";
@@ -653,6 +667,27 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
     {
         GameEventBus.Publish(pname);
 
+    }
+    #endregion
+    #region Auth
+    public void SuccessLogin()
+    {
+
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.LocalPlayer.NickName = DataBaseManager.UserName;
+        //
+        GetRankedPointsAction?.Invoke();
+        _offlinemode = false;
+        loginPanel.SetActive(false);
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    BuildPlatform(gamePlatform);
+        //}
+
+        _mainPanel.SetActive(true);
+        UdpateSoundSource(_playerAudio, _uiclips[0]);
+        RetriveData(_lockedButtons, _lockedImages);
+        SetSelectedGameObject(_mainMenubuttns[0]);
     }
     #endregion
 

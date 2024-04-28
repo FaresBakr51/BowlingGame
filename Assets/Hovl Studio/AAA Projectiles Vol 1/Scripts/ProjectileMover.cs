@@ -12,7 +12,7 @@ public class ProjectileMover : MonoBehaviour
     public GameObject flash;
     private Rigidbody rb;
     public GameObject[] Detached;
-
+    public PlayerController myPlayer;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -77,6 +77,24 @@ public class ProjectileMover : MonoBehaviour
             if (detachedPrefab != null)
             {
                 detachedPrefab.transform.parent = null;
+            }
+        }
+        if (collision.gameObject.CompareTag("wall"))
+        {
+            if (myPlayer)
+            {
+
+                myPlayer.Waitstate();
+                Destroy(gameObject);
+            }
+        }
+        if (collision.gameObject.CompareTag("pin"))
+        {
+            if (myPlayer)
+            {
+                myPlayer.GetAllPinsDown();
+                myPlayer = null;
+                Destroy(gameObject);
             }
         }
         Destroy(gameObject);

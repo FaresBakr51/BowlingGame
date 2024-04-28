@@ -25,7 +25,8 @@ namespace BigRookGames.Weapons
         // --- VFX ---
         public ParticleSystem disableOnHit;
 
-
+        public PlayerController myPlayer;
+        public AiController aiplayer;
         private void Update()
         {
             // --- Check to see if the target has been hit. We don't want to update the position if the target was hit ---
@@ -42,17 +43,47 @@ namespace BigRookGames.Weapons
         /// <param name="collision"></param>
         private void OnCollisionEnter(Collision collision)
         {
+
+            if (collision.gameObject.CompareTag("wall"))
+            {
+                Debug.LogError("collided wall");
+                Explode();
+                if (myPlayer)
+                {
+                    myPlayer.Waitstate();
+                    myPlayer = null;
+                }
+                if (aiplayer)
+                {
+                    aiplayer.Waitstate();
+                    aiplayer = null;
+                }
+                Destroy(gameObject);
+               
+            }
             if (collision.gameObject.CompareTag("pin"))
             {
                 //collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 100, ForceMode.Impulse);
                 //collision.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 3, ForceMode.Impulse);
+                Debug.LogError("collided pin");
                 Explode();
                 projectileMesh.enabled = false;
                 targetHit = true;
                 inFlightAudioSource.Stop();
                 disableOnHit.Stop();
-                
+                if (myPlayer)
+                {
+                    myPlayer.GetAllPinsDown();
+                    myPlayer = null;
+                }
+                if (aiplayer)
+                {
+                    aiplayer.GetAllPinsDown();
+                    aiplayer = null;
+                }
+                Destroy(gameObject);
             }
+           
             // --- return if not enabled because OnCollision is still called if compoenent is disabled ---
             if (!enabled) return;
             Destroy(gameObject, 5f);

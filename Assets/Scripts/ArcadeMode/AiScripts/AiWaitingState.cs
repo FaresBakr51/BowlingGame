@@ -43,7 +43,7 @@ public class AiWaitingState : AiStates
         for (int i = 0; i < _aiController._mypins.Count; i++)
         {
 
-            if (_aiController._mypins[i].transform.up.y < 0.9f)//|| playercontroller._resetpins[i].x != playercontroller._mypins[i].transform.localPosition.x)// Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f
+            if (_aiController._mypins[i].transform.eulerAngles.y > 10 || _aiController._mypins[i].transform.eulerAngles.y > 10 || _aiController._mypins[i].transform.eulerAngles.z > 10)//_aiController._mypins[i].transform.up.y < 0.9f)//|| playercontroller._resetpins[i].x != playercontroller._mypins[i].transform.localPosition.x)// Mathf.Abs(playercontroller._mypins[i].transform.rotation.eulerAngles.z) > 5f
             {
                 if (_aiController._mypins[i].gameObject.activeInHierarchy == true)
                 {
