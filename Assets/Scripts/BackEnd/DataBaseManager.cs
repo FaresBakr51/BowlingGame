@@ -137,6 +137,7 @@ namespace BackEnd
 
                 //REGISTER NEW USAER with empty data
                 UserID = uid;
+                UserName = username;
                 StartCoroutine(GetPlayerData(uid));
             }
 

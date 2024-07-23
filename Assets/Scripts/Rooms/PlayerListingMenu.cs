@@ -12,7 +12,7 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _startButt;
     [SerializeField] private GameObject _currentroompanel;
     [SerializeField] private GameObject _WaitingPlayerMass;
-
+    [SerializeField] private int minimumBattleRoyalPlayers =3;
     [SerializeField] private Sprite[] _plaformSprites;
     private bool _gameLoading;
     public override void OnEnable()
@@ -92,12 +92,12 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
             }
             else
             {
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= 3)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= minimumBattleRoyalPlayers)
                 {
                     _WaitingPlayerMass.SetActive(false);
                     _startButt.SetActive(true);
                 }
-                if (PhotonNetwork.CurrentRoom.PlayerCount < 3)
+                if (PhotonNetwork.CurrentRoom.PlayerCount < minimumBattleRoyalPlayers)
                 {
                     _WaitingPlayerMass.SetActive(true);
                     _startButt.SetActive(false);
@@ -125,9 +125,9 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
             }
 
         }
-        else
+        else//Battle Royal Mode
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount < 3)
+            if (PhotonNetwork.CurrentRoom.PlayerCount < minimumBattleRoyalPlayers)
             {
 
                 _startButt.SetActive(false);
@@ -154,9 +154,9 @@ public class PlayerListingMenu : MonoBehaviourPunCallbacks
                 _gameLoading = true;
             }
         }
-        else
+        else//Battle Royal Mode
         {
-            if (PhotonNetwork.IsMasterClient && !_gameLoading && PhotonNetwork.CurrentRoom.PlayerCount >= 3)
+            if (PhotonNetwork.IsMasterClient && !_gameLoading && PhotonNetwork.CurrentRoom.PlayerCount >= minimumBattleRoyalPlayers)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.LoadLevel(4);

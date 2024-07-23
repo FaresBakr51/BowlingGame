@@ -89,6 +89,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         //    weeklyButton.SetActive(false);
         //}
     }
+
     public override void OnDisable()
     {
         GetRankedPointsAction -= LoadRankedPoints;
@@ -302,6 +303,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        BuildPlatform(gamePlatform);
         Debug.Log("Connecting Master");
         AudioListener.volume = 1;
         GameModes._rankedMode = false;
@@ -683,7 +685,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         //{
         //    BuildPlatform(gamePlatform);
         //}
-
+        UiManager.Instance.PointerHandler.SetActive(false);
         _mainPanel.SetActive(true);
         UdpateSoundSource(_playerAudio, _uiclips[0]);
         RetriveData(_lockedButtons, _lockedImages);

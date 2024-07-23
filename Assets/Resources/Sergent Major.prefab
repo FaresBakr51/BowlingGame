@@ -1897,6 +1897,7 @@ MonoBehaviour:
   _powerSlider: {fileID: 5686085970973062803}
   _hookScroll: {fileID: 5686085969814221968}
   _mypins: []
+  myPinsSetter: {fileID: 0}
   _resetpins: []
   _leftpins: []
   _speed: 0.5
@@ -1914,6 +1915,7 @@ MonoBehaviour:
   _leaderboardprefab: {fileID: 1234403425327534529, guid: 0a677aff29c220040901c911c2b86d66, type: 3}
   myleader: {fileID: 0}
   _mypinsobj: {fileID: 6811177219319869036}
+  _myPinsParent: {fileID: 0}
   _followBall: 0
   _mytotal: {fileID: 0}
   _GoHomebutt: {fileID: 0}
@@ -4080,6 +4082,8 @@ MonoBehaviour:
   projectileToDisableOnFire: {fileID: 5686085969391064581}
   timeLastFired: 0
   _projectilePrefab: {fileID: 0}
+  myPlayer: {fileID: 0}
+  aicontroller: {fileID: 0}
 --- !u!82 &5686085969899898887
 AudioSource:
   m_ObjectHideFlags: 0

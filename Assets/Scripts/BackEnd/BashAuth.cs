@@ -1,5 +1,6 @@
 using Firebase.Auth;
 using Firebase.Extensions;
+//using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,18 +18,88 @@ namespace BackEnd
         
         [SerializeField] private bool autAction;
         [SerializeField] private Toggle rememberMe;
+        [SerializeField] private GameObject steamApply;
         public bool AuthAction { get { return autAction; } set { autAction = value; } }
+
+
+
+        #region Platforms 
+
+        private void OnEnable()
+        {
+            GameEventBus.Subscribe(GameEventType.arcademode, OnSignInIIRCade);
+            GameEventBus.Subscribe(GameEventType.PolyCadebuild, OnSignInPolyCade);
+            GameEventBus.Subscribe(GameEventType.steamBuild, OnSteamSignIn);
+        }
+        private void OnDisable()
+        {
+            GameEventBus.UnSubscribe(GameEventType.arcademode, OnSignInIIRCade);
+            GameEventBus.UnSubscribe(GameEventType.PolyCadebuild, OnSignInPolyCade);
+            GameEventBus.UnSubscribe(GameEventType.steamBuild, OnSteamSignIn);
+        }
+        private void OnSignInIIRCade()
+        {
+            string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
+            RandEmailSignit(randUsername, "iiRcade");
+          
+        }
+
+        private void OnSignInPolyCade()
+        {
+            string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
+            RandEmailSignit(randUsername, "polycade");
+
+        }
+
+
+        private void OnSteamSignIn()
+        {
+
+
+            steamApply.SetActive(true);
+
+            if (!SteamManager.Initialized) return;
+         //    string name = SteamFriends.GetPersonaName();
+
+            RandEmailSignit(name, "steam");
+        }
+
+
+
+        private void RandEmailSignit(string username,string sign)
+        {
+            if (PlayerPrefs.HasKey("email") && PlayerPrefs.HasKey("password"))
+            {
+                //Auto Login
+                Debug.Log("Auto Login ..");
+                Login(PlayerPrefs.GetString("email"), PlayerPrefs.GetString("password"));
+            }
+            else
+            {
+                //No saved
+                rememberMe.isOn = true;
+
+                string randUsername = username;//"bowler" + Random.Range(1000, 5000).ToString();
+                string randEmail = randUsername + "@" + sign  + ".cab";
+                string randPassword = "@" + sign + sign;
+                SignUp(randUsername, randEmail, randPassword, randPassword);
+                Debug.Log("Email = " + randEmail);
+                Debug.Log("Rand pass = " + randPassword);
+            }
+        }
+        #endregion
+
         private void Awake()
         {
             auth = FirebaseAuth.DefaultInstance;
         }
         private void Start()
         {
-           if(PlayerPrefs.HasKey("email") && PlayerPrefs.HasKey("password")){
-                //Auto Login
-                Debug.Log("Auto Login ..");
-                Login(PlayerPrefs.GetString("email"),PlayerPrefs.GetString("password"));
-            }
+           //if(PlayerPrefs.HasKey("email") && PlayerPrefs.HasKey("password")){
+           //     //Auto Login
+           //     Debug.Log("Auto Login ..");
+           //     Login(PlayerPrefs.GetString("email"),PlayerPrefs.GetString("password"));
+           // }
         }
 
         public void Login(string email,string password)
@@ -134,6 +205,12 @@ namespace BackEnd
                     UiManager.Instance.ClearSignData();
                     StartCoroutine(DataBaseManager.Instance.RegisterNewUser(x.Result.User.UserId, username));
                     SuccessMessage("SignUp Succes !!");
+                    if (rememberMe.isOn)
+                    {
+                        //remember me
+                        PlayerPrefs.SetString("email", email);
+                        PlayerPrefs.SetString("password", password);
+                    }
                     autAction = false;
                 }
             });
@@ -158,8 +235,9 @@ namespace BackEnd
                 errors.text = string.Empty;
             }
         }
- 
+
         #endregion
+    
     }
 
 }

@@ -96,13 +96,13 @@ public class AiController : MonoBehaviour
                 break;
             }
         }
-        if (SceneManager.GetActiveScene().name == "Map4")
+        if (SceneManager.GetActiveScene().name == "battleRoyalScene")//OnBattleRoyal
         {
-            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.5f);
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 1f);
         }
         else
         {
-            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z + 0.3f);
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.2f);
         }
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
         _scoreplayer = GetComponent<ScorePlayer>();
@@ -258,9 +258,11 @@ public class AiController : MonoBehaviour
             }
             foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
             {
-
-                _mypins.Add(obj);
-                _resetpinsrot.Add(obj.transform.rotation);
+                if (obj.name != "PinSetter")
+                {
+                    _mypins.Add(obj);
+                    _resetpinsrot.Add(obj.transform.rotation);
+                }
             }
 
             StartCoroutine(waitReady());

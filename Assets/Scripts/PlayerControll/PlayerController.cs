@@ -15,6 +15,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using Special;
 using BackEnd;
+using System.Net.NetworkInformation;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public Slider _powerSlider;
     public Scrollbar _hookScroll;
     public List<Transform> _mypins = new List<Transform>();
+    public GameObject myPinsSetter;
     [SerializeField] public  List<Vector3> _resetpins = new List<Vector3>();
     [SerializeField] public List<Transform> _leftpins = new List<Transform>();
 
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject myleader;
     private GameObject _golballeaderboradcanavas;
     public GameObject _mypinsobj;
+    public GameObject _myPinsParent;
     public bool _followBall;
     public GameObject _mytotal;
     public GameObject _GoHomebutt;
@@ -193,13 +196,13 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 break;
             }
         }
-        if (SceneManager.GetActiveScene().name == "Map4")
+        if (SceneManager.GetActiveScene().name == "battleRoyalScene")//OnBattleRoyal
         {
-            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 0.5f);
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z - 1f);
         }
         else
         {
-            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z + 0.3f);
+            _mypinsobj.transform.position = new Vector3(_mypinsobj.transform.position.x, _mypinsobj.transform.position.y, _mypinsobj.transform.position.z -0.2f);
         }
         _golballeaderboradcanavas = GameObject.FindWithTag("leaderboard");
           _scoreplayer = GetComponent<ScorePlayer>();
@@ -824,9 +827,15 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
             foreach (Transform obj in _mypinsobj.GetComponentInChildren<Transform>())
             {
-               
-                _mypins.Add(obj);           
-                _resetpinsrot.Add(obj.transform.rotation);
+                if (obj.name != "PinSetter")
+                {
+                    _mypins.Add(obj);
+                    _resetpinsrot.Add(obj.transform.rotation);
+                }
+                else if(obj.name == "PinSetter")
+                {
+                    myPinsSetter = obj.gameObject;
+                }
             }
 
             StartCoroutine(waitReady());
@@ -842,7 +851,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     }
     IEnumerator waitReady()
     {
-        ResetPins();
+        ResetPins(false);
         foreach (Transform pins in _mypins)
         {
             if (pins.name != "PinSetter")
@@ -1092,24 +1101,31 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         Bowl(_roundscore);
     }
-    private void ResetPins()
+    private void ResetPins(bool pinResetter)
     {
     
         if (_photonview.IsMine)
         {
+
             photonView.RPC("ResetPinsRunCounter", RpcTarget.All);
+
+            if (pinResetter)
+            {
+                PinSetterReset();//PinSetter
+            }
         }
-      
-        
+       
+
+
     }
     [PunRPC]
-    private void ResetPinsRunCounter()
+    private void ResetPinsRunCounter()//Reset After All Down Or New Round
     {
         for (int y = 0; y < _resetpins.Count; y++)
         {
             if (_mypins[y].gameObject.activeInHierarchy == false)
             {
-                _mypins[y].gameObject.SetActive(true);
+               // _mypins[y].gameObject.SetActive(true);
             }
             if (_mypins[y].name != "PinSetter")
             {
@@ -1117,12 +1133,37 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 _mypins[y + 1 - 1].gameObject.GetComponent<Rigidbody>().isKinematic = true;
                 _mypins[y + 1 - 1].transform.localPosition = _resetpins[y + 1 - 1];
                 _mypins[y + 1 - 1].transform.rotation = _resetpinsrot[y + 1 - 1];
+               
             }
 
         }
         _leftpins.Clear();
     }
-    
+    public void PinSetterReset()
+    {
+       
+        StartCoroutine(PinSetterWaiter());
+
+    }
+    IEnumerator PinSetterWaiter()
+    {
+        myPinsSetter.GetComponent<Animator>().Play("Down");//Do Cycle Twice
+        yield return new WaitForSeconds(0.6f); // down time
+        foreach (Transform pin in _mypins)
+            pin.transform.parent = myPinsSetter.transform.Find("Collector");
+        yield return new WaitForSeconds(0.6f); //up time
+        myPinsSetter.transform.Find("Collector").gameObject.SetActive(true);
+        foreach (Transform pin in _mypins)
+        {
+            pin.gameObject.SetActive(true);
+        }
+        myPinsSetter.GetComponent<Animator>().Play("Down");
+        yield return new WaitForSeconds(0.6f); // down time
+       foreach (Transform pin in _mypins)// Reback Pins Parent
+            pin.transform.parent = _mypinsobj.transform;
+        yield return new WaitForSeconds(0.6f); //up time
+        myPinsSetter.transform.Find("Collector").gameObject.SetActive(false);
+    }
    
     public void Bowl(int pinFall)
     {
@@ -1186,12 +1227,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          if (action == ActionMasterOld.Action.EndTurn)
         {
 
-            ResetPins();
+            ResetPins(true);
         }
         else if (action == ActionMasterOld.Action.Reset)
         {
 
-            ResetPins();
+            ResetPins(true);
         }
         else if (action == ActionMasterOld.Action.EndGame)
         {

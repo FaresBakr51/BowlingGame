@@ -33,6 +33,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
     }
     private void ResetCamAndpins()
     {
+        Debug.LogWarning("Reset Pins For Next Shot");
         playerController._followBall = false;
         playerController._powerval = false;
         playerController._hookcalclated = false;
@@ -133,7 +134,11 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             }
             
         }
-
+        if (playerController.usedAbility && playerController._RocketOn.activeInHierarchy)
+        {
+            playerController._RocketOn.SetActive(false);
+            playerController._RocketOff.SetActive(true);
+        }
     
         if (playerController._usingRock)
         {
@@ -185,6 +190,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
                 leftpin.gameObject.SetActive(true);
                 leftpin.transform.up = new Vector3(leftpin.transform.up.x, 1, leftpin.transform.up.z);
             }
+            playerController._leftpins.Clear();
         }
         yield return new WaitForSeconds(3f);
         if (playerController.myleader.activeInHierarchy) { playerController.myleader.SetActive(false); }

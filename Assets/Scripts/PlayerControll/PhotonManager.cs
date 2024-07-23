@@ -126,8 +126,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks,IPunObservable
                     {
                         if (_myAvatarController._timerAfk >= 0 && _startCounter)
                         {
-                            
-                            _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = ((int)_myAvatarController._timerAfk).ToString();
+                            if (_totalScoretexts[_pv.OwnerActorNr - 1] != null)
+                            {
+                                _totalScoretexts[_pv.OwnerActorNr - 1].GetComponentInChildren<Image>().GetComponentInChildren<TextMeshProUGUI>().text = ((int)_myAvatarController._timerAfk).ToString();
+                            }
                             
                         }
                     }

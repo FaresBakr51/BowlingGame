@@ -37,8 +37,11 @@ public class UiManager : Singelton<UiManager>
 
 
     [SerializeField] private CanvasGroup[] canvasGroups;
-   // private bool currentSelectionCheck;
+    // private bool currentSelectionCheck;
 
+
+    public UIScreen CurrentUISCreen;
+    public GameObject PointerHandler;
 
  
     public void Leaderboard()
@@ -52,6 +55,8 @@ public class UiManager : Singelton<UiManager>
        StartCoroutine(DataBaseManager.GetLoadLeaderboard());
         leaderpardPanel.SetActive(true);
     }
+
+
     public void ExitLeader()
     {
         canvasGroups[0].interactable = true;
@@ -67,6 +72,24 @@ public class UiManager : Singelton<UiManager>
         {
             InteractionInputs(true);
         }
+
+        if(CurrentUISCreen == null || !CurrentUISCreen.gameObject.activeInHierarchy)
+        {
+            if (PointerHandler.activeInHierarchy)
+            {
+                CurrentUISCreen = FindObjectOfType<UIScreen>();
+            }
+
+        }else if(CurrentUISCreen != null && PointerHandler.activeInHierarchy)
+        {
+            if(EventSystem.current.currentSelectedGameObject ==null || !EventSystem.current.isFocused)
+            {
+                EventSystem.current.SetSelectedGameObject(CurrentUISCreen.navigationButtons[CurrentUISCreen.currentIndex]);
+                CurrentUISCreen.SpecialCaseButton();
+            }
+        }
+
+//        Debug.Log(EventSystem.current.isFocused);
     }
 
 

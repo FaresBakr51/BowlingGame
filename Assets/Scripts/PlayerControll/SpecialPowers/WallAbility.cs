@@ -60,6 +60,7 @@ namespace Special
         {
             PhotonNetwork.Instantiate("wallprefab", pos, rot);
 
+
         }
     }
 }
