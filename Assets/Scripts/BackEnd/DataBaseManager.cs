@@ -24,6 +24,10 @@ namespace BackEnd
         #endregion
         public bool Steam;
         public static PlayerData playerData;
+
+
+        [SerializeField] private bool isLocallSaving;
+        public bool IsLocallSaving { get { return isLocallSaving; } }
         private void OnEnable()
         {
            SignIn.AddListener(CheckUserName);
@@ -34,7 +38,7 @@ namespace BackEnd
         }
         private void Start()
         {
-            DbReference = FirebaseDatabase.DefaultInstance.RootReference;
+            //DbReference = FirebaseDatabase.DefaultInstance.RootReference;
             DontDestroyOnLoad(gameObject);
             if (Steam)
             {
@@ -141,6 +145,22 @@ namespace BackEnd
                 StartCoroutine(GetPlayerData(uid));
             }
 
+        }
+        public void RegisterLocallUser(string username)//Overload for locall saving
+        {
+            isLocallSaving = true;
+            if (PlayerPrefs.HasKey("username"))//check username (key)
+            {
+                UserName = PlayerPrefs.GetString("username");//load key
+            }
+            else
+            {
+                UserName = username;
+                PlayerPrefs.SetString("username", username);
+            }
+
+
+            SuccessSignIn?.Invoke();
         }
 
         public static IEnumerator AddIndividualDataToUser<T>(string uid,string username, string childName, string childtype, T value )
@@ -335,6 +355,7 @@ namespace BackEnd
                 }
                 Debug.Log(usernames.Count);
                 Debug.Log(scores.Count);
+                Debug.Log(usernames.Count == scores.Count);
                 if (usernames.Count == scores.Count)
                 {
                     for(int i = 0; i < usernames.Count;)
@@ -346,6 +367,7 @@ namespace BackEnd
                                 if (scores[i] != 0)
                                 {
                                     playersDict.Add(usernames[i], scores[i]);
+                                    Debug.Log("Adding scores");
                                     i++;
                                 }
                                 else
@@ -362,6 +384,7 @@ namespace BackEnd
                 }
 
                 var list = playersDict.OrderByDescending(x => x.Value).ToList();
+                Debug.Log(list.Count);
                 var count = 0;
                 for(int i = 0; i < list.Count; i++)
                 {

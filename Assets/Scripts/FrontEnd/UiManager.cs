@@ -52,7 +52,8 @@ public class UiManager : Singelton<UiManager>
         {
             Destroy(t.gameObject);
         }
-       StartCoroutine(DataBaseManager.GetLoadLeaderboard());
+        if (DataBaseManager.Instance.IsLocallSaving) return;
+        StartCoroutine(DataBaseManager.GetLoadLeaderboard());
         leaderpardPanel.SetActive(true);
     }
 

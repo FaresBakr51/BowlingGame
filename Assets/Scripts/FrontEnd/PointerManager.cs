@@ -33,7 +33,8 @@ public class PointerManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        currentActionAsset.Disable();
+        if (currentActionAsset == null) return;
+          currentActionAsset.Disable();
     }
 
 }

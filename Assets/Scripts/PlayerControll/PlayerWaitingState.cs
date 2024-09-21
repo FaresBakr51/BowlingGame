@@ -17,7 +17,10 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
         {
             playercontroller = _playercontroller;
         }
+        //playercontroller
         playercontroller._MyPlayCanavas.SetActive(false);
+
+       
         if (playercontroller._canhit)
         {
             playercontroller._canhit = false;
@@ -34,6 +37,11 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
         }
       
         playercontroller._driftBall = true;
+        if (playercontroller._driftBall)
+        {
+            playercontroller.hookStick.transform.parent.gameObject.SetActive(true);
+            Debug.Log("parent name = " + playercontroller.hookStick.transform.root.gameObject.name);
+        }
         StartCoroutine(WaitHit());
     }
     private void Update()

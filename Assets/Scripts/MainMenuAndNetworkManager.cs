@@ -71,6 +71,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
  
     private bool joinlobby;
+
+    
     public override void OnEnable()
     {
         CheckPurchaseButtonsState();
@@ -311,8 +313,8 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         GameModes._battleRoyale = false;
         GameModes._2pMode = false;
         PhotonNetwork.OfflineMode = false;
-
-        if(DataBaseManager.Instance && DataBaseManager.UserName !="" && DataBaseManager.playerData != null)
+        RetriveData(_lockedButtons, _lockedImages); // retrieve achivement data when back to home
+        if (DataBaseManager.Instance && DataBaseManager.UserName !="" && DataBaseManager.playerData != null)
         {
             SuccessLogin();
         }
@@ -328,7 +330,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
 
      private void LoadRankedPoints()
     {
-        _totalRankedPoints = DataBaseManager.playerData.rankedPoints;//PlayerPrefs.GetInt("rankedpoints", 0);
+        _totalRankedPoints =  DataBaseManager.Instance.IsLocallSaving ? PlayerPrefs.GetInt("rankedpoints", 0) : DataBaseManager.playerData.rankedPoints;
         _rankedpointTxt.text = PhotonNetwork.LocalPlayer.NickName + " / " + _totalRankedPoints.ToString();
     }
 
@@ -598,7 +600,7 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         {
             if (PlayerPrefs.HasKey(s))
             {
-
+                Debug.Log("There is unloucked achivment with name of = " + s);
                 lockedButtons[PlayerPrefs.GetInt(s)].enabled  =  true;
                 lockedImages[PlayerPrefs.GetInt(s)].SetActive(false);
             }
@@ -609,8 +611,14 @@ public class MainMenuAndNetworkManager : MonoBehaviourPunCallbacks
         if (!PlayerPrefs.HasKey(name))
         {
             PlayerPrefs.SetInt(name, characterid);
+           
         }
     
+    }
+    [ContextMenu("UnlouckIsiah")]
+    public void UnlouckIsaiah()
+    {
+        UnlouchAchivment("isaiah", 0);
     }
 
 

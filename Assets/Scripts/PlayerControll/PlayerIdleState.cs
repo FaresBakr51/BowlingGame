@@ -53,6 +53,8 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._ball.GetComponent<BallSound>()._hit = false;
         this.transform.position = _mypos;
         playerController._camera.transform.position = _Cambos;
+
+      
         if (playerController.IGT || playerController._trackBall)
         {
 
@@ -83,6 +85,11 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
             {
                playerController._MyPlayCanavas.SetActive(false);
             }
+            if (playerController.hookStick.transform.parent.gameObject.activeInHierarchy)
+            {
+                playerController.hookStick.transform.parent.gameObject.SetActive(false);
+              
+            }
 
             if (!GameModes._rankedMode && !GameModes._arcadeMode)
             {
@@ -108,6 +115,11 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         {
 
             playerController._MyPlayCanavas.SetActive(true);
+            if (playerController.hookStick.transform.parent.gameObject.activeInHierarchy)
+            {
+                playerController.hookStick.transform.parent.gameObject.SetActive(false);
+
+            }
             if (GameModes._battleRoyale)
             {
                 playerController._timerAfk = 15;

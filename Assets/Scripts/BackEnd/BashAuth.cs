@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace BackEnd
 {
-    public class BashAuth : Singelton<BashAuth>
+    public class BashAuth : AuthManager
     {
         #region EmailAuth
         private FirebaseAuth auth;
@@ -16,12 +16,16 @@ namespace BackEnd
         [SerializeField] private TextMeshProUGUI successMessage;
         [SerializeField] private TextMeshProUGUI[] errormessages;
         
-        [SerializeField] private bool autAction;
+ 
         [SerializeField] private Toggle rememberMe;
         [SerializeField] private GameObject steamApply;
-        public bool AuthAction { get { return autAction; } set { autAction = value; } }
+      
+          [SerializeField] private GameObject bashPanel;
 
 
+
+
+      
 
         #region Platforms 
 
@@ -39,9 +43,12 @@ namespace BackEnd
         }
         private void OnSignInIIRCade()
         {
-            string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
-            RandEmailSignit(randUsername, "iiRcade");
-          
+             bashPanel.SetActive(false);
+             string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
+           
+            DataBaseManager.Instance.RegisterLocallUser(randUsername);//register new user
+    //        RandEmailSignit(randUsername, "iiRcade"); */
+
         }
 
         private void OnSignInPolyCade()
@@ -107,36 +114,14 @@ namespace BackEnd
             if (autAction) return;
             ClearErrorMessage();
             autAction = true;
-            auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(x =>
+
+            OnSignInEmailAndPass(email, password, (result1,result2) => 
             {
-               
-            if (x.IsFaulted)
-                {
 
-                    Debug.Log(x.Exception.InnerExceptions[0].Message);
-                    switch (x.Exception.InnerExceptions[0].Message)
-                    {
-                        case "The email address is badly formatted.":
-                            Debug.Log("first case test 1 ");
-                             ErrorMessage(1,x.Exception.InnerExceptions[0].Message);
-                            break;
- 
-                        default:
-                            ErrorMessage(1,"Please Check Your Password OR Email !!");
-                            Debug.Log("default case");
-                            break;
-                    }
-                  
-                   return;
-                }
-            
-                if (x.IsCompleted)
-                {
-                    //login success
-                    Debug.Log("Login Success");
+                if (result1 == "success") {
 
-                    DataBaseManager.Instance.CheckUserName(x.Result.User.UserId);
-                  //  autAction = false;
+                    DataBaseManager.Instance.CheckUserName(result2.User.UserId);
+                    //  autAction = false;
                     if (rememberMe.isOn)
                     {
                         //remember me
@@ -144,8 +129,51 @@ namespace BackEnd
                         PlayerPrefs.SetString("password", password);
                     }
                 }
+                else
+                {
+                    ErrorMessage(1, result1);
+                }
 
             });
+            //auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(x =>
+            //{
+               
+            //if (x.IsFaulted)
+            //    {
+
+            //        Debug.Log(x.Exception.InnerExceptions[0].Message);
+            //        switch (x.Exception.InnerExceptions[0].Message)
+            //        {
+            //            case "The email address is badly formatted.":
+            //                Debug.Log("first case test 1 ");
+            //                 ErrorMessage(1,x.Exception.InnerExceptions[0].Message);
+            //                break;
+ 
+            //            default:
+            //                ErrorMessage(1,"Please Check Your Password OR Email !!");
+            //                Debug.Log("default case");
+            //                break;
+            //        }
+                  
+            //       return;
+            //    }
+            
+            //    if (x.IsCompleted)
+            //    {
+            //        //login success
+            //        Debug.Log("Login Success");
+
+            //        DataBaseManager.Instance.CheckUserName(x.Result.User.UserId);
+            //      //  autAction = false;
+            //        if (rememberMe.isOn)
+            //        {
+            //            //remember me
+            //            PlayerPrefs.SetString("email", email);
+            //            PlayerPrefs.SetString("password", password);
+            //        }
+            //    }
+
+            //});
       
 
         }

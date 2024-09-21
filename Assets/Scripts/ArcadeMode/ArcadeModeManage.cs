@@ -104,6 +104,7 @@ public class ArcadeModeManage : MonoBehaviour
             }
             else
             {
+                //finished all ai players
 
                 if (PlayerPrefs.HasKey("ai"))
                 {
@@ -118,12 +119,14 @@ public class ArcadeModeManage : MonoBehaviour
                     PlayerPrefs.DeleteKey("selectedplayerindx");
                 }
                 _currentPlayer.ShowRankedResult("arcade");
-
+             
                 if (!PlayerPrefs.HasKey("isaiah"))
                 {
                     _currentPlayer._arcadereward.SetActive(true);
                     MainMenuAndNetworkManager.UnlouchAchivment("isaiah", 0);
                 }
+                //add 50points ranked
+                PlayerPrefs.SetInt("rankedpoints", PlayerPrefs.GetInt("rankedpoints",0) + 50);
             }
         }
         else

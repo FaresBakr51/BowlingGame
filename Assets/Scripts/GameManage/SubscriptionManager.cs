@@ -1,4 +1,4 @@
-using GoogleMobileAds.Api;
+//using GoogleMobileAds.Api;
 using System;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -25,7 +25,7 @@ public class SubscriptionManager : MonoBehaviour
 #else
   private string _adUnitId = "unused";
 #endif
-    private InterstitialAd interstitialAd;
+   // private InterstitialAd interstitialAd;
 
     private static System.DateTime startDate;
     private static System.DateTime today;
@@ -202,53 +202,53 @@ public class SubscriptionManager : MonoBehaviour
 
     public void LoadInterstitialAd()
     {
-        if (!MainMenuAndNetworkManager.Instance || MainMenuAndNetworkManager.Instance.gamePlatform != GameEventType.AndroidBuild) return;
-        // Clean up the old ad before loading a new one.
-        if (PlayerPrefs.GetInt("gamefull", 0) != 1 && PlayerPrefs.GetInt("gameweekly", 0) != 1)
-        {
+        //if (!MainMenuAndNetworkManager.Instance || MainMenuAndNetworkManager.Instance.gamePlatform != GameEventType.AndroidBuild) return;
+        //// Clean up the old ad before loading a new one.
+        //if (PlayerPrefs.GetInt("gamefull", 0) != 1 && PlayerPrefs.GetInt("gameweekly", 0) != 1)
+        //{
 
-            if (interstitialAd != null)
-            {
-                interstitialAd.Destroy();
-                interstitialAd = null;
-            }
+        //    if (interstitialAd != null)
+        //    {
+        //        interstitialAd.Destroy();
+        //        interstitialAd = null;
+        //    }
 
-            Debug.Log("Loading the interstitial ad.");
+        //    Debug.Log("Loading the interstitial ad.");
 
-            // create our request used to load the ad.
-            var adRequest = new AdRequest();
-            // send the request to load the ad.
-            InterstitialAd.Load(_adUnitId, adRequest,
-                (InterstitialAd ad, LoadAdError error) =>
-                {
-                    // if error is not null, the load request failed.
-                    if (error != null || ad == null)
-                    {
-                        Debug.LogError("interstitial ad failed to load an ad " +
-                                       "with error : " + error);
-                        return;
-                    }
+        //    // create our request used to load the ad.
+        //    var adRequest = new AdRequest();
+        //    // send the request to load the ad.
+        //    InterstitialAd.Load(_adUnitId, adRequest,
+        //        (InterstitialAd ad, LoadAdError error) =>
+        //        {
+        //            // if error is not null, the load request failed.
+        //            if (error != null || ad == null)
+        //            {
+        //                Debug.LogError("interstitial ad failed to load an ad " +
+        //                               "with error : " + error);
+        //                return;
+        //            }
 
-                    Debug.Log("Interstitial ad loaded with response : "
-                              + ad.GetResponseInfo());
+        //            Debug.Log("Interstitial ad loaded with response : "
+        //                      + ad.GetResponseInfo());
 
-                    interstitialAd = ad;
-                    ShowAdd();
-                });
-        }
+        //            interstitialAd = ad;
+        //            ShowAdd();
+        //        });
+        //}
     }
     public void ShowAdd()
     {
         
-            if (interstitialAd != null && interstitialAd.CanShowAd())
-            {
-                Debug.Log("Showing interstitial ad.");
-                interstitialAd.Show();
-            }
-            else
-            {
-                Debug.LogError("Interstitial ad is not ready yet.");
-            }
+            //if (interstitialAd != null && interstitialAd.CanShowAd())
+            //{
+            //    Debug.Log("Showing interstitial ad.");
+            //    interstitialAd.Show();
+            //}
+            //else
+            //{
+            //    Debug.LogError("Interstitial ad is not ready yet.");
+            //}
         
     }
     public void ShowRestoreButt()

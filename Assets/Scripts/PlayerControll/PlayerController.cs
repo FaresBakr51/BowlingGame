@@ -16,6 +16,7 @@ using UnityEngine.InputSystem;
 using Special;
 using BackEnd;
 using System.Net.NetworkInformation;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -66,7 +67,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public bool _powerval;
     private bool _moveright;
    [SerializeField] private Vector3 _movingL;
-   
+    [SerializeField] public FixedJoystick joyStick;
+    [SerializeField] public FixedJoystick hookStick;
     public bool _calcScore;
     public bool _calcPower;
     private bool _ControllPower;
@@ -234,42 +236,22 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     {
         GameEventBus.Subscribe(GameEventType.waiting, Waitstate);
         GameEventBus.Subscribe(GameEventType.leaderboard, CheckOtherHit);
-       
-        _gameactions.ButtonActions.moving.performed += cntxt =>{
-
-              if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-              _movingL = cntxt.ReadValue<Vector2>();
-             }
-             if (_driftBall)
-             {
-              
-                if (_movingL.x > 0)
-                 {
-                   
-                     var rig = _ball.GetComponent<Rigidbody>();
-                    rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
-                     _driftBall = false;
-                   
-                 }
-                 else if(_movingL.x < 0)
-                 {
-                    
-                     var rig = _ball.GetComponent<Rigidbody>();
-                    rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
-                     _driftBall = false;
-                    
-                 }
-             }
-               
-              
-              };
-           _gameactions.ButtonActions.moving.canceled += cntxt => _movingL =Vector2.zero;
-        _gameactions.ButtonActions.pause.performed += x => {
+        if (joyStick == null)
+        {
+            joyStick = GetComponentInChildren<FixedJoystick>();
+        }
+        _gameactions.ButtonActions.moving.performed += cntxt =>
+        {
+            OnHookAction(cntxt.ReadValue<Vector2>());
+        };
           
-            if (!_gameend && !_usingRock && _battleStart) {
-                _pauseMenupanel.SetActive(true);
-                _gamePaused = true;
-                EventSystem.current.SetSelectedGameObject(_pauseMenuFirstbutt);
+        _gameactions.ButtonActions.moving.canceled += cntxt => _movingL = Vector2.zero;
+        _gameactions.ButtonActions.pause.performed += x =>
+        {
+
+            if (!_gameend && !_usingRock && _battleStart)
+            {
+                Pause();
             }
         };
         _gameactions.ButtonActions.Rocket2.performed += r =>
@@ -277,9 +259,40 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
             LunchRocket();
         };
- 
+
         _gameactions.Enable();
     }
+
+    private void OnHookAction(Vector2 val)
+    {
+        if (!_driftBall) return;
+        if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
+        {
+            _movingL = val;//cntxt.ReadValue<Vector2>();
+        }
+        if (_driftBall)
+        {
+
+            if (_movingL.x > 0)
+            {
+
+                var rig = _ball.GetComponent<Rigidbody>();
+                rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
+                _driftBall = false;
+
+            }
+            else if (_movingL.x < 0)
+            {
+
+                var rig = _ball.GetComponent<Rigidbody>();
+                rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
+                _driftBall = false;
+
+            }
+        }
+  
+    }
+
     public void LunchRocket()
     {
         if (_canhit && !GameModes._battleRoyale)
@@ -482,12 +495,12 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             //{
             //    if (_trackBall)
             //    {
-                   
+
             //        if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
             //        {
             //            if (_canhit && _ball.activeInHierarchy && _battleStart)
             //            {
-                            
+
             //                if (_hookcalclated)
             //                {
             //                    if (_calcPower)
@@ -512,37 +525,16 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             //        }
             //    }
             //};
-      
-                _gameactions.ButtonActions.powerupaction.performed += x => {
-               
-                 if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-                 if(_canhit && _ball.activeInHierarchy && _battleStart)
-                     {
-                     if(_hookcalclated){
-                          if(_calcPower && !_trackBall){
-                                    if (!IGT)
-                                    {
-                                        GetPowerValue();
-                                    }
-                           
-                           }
-                     }
-                   }
-               }
-           };
-        
+
+            _gameactions.ButtonActions.powerupaction.performed += x => {
+
+                OnPowerUpAction();
+            };
+
             _gameactions.ButtonActions.driftbar.performed += y => {
-           
-              if (!_gamePaused && !_pauseMenupanel.activeInHierarchy){
-              if(_canhit && _ball.activeInHierarchy && _battleStart)
-                  {
-                  if(_hookcalclated == false) { // && !_trackBall){
-                      GetDriftValue();
-                    _hookcalclated = true;
-                   }
-              }
-         }
-          };
+
+                OnDriftAction();
+            };
         
            }
        // #region IGT
@@ -599,6 +591,51 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     }
 
+    public void OnPowerOrDriftAction()
+    {
+        if (_hookcalclated)
+        {
+            OnPowerUpAction();
+        }
+        else
+        {
+            OnDriftAction();
+        }
+    }
+    private void OnDriftAction()
+    {
+        if (_gamePaused || _pauseMenupanel.activeInHierarchy) return;
+        if (_canhit && _ball.activeInHierarchy && _battleStart)
+        {
+            if (_hookcalclated == false)
+            { // && !_trackBall){
+
+                GetDriftValue();
+                _hookcalclated = true;
+            }
+        }
+    }
+
+    private void OnPowerUpAction()
+    {
+        if (_gamePaused || _pauseMenupanel.activeInHierarchy) return;
+        if (_canhit && _ball.activeInHierarchy && _battleStart)
+        {
+            if (_hookcalclated)
+            {
+                if (_calcPower && !_trackBall)
+                {
+                    if (!IGT)
+                    {
+
+                        GetPowerValue();
+                    }
+
+                }
+            }
+        }
+    }
+
     public void PowerUpAction()
     {
         if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
@@ -633,6 +670,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
          } */
         if (_photonview.IsMine)
         {
+
+            OnMobileMove();
+            OnHookAction(new Vector2(hookStick.Horizontal,0));
             if (_trackBall)
             {
                // _hookScroll.gameObject.SetActive(false);
@@ -767,7 +807,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             
                 if (!_usingRock)
                 {
-                    if (!_gamePaused && !_hookcalclated)
+                    if (!_gamePaused && !_hookcalclated)//when to move
                     {
                         inputdir = new Vector3(_movingL.x, 0, 0);
                         transform.Translate(inputdir * Time.deltaTime);
@@ -1312,8 +1352,24 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 this._scoreplayer.totalscre = (int)stream.ReceiveNext();
             }
         }
- 
+
     }
+    #region Inputs
+    public void OnMobileMove()
+    {
+        if (joyStick == null) return;
+        if (_gamePaused || _pauseMenupanel.activeInHierarchy) return;
+            _movingL = new Vector3(joyStick.Horizontal, 0, 0);
+    }
+    #endregion
+    #region UI
+    public void Pause()
+    {
+        _pauseMenupanel.SetActive(true);
+        _gamePaused = true;
+        EventSystem.current.SetSelectedGameObject(_pauseMenuFirstbutt);
+    }
+    #endregion
 
     #region Settings
     public void Resume(){
@@ -1452,7 +1508,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         
         PlayerPrefs.Save();
-        StartCoroutine(DataBaseManager.AddIndividualDataToUser(DataBaseManager.UserID, PhotonNetwork.LocalPlayer.NickName, "playerData", "rankedPoints", latpoints));
+       if(DataBaseManager.Instance.IsLocallSaving)
+            StartCoroutine(DataBaseManager.AddIndividualDataToUser(DataBaseManager.UserID, PhotonNetwork.LocalPlayer.NickName, "playerData", "rankedPoints", latpoints));
         StartCoroutine(PostScore());
     }
     IEnumerator waitExit()
