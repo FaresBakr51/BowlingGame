@@ -18,8 +18,8 @@ namespace BackEnd
         public static string UserID;
         public static string UserName;
         #region Google
-      
-        public static UnityEvent<string> SignIn = new UnityEvent<string>();
+
+        public static UnityEvent<string, bool, string> SignIn = new UnityEvent<string, bool, string>();
         public static UnityEvent SuccessSignIn = new UnityEvent();
         #endregion
         public bool Steam;
@@ -71,18 +71,18 @@ namespace BackEnd
 
         #endregion
 
-        public void CheckUserName(string uid)
+        public void CheckUserName(string uid, bool registerifnotfound = false, string username = "")
         {
            
             Debug.LogError(uid);
             // PlayerLocalStaticData.localPlayeruserName = user;
-             StartCoroutine(CheckIfUsernameExists(uid));
+             StartCoroutine(CheckIfUsernameExists(uid, registerifnotfound,username));
             //UserName = user;
         }
 
  
         #region FetchFireBaseData
-        public IEnumerator CheckIfUsernameExists(string uid )
+        public IEnumerator CheckIfUsernameExists(string uid ,bool registerifnotfound = false,string username = "")
         {
             Debug.LogError("CheckingUserNameCourtine");
             if (DbReference == null) DbReference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -110,6 +110,10 @@ namespace BackEnd
                 else
                 {
                     Debug.LogError("not exist");
+                    if (registerifnotfound && username!="")
+                    {
+                        StartCoroutine(RegisterNewUser(uid, username));
+                    }
                 }
             }
             else if (taskCheckuSER.IsCanceled)

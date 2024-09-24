@@ -198,40 +198,15 @@ namespace BackEnd
             }
             ClearErrorMessage();
              autAction = true;
-            auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(x =>
+
+            OnSignUpEmailAndPass(email, password, (result1,result2) =>
             {
-                //CheckIfEmailRegistered(auth, email);
-                if (x.IsFaulted)
-                {
 
-                    Debug.Log(x.Exception.InnerExceptions[0].Message);
-                    switch (x.Exception.InnerExceptions[0].Message)
-                    {
-                        case "The email address is badly formatted.":
-                            Debug.Log("first case test 1 ");
-                            ErrorMessage(0, x.Exception.InnerExceptions[0].Message);
-                            break;
-                        case "The email address is already in use by another account.":
-                            Debug.Log("first case test 1 ");
-                             ErrorMessage(0,x.Exception.InnerExceptions[0].Message);
-                            break;
-                        case "The given password is invalid.":
-                            ErrorMessage(0, "Your Password is Too Week !");
-                            break;
-                        default:
-                            ErrorMessage(0,"Please Check Your Data !!");
-                            Debug.Log("default case");
-                            break;
-                    }
-                    return;
-                }
-
-                if (x.IsCompleted)
+                if(result1 == "success" && result2 !=null)
                 {
-                    //login success
                     Debug.Log("SignUp Success");
                     UiManager.Instance.ClearSignData();
-                    StartCoroutine(DataBaseManager.Instance.RegisterNewUser(x.Result.User.UserId, username));
+                    StartCoroutine(DataBaseManager.Instance.RegisterNewUser(result2.User.UserId, username));
                     SuccessMessage("SignUp Succes !!");
                     if (rememberMe.isOn)
                     {
@@ -240,8 +215,57 @@ namespace BackEnd
                         PlayerPrefs.SetString("password", password);
                     }
                     autAction = false;
+
+                }
+                else
+                {
+                    ErrorMessage(0, result1);
                 }
             });
+            //auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(x =>
+            //{
+            //    //CheckIfEmailRegistered(auth, email);
+            //    if (x.IsFaulted)
+            //    {
+
+            //        Debug.Log(x.Exception.InnerExceptions[0].Message);
+            //        switch (x.Exception.InnerExceptions[0].Message)
+            //        {
+            //            case "The email address is badly formatted.":
+            //                Debug.Log("first case test 1 ");
+            //                ErrorMessage(0, x.Exception.InnerExceptions[0].Message);
+            //                break;
+            //            case "The email address is already in use by another account.":
+            //                Debug.Log("first case test 1 ");
+            //                 ErrorMessage(0,x.Exception.InnerExceptions[0].Message);
+            //                break;
+            //            case "The given password is invalid.":
+            //                ErrorMessage(0, "Your Password is Too Week !");
+            //                break;
+            //            default:
+            //                ErrorMessage(0,"Please Check Your Data !!");
+            //                Debug.Log("default case");
+            //                break;
+            //        }
+            //        return;
+            //    }
+
+            //    if (x.IsCompleted)
+            //    {
+            //        //login success
+            //        Debug.Log("SignUp Success");
+            //        UiManager.Instance.ClearSignData();
+            //        StartCoroutine(DataBaseManager.Instance.RegisterNewUser(x.Result.User.UserId, username));
+            //        SuccessMessage("SignUp Succes !!");
+            //        if (rememberMe.isOn)
+            //        {
+            //            //remember me
+            //            PlayerPrefs.SetString("email", email);
+            //            PlayerPrefs.SetString("password", password);
+            //        }
+            //        autAction = false;
+            //    }
+            //});
         }
      
         public void ErrorMessage(int errormessageindex,string message)

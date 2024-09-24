@@ -100,14 +100,22 @@ public class UiManager : Singelton<UiManager>
         Application.Quit();
     }
     #region Auth
+    public void SignInGoogle()
+    {
+        AuthManager.Instance.OnSignInGoogle();
+    }
+    public void SignInApple()
+    {
+        AuthManager.Instance.OnSignInApple();
+    }
     public void SignUp()
     {
-        BashAuth.Instance.SignUp(userNameinput.text,emailInput.text.Trim(), passinput.text.Trim(), passconfirminput.text.Trim());
+        AuthManager.Instance.BashAuth.SignUp(userNameinput.text,emailInput.text.Trim(), passinput.text.Trim(), passconfirminput.text.Trim());
     }
     public void Login()
     {
 
-        BashAuth.Instance.Login(emailloginInput.text.Trim(), passlogininput.text.Trim());
+        AuthManager.Instance.BashAuth.Login(emailloginInput.text.Trim(), passlogininput.text.Trim());
     }
     public void ClearSignData()
     {

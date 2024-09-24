@@ -16,7 +16,6 @@ using UnityEngine.InputSystem;
 using Special;
 using BackEnd;
 using System.Net.NetworkInformation;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
@@ -1508,8 +1507,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         
         PlayerPrefs.Save();
-       if(DataBaseManager.Instance.IsLocallSaving)
+        if (!DataBaseManager.Instance.IsLocallSaving)
+        {
             StartCoroutine(DataBaseManager.AddIndividualDataToUser(DataBaseManager.UserID, PhotonNetwork.LocalPlayer.NickName, "playerData", "rankedPoints", latpoints));
+        }
         StartCoroutine(PostScore());
     }
     IEnumerator waitExit()
