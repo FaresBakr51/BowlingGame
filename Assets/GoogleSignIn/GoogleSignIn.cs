@@ -19,7 +19,8 @@ namespace Google {
   using System.Runtime.Serialization;
   using System.Threading.Tasks;
   using Google.Impl;
-  using UnityEngine;
+    using TMPro;
+    using UnityEngine;
 
   /// <summary>
   /// Google sign in API.
@@ -89,14 +90,17 @@ namespace Google {
         if (theInstance == null) {
 #if UNITY_ANDROID || UNITY_IOS
           theInstance = new GoogleSignIn(new GoogleSignInImpl(Configuration));
+                    GameObject.FindGameObjectWithTag("debug").GetComponent<TextMeshProUGUI>().text = "Getting instance ";
+
 #else
           theInstance = new GoogleSignIn(null);
           throw new SignInException(
               GoogleSignInStatusCode.DeveloperError,
               "This platform is not supported by GoogleSignIn");
+               GameObject.FindGameObjectWithTag("debug").GetComponent<TextMeshProUGUI>().text = "Not Supported by google  ";
 #endif
-        }
-        return theInstance;
+                }
+                return theInstance;
       }
     }
 

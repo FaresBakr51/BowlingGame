@@ -10,8 +10,8 @@ namespace BackEnd
     public class BashAuth : AuthManager
     {
         #region EmailAuth
-        private FirebaseAuth auth;
-        private FirebaseUser User;
+        //private FirebaseAuth auth;
+        //private FirebaseUser User;
 
         [SerializeField] private TextMeshProUGUI successMessage;
         [SerializeField] private TextMeshProUGUI[] errormessages;
@@ -98,7 +98,7 @@ namespace BackEnd
 
         private void Awake()
         {
-            auth = FirebaseAuth.DefaultInstance;
+            //auth = FirebaseAuth.DefaultInstance;
         }
         private void Start()
         {

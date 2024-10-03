@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase;
 using TMPro;
+using UnityEngine.UI;
 namespace BackEnd
 {
 
@@ -42,6 +43,16 @@ namespace BackEnd
           
             configuration = new GoogleSignInConfiguration { WebClientId = webclientId, RequestEmail = true, RequestIdToken = true };
 
+#if UNITY_ANDROID
+           googleSigninButt.gameObject.SetActive(true);
+            prefabPlatformChanger.GetComponent<RawImage>().texture = androidImg;
+#elif UNITY_IOS
+             appleSignInButt.gameObject.SetActive(true);
+             prefabPlatformChanger.GetComponent<RawImage>().texture = iosImg;
+#else
+                        BSOBAuthPanel.gameObject.SetActive(true);
+#endif
+
 
         }
 
@@ -54,10 +65,12 @@ namespace BackEnd
 
         private void Start()
         {
+           Debug.Log(FirebaseAuth.DefaultInstance);
             //check if already local data sign in
             if (PlayerPrefs.HasKey("userid") && PlayerPrefs.HasKey("username"))
             {
                 //
+                Debug.Log("lOCATED LOCAL DATA");
                 mobileGroup.interactable = false;
                 waitingPanel.gameObject.SetActive(true);
                 DataBaseManager.SignIn?.Invoke(PlayerPrefs.GetString("userid"), true, PlayerPrefs.GetString("username"));//load local data
@@ -109,18 +122,28 @@ namespace BackEnd
         #region Google
         private void OnSignIn()
         {
-            mobileGroup.interactable = false;
+            Debug.Log("Login Google ...");
+            debugTxt.text = "Loging google...";
+            GoogleSignIn.DefaultInstance.SignOut();
+            GoogleSignIn.DefaultInstance.SignIn();
+            debugTxt.text = GoogleSignIn.DefaultInstance.ToString();
+            debugTxt.text += GoogleSignIn.DefaultInstance.SignIn().ToString();
             GoogleSignIn.Configuration = configuration;
             GoogleSignIn.Configuration.UseGameSignIn = false;
             GoogleSignIn.Configuration.RequestIdToken = true;
             GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
+            debugTxt.text = GoogleSignIn.DefaultInstance.ToString();
         }
 
 
         internal void OnAuthenticationFinished(Task<GoogleSignInUser> task)
         {
+            debugTxt.text = "Auth finish google...";
+            mobileGroup.interactable = false;
+          
             if (task.IsFaulted)
             {
+
                 using (IEnumerator<Exception> enumerator = task.Exception.InnerExceptions.GetEnumerator())
                 {
                     if (enumerator.MoveNext())
@@ -144,13 +167,18 @@ namespace BackEnd
 
 
                 debugTxt.text = task.Result.IdToken;
+                debugTxt.text = "Going to login to firebase";
                 SignInWithGoogleOnFirebase(task.Result.IdToken);
             }
         }
         private void SignInWithGoogleOnFirebase(string idToken)
         {
-            Credential credential = GoogleAuthProvider.GetCredential(idToken, null);
+            debugTxt.text = "Sign in with google on firebase";
+            debugTxt.text = FirebaseAuth.DefaultInstance.ToString();
+           Credential credential = GoogleAuthProvider.GetCredential(idToken, null);
+            debugTxt.text = "Trying sign in firebase";
             if (auth == null) auth = FirebaseAuth.DefaultInstance;
+            debugTxt.text += auth.ToString();
             auth.SignInWithCredentialAsync(credential).ContinueWith(task =>
             {
                 AggregateException ex = task.Exception;
