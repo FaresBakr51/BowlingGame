@@ -3,12 +3,10 @@ using Firebase.Extensions;
 using System;
 using UnityEngine;
 using Google;
-using System.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase;
 using TMPro;
-
 namespace BackEnd
 {
 
@@ -27,12 +25,24 @@ namespace BackEnd
         [SerializeField] private string webclientId;
         [SerializeField] private CanvasGroup mobileGroup;
         [SerializeField] private GameObject waitingPanel;
+
+
+        [SerializeField] private GameObject googleSigninButt;
+        [SerializeField] private Texture androidImg;
+        [SerializeField] private Texture iosImg;
+        [SerializeField] private GameObject appleSignInButt;
+        [SerializeField] private GameObject prefabPlatformChanger;
+        [SerializeField] private GameObject BSOBAuthPanel;
         #endregion
+
 
 
         private void OnEnable()
         {
+          
             configuration = new GoogleSignInConfiguration { WebClientId = webclientId, RequestEmail = true, RequestIdToken = true };
+
+
         }
 
         [ContextMenu("Test auth data local save")]

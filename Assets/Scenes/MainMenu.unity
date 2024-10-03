@@ -5963,6 +5963,10 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 1805748708}
+    - target: {fileID: 620560390361650897, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 792951812160723985, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5993,7 +5997,7 @@ PrefabInstance:
       objectReference: {fileID: 1805748708}
     - target: {fileID: 2213527250030423201, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4809886270235211435, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -8188,6 +8192,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 941724297}
   m_CullTransparentMesh: 1
+--- !u!1 &941868185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2213527250030423201, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
+  m_PrefabInstance: {fileID: 808417022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &944884249
 GameObject:
   m_ObjectHideFlags: 0
@@ -9502,6 +9511,12 @@ MonoBehaviour:
   webclientId: 367082279979-ieqfeo3gu0tuevalan1il19l484738ed.apps.googleusercontent.com
   mobileGroup: {fileID: 2129859620}
   waitingPanel: {fileID: 1587938642}
+  googleSigninButt: {fileID: 941868185}
+  androidImg: {fileID: 2800000, guid: 268d234f0a1df9b4faf9f28ebe86df84, type: 3}
+  iosImg: {fileID: 2800000, guid: f343536fd195bec478358ba204fa5125, type: 3}
+  appleSignInButt: {fileID: 1423544520}
+  prefabPlatformChanger: {fileID: 6322242457359061577, guid: 8af721f40132cf946b23a34b0d7db25a, type: 3}
+  BSOBAuthPanel: {fileID: 1864975435}
 --- !u!1 &1103352064
 GameObject:
   m_ObjectHideFlags: 0
@@ -11655,6 +11670,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1423544520 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1140759394969517995, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
+  m_PrefabInstance: {fileID: 808417022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1452996212
 GameObject:
   m_ObjectHideFlags: 0
@@ -15082,6 +15102,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852611373}
   m_CullTransparentMesh: 1
+--- !u!1 &1864975435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 620560390361650897, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
+  m_PrefabInstance: {fileID: 808417022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1865272730
 GameObject:
   m_ObjectHideFlags: 0
@@ -17297,6 +17322,12 @@ MonoBehaviour:
   webclientId: 
   mobileGroup: {fileID: 0}
   waitingPanel: {fileID: 0}
+  googleSigninButt: {fileID: 0}
+  androidImg: {fileID: 0}
+  iosImg: {fileID: 0}
+  appleSignInButt: {fileID: 0}
+  prefabPlatformChanger: {fileID: 0}
+  BSOBAuthPanel: {fileID: 0}
   successMessage: {fileID: 808417025}
   errormessages:
   - {fileID: 808417027}
