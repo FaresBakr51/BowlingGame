@@ -124,15 +124,15 @@ namespace BackEnd
         {
             Debug.Log("Login Google ...");
             debugTxt.text = "Loging google...";
-            GoogleSignIn.DefaultInstance.SignOut();
-            GoogleSignIn.DefaultInstance.SignIn();
-            debugTxt.text = GoogleSignIn.DefaultInstance.ToString();
-            debugTxt.text += GoogleSignIn.DefaultInstance.SignIn().ToString();
+            //GoogleSignIn.DefaultInstance.SignOut();
+            //GoogleSignIn.DefaultInstance.SignIn();
+            //debugTxt.text = GoogleSignIn.DefaultInstance.ToString();
+            //debugTxt.text += GoogleSignIn.DefaultInstance.SignIn().ToString();
             GoogleSignIn.Configuration = configuration;
             GoogleSignIn.Configuration.UseGameSignIn = false;
             GoogleSignIn.Configuration.RequestIdToken = true;
             GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
-            debugTxt.text = GoogleSignIn.DefaultInstance.ToString();
+            //debugTxt.text = GoogleSignIn.DefaultInstance.ToString();
         }
 
 
