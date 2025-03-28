@@ -1,6 +1,8 @@
+#if !UNITY_WEBGL
 using Firebase.Auth;
 using Firebase.Extensions;
-//using Steamworks;
+#endif
+using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,42 +17,66 @@ namespace BackEnd
 
         [SerializeField] private TextMeshProUGUI successMessage;
         [SerializeField] private TextMeshProUGUI[] errormessages;
-        
- 
+
+
         [SerializeField] private Toggle rememberMe;
         [SerializeField] private GameObject steamApply;
-      
-          [SerializeField] private GameObject bashPanel;
+
+        [SerializeField] private GameObject bashPanel;
 
 
 
 
-      
+
 
         #region Platforms 
+        [SerializeField] private GameObject[] Modes;
+        #endregion
 
         private void OnEnable()
         {
             GameEventBus.Subscribe(GameEventType.arcademode, OnSignInIIRCade);
+#if !UNITY_WEBGL
             GameEventBus.Subscribe(GameEventType.PolyCadebuild, OnSignInPolyCade);
             GameEventBus.Subscribe(GameEventType.steamBuild, OnSteamSignIn);
+#endif
+            GameEventBus.Subscribe(GameEventType.WebGlVersion, OnWebGlVersion);
         }
         private void OnDisable()
         {
             GameEventBus.UnSubscribe(GameEventType.arcademode, OnSignInIIRCade);
+#if !UNITY_WEBGL
             GameEventBus.UnSubscribe(GameEventType.PolyCadebuild, OnSignInPolyCade);
             GameEventBus.UnSubscribe(GameEventType.steamBuild, OnSteamSignIn);
+#endif
+            GameEventBus.UnSubscribe(GameEventType.WebGlVersion, OnWebGlVersion);
+        }
+
+        private void OnWebGlVersion()
+        {
+
+
+            string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
+            foreach (GameObject mode in Modes)
+            {
+                mode.SetActive(false);
+            }
+            Modes[0].SetActive(true);
+            Modes[3].SetActive(true);
+            MainMenuAndNetworkManager.UnlouchAchivment("isaiah", 0);
+            DataBaseManager.Instance.RegisterLocallUser(randUsername);//register new user
+                                                                      //        RandEmailSignit(randUsername, "iiRcade"); */
         }
         private void OnSignInIIRCade()
         {
-             bashPanel.SetActive(false);
-             string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
-           
+            bashPanel.SetActive(false);
+            string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
+
             DataBaseManager.Instance.RegisterLocallUser(randUsername);//register new user
-    //        RandEmailSignit(randUsername, "iiRcade"); */
+                                                                      //        RandEmailSignit(randUsername, "iiRcade"); */
 
         }
-
+#if !UNITY_WEBGL
         private void OnSignInPolyCade()
         {
             string randUsername = "bowler" + Random.Range(1000, 5000).ToString();
@@ -66,15 +92,16 @@ namespace BackEnd
             steamApply.SetActive(true);
 
             if (!SteamManager.Initialized) return;
-         //    string name = SteamFriends.GetPersonaName();
+            string name = SteamFriends.GetPersonaName();
 
             RandEmailSignit(name, "steam");
         }
 
 
 
-        private void RandEmailSignit(string username,string sign)
+        private void RandEmailSignit(string username, string sign)
         {
+            if (DataBaseManager.Instance != null && DataBaseManager.UserName != "" && DataBaseManager.playerData != null) return;
             if (PlayerPrefs.HasKey("email") && PlayerPrefs.HasKey("password"))
             {
                 //Auto Login
@@ -94,7 +121,8 @@ namespace BackEnd
                 Debug.Log("Rand pass = " + randPassword);
             }
         }
-        #endregion
+#endif
+#endregion
 
         private void Awake()
         {
@@ -108,7 +136,7 @@ namespace BackEnd
            //     Login(PlayerPrefs.GetString("email"),PlayerPrefs.GetString("password"));
            // }
         }
-
+#if !UNITY_WEBGL
         public void Login(string email,string password)
         {
             if (autAction) return;
@@ -267,6 +295,7 @@ namespace BackEnd
             //    }
             //});
         }
+#endif
      
         public void ErrorMessage(int errormessageindex,string message)
         {
@@ -288,7 +317,7 @@ namespace BackEnd
             }
         }
 
-        #endregion
+      
     
     }
 

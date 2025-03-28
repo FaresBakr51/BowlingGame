@@ -1,11 +1,14 @@
+
+#if !UNITY_WEBGL
 using Firebase.Auth;
 using Firebase.Extensions;
+using Firebase;
+#endif
 using System;
 using UnityEngine;
 using Google;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Firebase;
 using TMPro;
 using UnityEngine.UI;
 namespace BackEnd
@@ -13,8 +16,9 @@ namespace BackEnd
 
     public class AuthManager : Singelton<AuthManager>
     {
+        #if !UNITY_WEBGL
         private FirebaseAuth auth;
-
+#endif
         [SerializeField] protected bool autAction;
         [SerializeField] BashAuth bashAuth;
         public TextMeshProUGUI debugTxt;
@@ -50,7 +54,7 @@ namespace BackEnd
              appleSignInButt.gameObject.SetActive(true);
              prefabPlatformChanger.GetComponent<RawImage>().texture = iosImg;
 #else
-                        BSOBAuthPanel.gameObject.SetActive(true);
+                     //   BSOBAuthPanel.gameObject.SetActive(true);
 #endif
 
 
@@ -65,7 +69,7 @@ namespace BackEnd
 
         private void Start()
         {
-           Debug.Log(FirebaseAuth.DefaultInstance);
+           
             //check if already local data sign in
             if (PlayerPrefs.HasKey("userid") && PlayerPrefs.HasKey("username"))
             {
@@ -76,6 +80,8 @@ namespace BackEnd
                 DataBaseManager.SignIn?.Invoke(PlayerPrefs.GetString("userid"), true, PlayerPrefs.GetString("username"));//load local data
             }
         }
+
+        #if !UNITY_WEBGL
         public virtual void OnSignInGoogle()
         {
             OnSignIn();
@@ -91,7 +97,6 @@ namespace BackEnd
             Firebase.Auth.FederatedOAuthProvider provider =
             new Firebase.Auth.FederatedOAuthProvider();
             provider.SetProviderData(providerData);
-
             if (auth == null) auth = FirebaseAuth.DefaultInstance;
             auth.SignInWithProviderAsync(provider).ContinueWithOnMainThread(task => {
                 if (task.IsCanceled)
@@ -119,7 +124,8 @@ namespace BackEnd
                     user.DisplayName, user.UserId);
             });
         }
-        #region Google
+
+    
         private void OnSignIn()
         {
             Debug.Log("Login Google ...");
@@ -171,6 +177,7 @@ namespace BackEnd
                 SignInWithGoogleOnFirebase(task.Result.IdToken);
             }
         }
+       
         private void SignInWithGoogleOnFirebase(string idToken)
         {
             debugTxt.text = "Sign in with google on firebase";
@@ -206,9 +213,11 @@ namespace BackEnd
             });
         }
 
-        #endregion
+
+
         protected virtual void OnSignUpEmailAndPass(string email,string password,Action<string,AuthResult> callback)
         {
+
            if(auth == null) auth = FirebaseAuth.DefaultInstance;
             auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(x =>
             {
@@ -225,6 +234,8 @@ namespace BackEnd
                         
                             break;
                         case "The email address is already in use by another account.":
+                            PlayerPrefs.SetString("email", email);
+                            PlayerPrefs.SetString("password", password);
                             Debug.Log("first case test 1 ");
                             callback?.Invoke(x.Exception.InnerExceptions[0].Message,null);
                             break;
@@ -249,6 +260,7 @@ namespace BackEnd
                  
                 }
             });
+
         }
         protected virtual void OnSignInEmailAndPass(string email, string password,Action<string,AuthResult> callBack)
         {
@@ -296,7 +308,7 @@ namespace BackEnd
 
             });
         }
-
+#endif
         private void OnSaveSignData(string uid,string username)
         {
             if (PlayerPrefs.HasKey("userid") || PlayerPrefs.HasKey("username")) return;

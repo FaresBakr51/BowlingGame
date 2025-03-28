@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 //using Steamworks;
+#if !UNITY_WEBGL
 using Firebase.Database;
+#endif
 using System;
 using System.Linq;
 using UnityEngine.Events;
+using Steamworks;
 
 
 namespace BackEnd
 {
     public class DataBaseManager : Singelton<DataBaseManager>
     {
-        private static DatabaseReference DbReference;
-
+#if !UNITY_WEBGL
+    private static DatabaseReference DbReference;
+#endif
         private const string GameDBName = "BSOB";
         public static string UserID;
         public static string UserName;
@@ -30,7 +35,9 @@ namespace BackEnd
         public bool IsLocallSaving { get { return isLocallSaving; } }
         private void OnEnable()
         {
-           SignIn.AddListener(CheckUserName);
+#if !UNITY_WEBGL
+            SignIn.AddListener(CheckUserName);
+#endif
         }
         private void OnDisable()
         {
@@ -40,30 +47,31 @@ namespace BackEnd
         {
             //DbReference = FirebaseDatabase.DefaultInstance.RootReference;
             DontDestroyOnLoad(gameObject);
-            if (Steam)
-            {
-                if (UserName == null)
-                {
-                    print("Checking Data Reconnecting ...");
-                    SetSteamUserNmae();
-                }
-            }
-       
+            //if (Steam)
+            //{
+            //    if (UserName == null)
+            //    {
+            //        print("Checking Data Reconnecting ...");
+            //        SetSteamUserNmae();
+            //    }
+            //}
+
         }
         #region SteamUsername
         public void SetSteamUserNmae()
         {
-          //  steamManage.SetActive(true);
+            //  steamManage.SetActive(true);
             if (SteamManager.Initialized)
             {
-               // string name = SteamFriends.GetPersonaName();
-                // string name = SteamFriends.GetPersonaName();
+
+                 string name = SteamFriends.GetPersonaName();
                 Debug.Log(name);
-                CheckUserName(name);
+                RegisterLocallUser(name);
+                //  CheckUserName(name);
             }
             else
             {
-             //   MainMenuManager.Instance.AlertUser("Couldn't Fetch Data !", () => { Application.Quit(); }, false);
+                //   MainMenuManager.Instance.AlertUser("Couldn't Fetch Data !", () => { Application.Quit(); }, false);
             }
         }
 
@@ -71,18 +79,38 @@ namespace BackEnd
 
         #endregion
 
+
+        public void RegisterLocallUser(string username)//Overload for locall saving
+        {
+            isLocallSaving = true;
+            if (PlayerPrefs.HasKey("username"))//check username (key)
+            {
+                UserName = PlayerPrefs.GetString("username");//load key
+            }
+            else
+            {
+                UserName = username;
+                PlayerPrefs.SetString("username", username);
+            }
+            SuccessSignIn?.Invoke();
+        }
+
+
+#if !UNITY_WEBGL
         public void CheckUserName(string uid, bool registerifnotfound = false, string username = "")
         {
-           
+
             Debug.LogError(uid);
             // PlayerLocalStaticData.localPlayeruserName = user;
-             StartCoroutine(CheckIfUsernameExists(uid, registerifnotfound,username));
+            StartCoroutine(CheckIfUsernameExists(uid, registerifnotfound, username));
             //UserName = user;
         }
 
- 
+
         #region FetchFireBaseData
-        public IEnumerator CheckIfUsernameExists(string uid ,bool registerifnotfound = false,string username = "")
+
+
+        public IEnumerator CheckIfUsernameExists(string uid, bool registerifnotfound = false, string username = "")
         {
             Debug.LogError("CheckingUserNameCourtine");
             if (DbReference == null) DbReference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -102,15 +130,15 @@ namespace BackEnd
                     Debug.LogError("user exist");
                     //GetPlayerData
                     StartCoroutine(GetPlayerUserName(uid));
-                  
-                
+
+
 
 
                 }
                 else
                 {
                     Debug.LogError("not exist");
-                    if (registerifnotfound && username!="")
+                    if (registerifnotfound && username != "")
                     {
                         StartCoroutine(RegisterNewUser(uid, username));
                     }
@@ -125,7 +153,7 @@ namespace BackEnd
 
         }//  DataBaseManager.SignIn?.Invoke(User.DisplayName);
 
-        public IEnumerator RegisterNewUser(string uid,string username)
+        public IEnumerator RegisterNewUser(string uid, string username)
         {
             DbReference = FirebaseDatabase.DefaultInstance.RootReference;
             var tasknewuser = DbReference.Child("Users").Child(uid).Child("username").SetValueAsync(username);
@@ -150,24 +178,9 @@ namespace BackEnd
             }
 
         }
-        public void RegisterLocallUser(string username)//Overload for locall saving
-        {
-            isLocallSaving = true;
-            if (PlayerPrefs.HasKey("username"))//check username (key)
-            {
-                UserName = PlayerPrefs.GetString("username");//load key
-            }
-            else
-            {
-                UserName = username;
-                PlayerPrefs.SetString("username", username);
-            }
 
 
-            SuccessSignIn?.Invoke();
-        }
-
-        public static IEnumerator AddIndividualDataToUser<T>(string uid,string username, string childName, string childtype, T value )
+        public static IEnumerator AddIndividualDataToUser<T>(string uid, string username, string childName, string childtype, T value)
         {
             Debug.LogError(uid);
             Debug.LogError(username);
@@ -188,13 +201,13 @@ namespace BackEnd
                 // get_data(username,"playerData");
 
                 Debug.Log("Registered Data Success");
-               
-               
+
+
             }
 
         }
-    
-    
+
+
         private IEnumerator GetPlayerUserName(string uid)
         {
             Debug.LogError("GettingPlayerData");
@@ -238,6 +251,7 @@ namespace BackEnd
                 {
 
                     //there is no data registered for this user on this game
+                    Debug.Log("No data registered registering new data");
                     PlayerData data = new PlayerData();
                     data.InitializeEmptyData();
                     playerData = data;
@@ -296,11 +310,11 @@ namespace BackEnd
             }
             else
             {
-          
+
                 DataSnapshot snapshot = taskfetchdata.Result;//uid's
                 List<string> usernames = new List<string>();
                 List<int> scores = new List<int>();
-    
+
                 Dictionary<string, int> playersDict = new Dictionary<string, int>();
                 Dictionary<string, object> uidsGameData = new Dictionary<string, object>();
 
@@ -310,7 +324,7 @@ namespace BackEnd
                     {
                         foreach (KeyValuePair<string, object> uidsData in results.Value as Dictionary<string, object>)//fetch uid data
                         {
-                            if(uidsData.Key == GameDBName)
+                            if (uidsData.Key == GameDBName)
                             {
                                 //filter uid with gamedata
                                 uidsGameData.Add(results.Key, results.Value);
@@ -354,7 +368,7 @@ namespace BackEnd
                                 }
                             }
                         }
-                   
+
                     }
                 }
                 Debug.Log(usernames.Count);
@@ -362,7 +376,7 @@ namespace BackEnd
                 Debug.Log(usernames.Count == scores.Count);
                 if (usernames.Count == scores.Count)
                 {
-                    for(int i = 0; i < usernames.Count;)
+                    for (int i = 0; i < usernames.Count;)
                     {
                         if (playersDict.Count < 8)
                         {
@@ -390,23 +404,25 @@ namespace BackEnd
                 var list = playersDict.OrderByDescending(x => x.Value).ToList();
                 Debug.Log(list.Count);
                 var count = 0;
-                for(int i = 0; i < list.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
-                   
+
                     if (count < 8)
                     {
-                        
+
                         print(list[i].Value);
                         count++;
                         GameObject leaderboardobj = UnityEngine.Object.Instantiate(UiManager.Instance.leaderBoardPrefab, UiManager.Instance.ContentLeaderboard);
-                         leaderboardobj.GetComponent<playerLeaderboardData>().SetData(list[i].Key, list[i].Value,i);
+                        leaderboardobj.GetComponent<playerLeaderboardData>().SetData(list[i].Key, list[i].Value, i);
                     }
                 }
 
 
             }
         }
-        #endregion
+
     }
 
-}
+    #endregion
+#endif
+    }

@@ -239,12 +239,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         {
             joyStick = GetComponentInChildren<FixedJoystick>();
         }
+        if (!Application.isMobilePlatform)//disable mobile stuff
+        {
+            joyStick?.gameObject.SetActive(false);
+            
+        }
         _gameactions.ButtonActions.moving.performed += cntxt =>
         {
             OnHookAction(cntxt.ReadValue<Vector2>());
         };
           
-        _gameactions.ButtonActions.moving.canceled += cntxt => _movingL = Vector2.zero;
+       _gameactions.ButtonActions.moving.canceled += cntxt => _movingL = Vector2.zero;
         _gameactions.ButtonActions.pause.performed += x =>
         {
 
@@ -264,32 +269,32 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     private void OnHookAction(Vector2 val)
     {
-        if (!_driftBall) return;
+       
         if (!_gamePaused && !_pauseMenupanel.activeInHierarchy)
         {
+        //    Debug.Log(val);
             _movingL = val;//cntxt.ReadValue<Vector2>();
+            Debug.Log(_movingL);
         }
-        if (_driftBall)
+        if (!_driftBall) return;
+      //  Debug.Log("Listening drift");
+        if (_movingL.x > 0)
         {
+            Debug.Log("left drift");
+            var rig = _ball.GetComponent<Rigidbody>();
+            rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
+            _driftBall = false;
 
-            if (_movingL.x > 0)
-            {
-
-                var rig = _ball.GetComponent<Rigidbody>();
-                rig.AddForce(new Vector3(-_controllBallPower, 0, 0), ForceMode.Impulse);
-                _driftBall = false;
-
-            }
-            else if (_movingL.x < 0)
-            {
-
-                var rig = _ball.GetComponent<Rigidbody>();
-                rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
-                _driftBall = false;
-
-            }
         }
-  
+        else if (_movingL.x < 0)
+        {
+            Debug.Log("right drift");
+            var rig = _ball.GetComponent<Rigidbody>();
+            rig.AddForce(new Vector3(_controllBallPower, 0, 0), ForceMode.Impulse);
+            _driftBall = false;
+
+        }
+
     }
 
     public void LunchRocket()
@@ -670,8 +675,11 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         if (_photonview.IsMine)
         {
 
-            OnMobileMove();
-            OnHookAction(new Vector2(hookStick.Horizontal,0));
+            if (Application.isMobilePlatform)
+            {
+                OnMobileMove();
+                OnHookAction(new Vector2(hookStick.Horizontal, 0));
+            }
             if (_trackBall)
             {
                // _hookScroll.gameObject.SetActive(false);
@@ -808,7 +816,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                 {
                     if (!_gamePaused && !_hookcalclated)//when to move
                     {
-                        inputdir = new Vector3(_movingL.x, 0, 0);
+                        inputdir = new Vector3(_movingL.x , 0, 0);
+                        //Debug.Log("Moving");
+                        //Debug.Log(_movingL);
                         transform.Translate(inputdir * Time.deltaTime);
                         Vector3 clampedPosition = transform.position;
                         clampedPosition.x = Mathf.Clamp(clampedPosition.x, _myxpos - 0.4f, _myxpos + 0.4f);
@@ -1356,6 +1366,7 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     #region Inputs
     public void OnMobileMove()
     {
+        if (!Application.isMobilePlatform) return;
         if (joyStick == null) return;
         if (_gamePaused || _pauseMenupanel.activeInHierarchy) return;
             _movingL = new Vector3(joyStick.Horizontal, 0, 0);
@@ -1507,10 +1518,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
         }
         
         PlayerPrefs.Save();
+
+         #if !UNITY_WEBGL
         if (!DataBaseManager.Instance.IsLocallSaving)
         {
             StartCoroutine(DataBaseManager.AddIndividualDataToUser(DataBaseManager.UserID, PhotonNetwork.LocalPlayer.NickName, "playerData", "rankedPoints", latpoints));
+
         }
+#endif
         StartCoroutine(PostScore());
     }
     IEnumerator waitExit()

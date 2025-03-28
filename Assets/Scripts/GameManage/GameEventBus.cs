@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public enum GameEventType
 {
-    waiting,leaderboard,menuLeader,arcademode,steamBuild,IGTbuild,PolyCadebuild,XboxBuild,ArcadeBuild,AndroidBuild,AndroidVersion
+    waiting,leaderboard,menuLeader,arcademode,steamBuild,IGTbuild,PolyCadebuild,XboxBuild,ArcadeBuild,AndroidBuild,AndroidVersion,WebGlVersion
 }
 public class GameEventBus : MonoBehaviour
 {

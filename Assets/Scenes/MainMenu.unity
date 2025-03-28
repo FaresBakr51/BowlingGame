@@ -3996,7 +3996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0998b4a3b91fe40811e60ab5b9d51a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gamePlatform: 10
+  gamePlatform: 4
   loginPanel: {fileID: 426255687}
   _setNamePanel: {fileID: 1731776772}
   _mainPanel: {fileID: 122975009}
@@ -6219,6 +6219,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 857988241}
+    - target: {fileID: 8113686708516970885, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
+      propertyPath: m_IsOn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8113686708965983888, guid: d09f3631ba724a74fa395e278bfb22b5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -12057,7 +12061,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1528964651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13151,7 +13155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1644391845
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17047,8 +17051,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85ac476601fd8e242a9c6e520bb1ca72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Steam: 0
-  isLocallSaving: 0
+  Steam: 1
+  isLocallSaving: 1
 --- !u!1 &2013941748
 GameObject:
   m_ObjectHideFlags: 0
@@ -17343,6 +17347,11 @@ MonoBehaviour:
   rememberMe: {fileID: 1242338022}
   steamApply: {fileID: 1528964650}
   bashPanel: {fileID: 426255687}
+  Modes:
+  - {fileID: 1892607148}
+  - {fileID: 2075784365}
+  - {fileID: 2081007934}
+  - {fileID: 1995165539}
 --- !u!1 &2059361219
 GameObject:
   m_ObjectHideFlags: 0

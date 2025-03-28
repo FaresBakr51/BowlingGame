@@ -37,7 +37,7 @@ public class PlayerWaitingState : MonoBehaviourPunCallbacks,PlayerState
         }
       
         playercontroller._driftBall = true;
-        if (playercontroller._driftBall)
+        if (playercontroller._driftBall && Application.isMobilePlatform)
         {
             playercontroller.hookStick.transform.parent.gameObject.SetActive(true);
             Debug.Log("parent name = " + playercontroller.hookStick.transform.root.gameObject.name);

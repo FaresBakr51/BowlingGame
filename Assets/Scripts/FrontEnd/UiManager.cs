@@ -53,7 +53,10 @@ public class UiManager : Singelton<UiManager>
             Destroy(t.gameObject);
         }
         if (DataBaseManager.Instance.IsLocallSaving) return;
+
+         #if !UNITY_WEBGL
         StartCoroutine(DataBaseManager.GetLoadLeaderboard());
+         #endif
         leaderpardPanel.SetActive(true);
     }
 
@@ -100,6 +103,8 @@ public class UiManager : Singelton<UiManager>
         Application.Quit();
     }
     #region Auth
+
+#if !UNITY_WEBGL
     public void SignInGoogle()
     {
         AuthManager.Instance.OnSignInGoogle();
@@ -117,6 +122,7 @@ public class UiManager : Singelton<UiManager>
 
         AuthManager.Instance.BashAuth.Login(emailloginInput.text.Trim(), passlogininput.text.Trim());
     }
+#endif
     public void ClearSignData()
     {
         userNameinput.text = string.Empty;
@@ -143,5 +149,5 @@ public class UiManager : Singelton<UiManager>
         passlogininput.interactable = enable;
         passconfirminput.interactable = enable;
     }
-    #endregion
+#endregion
 }
