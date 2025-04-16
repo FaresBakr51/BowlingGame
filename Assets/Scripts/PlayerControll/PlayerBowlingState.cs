@@ -64,6 +64,10 @@ public class PlayerBowlingState : MonoBehaviourPunCallbacks, PlayerState
 
         rig.AddForce(new Vector3(0, 0, -playercontroller._power), ForceMode.Impulse);
         rig.AddForce(new Vector3(-playercontroller._driftvalue, 0, 0),ForceMode.Force);
+
+        rig.AddTorque(Vector3.forward * playercontroller.spinvalue * playercontroller.spinScaler, ForceMode.Impulse);
+        rig.AddTorque(  (playercontroller.leftSpin ?  Vector3.left : Vector3.right) * playercontroller.spinvalue * playercontroller.spinScaler, ForceMode.Force);
+        rig.AddForce(new Vector3((playercontroller.leftSpin ? playercontroller.spinvalue : -playercontroller.spinvalue), 0, 0), ForceMode.Force);
         playercontroller._ball.GetComponent<TrailRenderer>().enabled = true;
         GameEventBus.Publish(GameEventType.waiting);
     }

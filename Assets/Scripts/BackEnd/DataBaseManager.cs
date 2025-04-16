@@ -37,11 +37,13 @@ namespace BackEnd
         {
 #if !UNITY_WEBGL
             SignIn.AddListener(CheckUserName);
+            GameEventBus.Subscribe(GameEventType.steamBuild, SetSteamUserNmae);
 #endif
         }
         private void OnDisable()
         {
             SignIn.RemoveAllListeners();
+            GameEventBus.UnSubscribe(GameEventType.steamBuild, SetSteamUserNmae);
         }
         private void Start()
         {

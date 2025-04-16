@@ -109,6 +109,24 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SpinBarLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""2d56c95f-e0a1-4c08-b8e6-fab6d8799dc3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpinBarRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""a69c7731-485a-47d9-b506-f5d5f89e990f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""driftbar2"",
                     ""type"": ""Button"",
                     ""id"": ""d07662cc-fa04-4c67-a42b-2d9931b365bb"",
@@ -210,7 +228,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""57a95f3e-334a-4737-8936-52e3887155c2"",
+                    ""id"": ""4225a425-aee5-4930-99d3-352ca8b9ac1e"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1043,6 +1061,50 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""action"": ""NavigateP2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b011c494-1d7e-4130-9dcb-648ae738208f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpinBarLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28f14b4e-2aa9-4d40-b52c-f81077c3e91a"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpinBarLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d00280bc-4014-415b-af67-75c68ad7ea4d"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpinBarRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0bcac202-3348-459c-8ac7-7059f3ff9d6a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpinBarRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1060,6 +1122,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         m_ButtonActions_trackBall = m_ButtonActions.FindAction("trackBall", throwIfNotFound: true);
         m_ButtonActions_powerupaction2 = m_ButtonActions.FindAction("powerupaction2", throwIfNotFound: true);
         m_ButtonActions_driftbar = m_ButtonActions.FindAction("driftbar", throwIfNotFound: true);
+        m_ButtonActions_SpinBarLeft = m_ButtonActions.FindAction("SpinBarLeft", throwIfNotFound: true);
+        m_ButtonActions_SpinBarRight = m_ButtonActions.FindAction("SpinBarRight", throwIfNotFound: true);
         m_ButtonActions_driftbar2 = m_ButtonActions.FindAction("driftbar2", throwIfNotFound: true);
         m_ButtonActions_moving = m_ButtonActions.FindAction("moving", throwIfNotFound: true);
         m_ButtonActions_moving2 = m_ButtonActions.FindAction("moving2", throwIfNotFound: true);
@@ -1136,6 +1200,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_ButtonActions_trackBall;
     private readonly InputAction m_ButtonActions_powerupaction2;
     private readonly InputAction m_ButtonActions_driftbar;
+    private readonly InputAction m_ButtonActions_SpinBarLeft;
+    private readonly InputAction m_ButtonActions_SpinBarRight;
     private readonly InputAction m_ButtonActions_driftbar2;
     private readonly InputAction m_ButtonActions_moving;
     private readonly InputAction m_ButtonActions_moving2;
@@ -1155,6 +1221,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         public InputAction @trackBall => m_Wrapper.m_ButtonActions_trackBall;
         public InputAction @powerupaction2 => m_Wrapper.m_ButtonActions_powerupaction2;
         public InputAction @driftbar => m_Wrapper.m_ButtonActions_driftbar;
+        public InputAction @SpinBarLeft => m_Wrapper.m_ButtonActions_SpinBarLeft;
+        public InputAction @SpinBarRight => m_Wrapper.m_ButtonActions_SpinBarRight;
         public InputAction @driftbar2 => m_Wrapper.m_ButtonActions_driftbar2;
         public InputAction @moving => m_Wrapper.m_ButtonActions_moving;
         public InputAction @moving2 => m_Wrapper.m_ButtonActions_moving2;
@@ -1197,6 +1265,12 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @driftbar.started += instance.OnDriftbar;
             @driftbar.performed += instance.OnDriftbar;
             @driftbar.canceled += instance.OnDriftbar;
+            @SpinBarLeft.started += instance.OnSpinBarLeft;
+            @SpinBarLeft.performed += instance.OnSpinBarLeft;
+            @SpinBarLeft.canceled += instance.OnSpinBarLeft;
+            @SpinBarRight.started += instance.OnSpinBarRight;
+            @SpinBarRight.performed += instance.OnSpinBarRight;
+            @SpinBarRight.canceled += instance.OnSpinBarRight;
             @driftbar2.started += instance.OnDriftbar2;
             @driftbar2.performed += instance.OnDriftbar2;
             @driftbar2.canceled += instance.OnDriftbar2;
@@ -1246,6 +1320,12 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @driftbar.started -= instance.OnDriftbar;
             @driftbar.performed -= instance.OnDriftbar;
             @driftbar.canceled -= instance.OnDriftbar;
+            @SpinBarLeft.started -= instance.OnSpinBarLeft;
+            @SpinBarLeft.performed -= instance.OnSpinBarLeft;
+            @SpinBarLeft.canceled -= instance.OnSpinBarLeft;
+            @SpinBarRight.started -= instance.OnSpinBarRight;
+            @SpinBarRight.performed -= instance.OnSpinBarRight;
+            @SpinBarRight.canceled -= instance.OnSpinBarRight;
             @driftbar2.started -= instance.OnDriftbar2;
             @driftbar2.performed -= instance.OnDriftbar2;
             @driftbar2.canceled -= instance.OnDriftbar2;
@@ -1292,6 +1372,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         void OnTrackBall(InputAction.CallbackContext context);
         void OnPowerupaction2(InputAction.CallbackContext context);
         void OnDriftbar(InputAction.CallbackContext context);
+        void OnSpinBarLeft(InputAction.CallbackContext context);
+        void OnSpinBarRight(InputAction.CallbackContext context);
         void OnDriftbar2(InputAction.CallbackContext context);
         void OnMoving(InputAction.CallbackContext context);
         void OnMoving2(InputAction.CallbackContext context);

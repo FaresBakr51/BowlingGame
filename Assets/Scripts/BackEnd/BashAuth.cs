@@ -38,7 +38,7 @@ namespace BackEnd
             GameEventBus.Subscribe(GameEventType.arcademode, OnSignInIIRCade);
 #if !UNITY_WEBGL
             GameEventBus.Subscribe(GameEventType.PolyCadebuild, OnSignInPolyCade);
-            GameEventBus.Subscribe(GameEventType.steamBuild, OnSteamSignIn);
+          //  GameEventBus.Subscribe(GameEventType.steamBuild, OnSteamSignIn);
 #endif
             GameEventBus.Subscribe(GameEventType.WebGlVersion, OnWebGlVersion);
         }
@@ -47,7 +47,7 @@ namespace BackEnd
             GameEventBus.UnSubscribe(GameEventType.arcademode, OnSignInIIRCade);
 #if !UNITY_WEBGL
             GameEventBus.UnSubscribe(GameEventType.PolyCadebuild, OnSignInPolyCade);
-            GameEventBus.UnSubscribe(GameEventType.steamBuild, OnSteamSignIn);
+          //  GameEventBus.UnSubscribe(GameEventType.steamBuild, OnSteamSignIn);
 #endif
             GameEventBus.UnSubscribe(GameEventType.WebGlVersion, OnWebGlVersion);
         }
@@ -105,7 +105,7 @@ namespace BackEnd
             if (PlayerPrefs.HasKey("email") && PlayerPrefs.HasKey("password"))
             {
                 //Auto Login
-                Debug.Log("Auto Login ..");
+                Debug.LogError("Auto Login ..");
                 Login(PlayerPrefs.GetString("email"), PlayerPrefs.GetString("password"));
             }
             else
@@ -117,8 +117,8 @@ namespace BackEnd
                 string randEmail = randUsername + "@" + sign  + ".cab";
                 string randPassword = "@" + sign + sign;
                 SignUp(randUsername, randEmail, randPassword, randPassword);
-                Debug.Log("Email = " + randEmail);
-                Debug.Log("Rand pass = " + randPassword);
+                Debug.LogError("Email = " + randEmail);
+                Debug.LogError("Rand pass = " + randPassword);
             }
         }
 #endif

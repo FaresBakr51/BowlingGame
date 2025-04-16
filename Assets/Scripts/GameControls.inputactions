@@ -87,6 +87,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "SpinBarLeft",
+                    "type": "Button",
+                    "id": "2d56c95f-e0a1-4c08-b8e6-fab6d8799dc3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SpinBarRight",
+                    "type": "Button",
+                    "id": "a69c7731-485a-47d9-b506-f5d5f89e990f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "driftbar2",
                     "type": "Button",
                     "id": "d07662cc-fa04-4c67-a42b-2d9931b365bb",
@@ -188,7 +206,7 @@
                 },
                 {
                     "name": "",
-                    "id": "57a95f3e-334a-4737-8936-52e3887155c2",
+                    "id": "4225a425-aee5-4930-99d3-352ca8b9ac1e",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -1021,6 +1039,50 @@
                     "action": "NavigateP2",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "b011c494-1d7e-4130-9dcb-648ae738208f",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpinBarLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28f14b4e-2aa9-4d40-b52c-f81077c3e91a",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpinBarLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d00280bc-4014-415b-af67-75c68ad7ea4d",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpinBarRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0bcac202-3348-459c-8ac7-7059f3ff9d6a",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpinBarRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
