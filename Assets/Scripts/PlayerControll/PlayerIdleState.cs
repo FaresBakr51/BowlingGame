@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.EventSystems;
+using UnityEngine.Splines;
 public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
 {
     private PlayerController playerController;
@@ -42,18 +43,24 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         playerController._hookScrollRect.gameObject.SetActive(true);
         playerController._calcPower = false;
         playerController._ball.GetComponent<Rigidbody>().isKinematic = true;
+        playerController._ball.GetComponent<BallSound>().Collided = false;
+        playerController.splineT = 0;
         playerController._ball.GetComponent<BallSound>().enabled = false;
+        playerController._ball.GetComponent<ball>().OnStartSpin(false, 0);
         playerController._ball.transform.parent = playerController._playerhand;
         playerController._slidertime = 0;
         playerController._scrolltime = 0;
         playerController._spinTime = 0;
         playerController.spinScroll.value = 0.5f;
+        playerController.CanMakeAction = false;
         playerController._powerSliderImg.fillAmount = 0;
         playerController._hookScrollRect.anchoredPosition = /*0.5f;*/ new Vector2(0, playerController._hookScrollRect.anchoredPosition.y);
         playerController._driftBall = false;
+        playerController.startTorque = false;
         playerController._ball.transform.localPosition = playerController._BallConstantPos;
         playerController._roundscore = 0;
         playerController._ball.GetComponent<BallSound>()._hit = false;
+ 
         this.transform.position = _mypos;
         playerController._camera.transform.position = _Cambos;
 
@@ -75,7 +82,7 @@ public class PlayerIdleState : MonoBehaviourPunCallbacks,PlayerState
         }
 
         playerController._ball.GetComponent<TrailRenderer>().enabled = false;
-     
+       
         if (playerController._gameend)
         {
             playerController.UpdateAnimator("shot", 0);

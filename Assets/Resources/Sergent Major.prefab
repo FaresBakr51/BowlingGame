@@ -1836,6 +1836,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ball: {fileID: 5686085969265127455}
+  startTorque: 0
+  splineT: 0
   _playerhand: {fileID: 6295088734945847830}
   _BallConstantPos: {x: -0.0071, y: 0.0074, z: 0.0307}
   _power: 0
@@ -1854,18 +1856,17 @@ MonoBehaviour:
   _speed: 0.5
   _slidertime: 0
   hookDuration: 0.8
-  spinDuration: 0.2
+  spinDuration: 0.4
   _scrolltime: 0
   _spinTime: 0
   _MyPlayCanavas: {fileID: 864921398248335454}
   _hookcalclated: 0
   spinCalculated: 0
   _driftvalue: 0
-  spinMinValue: 0
-  spinMaxValue: 600
+  spinMinValue: -10
+  spinMaxValue: 10
   leftSpin: 1
   spinvalue: 0
-  spinScaler: 600
   _driftMaxval: 350
   _canhit: 0
   _roundscore: 0
@@ -1973,6 +1974,7 @@ MonoBehaviour:
   force: 0
   minPower: 225
   maxPower: 300
+  CanMakeAction: 0
 --- !u!114 &5686085970154837461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2651,6 +2653,7 @@ MonoBehaviour:
   ping: {fileID: 0}
   RTT: 0
   teleportIfFarDistance: 0
+  Collided: 0
 --- !u!96 &27215176
 TrailRenderer:
   serializedVersion: 3

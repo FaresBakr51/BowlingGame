@@ -15,19 +15,22 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using Special;
 using BackEnd;
+using UnityEngine.Splines;
 
 public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 {
 
     public GameObject _ball;
+    public bool startTorque;
+    public float splineT;
     public Transform _playerhand;
     public Vector3 _BallConstantPos;
     public float _power;
     public GameObject _camera;
     private Animator _playerAnim;
     public Image _powerSliderImg;
-    [SerializeField] private float minBowlPower;
-    [SerializeField] private float maxBowlPower;
+    public float minBowlPower;
+    public float maxBowlPower;
     public RectTransform _hookScrollRect;
 
     public Scrollbar spinScroll;
@@ -57,7 +60,6 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     public float spinMaxValue;
     public bool leftSpin;
     public float spinvalue;
-    public float spinScaler;
     [SerializeField] private float _driftMaxval;
     public bool _canhit;
     public int _roundscore;
@@ -184,6 +186,8 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
     [SerializeField] private float minPower;
     [SerializeField] private float maxPower;
+
+    public bool CanMakeAction = false;
     private void Awake()
     {
       for(int i = 0; i < _danceClips.Length; i++)
@@ -549,28 +553,18 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
                 OnPowerUpAction();
             };
+       
 
             _gameactions.ButtonActions.driftbar.performed += y => {
 
                 OnDriftAction();
             };
 
-            if (leftSpin)
+            _gameactions.ButtonActions.SpinBar.performed += z =>
             {
-                _gameactions.ButtonActions.SpinBarLeft.performed += y =>
-                {
-
-                    OnGetSpinValue();
-                };
-            }
-            else
-            {
-                _gameactions.ButtonActions.SpinBarRight.performed += y =>
-                {
-
-                    OnGetSpinValue();
-                };
-            }
+                Debug.Log("Spin Bar");
+                OnGetSpinValue();
+            };
         }
         // #region IGT
         //_gameactions.ButtonActions.IGTpowerAction.performed += val =>
@@ -664,6 +658,9 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
                     {
 
                         GetPowerValue();
+                       
+
+
                     }
 
                 }
@@ -1045,10 +1042,17 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
             }
 
         }
+        StartCoroutine(ActiveSpinShot());
 
         //check spin meter ?
         spinScroll.gameObject.SetActive(true);
       //    BowlState();
+    }
+    IEnumerator ActiveSpinShot()
+    {
+
+        yield return new WaitForSeconds(0.5f);
+        CanMakeAction = true;
     }
 
     private void OnUpdateSpinGui()
@@ -1085,12 +1089,27 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
     private void OnGetSpinValue()
     {
         if (_gamePaused || _pauseMenupanel.activeInHierarchy) return;
-        if (!spinCalculated)
+        if (  _canhit &&!spinCalculated && _calcPower && _hookcalclated && CanMakeAction)
         {
-            spinCalculated = true;
-            spinvalue = Mathf.Lerp(spinMinValue,spinMaxValue, spinScroll.value);
+
+          
+
+            float lerpval = Mathf.InverseLerp(0, 0.5f, spinScroll.value);
+            float lerpval2 = Mathf.InverseLerp(0.5f, 1, spinScroll.value);
+
+            float lerpValfinal = Mathf.Lerp(spinMinValue , 0, lerpval);
+
+            float lerpValfinal2 = Mathf.Lerp(0, spinMaxValue, lerpval2);
+
+            spinvalue = spinScroll.value > 0.5f ? lerpValfinal2 : lerpValfinal;
+            Debug.Log("Spin value lerp1 = " + lerpValfinal);
+            Debug.Log("Spin value  lerp 2= " + lerpValfinal2);
             Debug.Log("Spin value = " + spinvalue);
+
+
+
             BowlState();
+            spinCalculated = true;
         }
     }
     private float GetActualPowerVal(float val)
@@ -1146,8 +1165,10 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
                  Mathf.Lerp(minHookX, maxHookX, _scrolltime / hookDuration)
                 , _hookScrollRect.anchoredPosition.y);
-            
-            if(_hookScrollRect.anchoredPosition.x >=  (maxHookX - 2f) ){
+
+
+
+            if (_hookScrollRect.anchoredPosition.x >=  (maxHookX - 2f) ){
                 _moveright = true;
                 _scrolltime = 0;
             }
@@ -1159,12 +1180,14 @@ public class PlayerController : MonoBehaviourPunCallbacks,IPunObservable
 
                  Mathf.Lerp(maxHookX, minHookX, _scrolltime / hookDuration)
                 , _hookScrollRect.anchoredPosition.y);
+
             if (_hookScrollRect.anchoredPosition.x <= (minHookX +2)){
                 _scrolltime = 0;
                 _moveright = false;
             }
 
          }
+       
 
     }
   

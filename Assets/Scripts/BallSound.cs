@@ -26,25 +26,40 @@ public class BallSound : MonoBehaviourPunCallbacks,IPunObservable
     Vector3 positionAtLastPacket = Vector3.zero;
     Quaternion rotationAtLastPacket = Quaternion.identity;
     public float teleportIfFarDistance;
+    public bool Collided = false;
+    private Vector3 cachedRot;
+    private Vector3 rightAxis;
     void Awake()
 
     {
       
         _rig = GetComponent<Rigidbody>();
-        
-      
+
+        transform.rotation = Quaternion.identity;
+        transform.right = Vector3.right;
+        rightAxis = transform.right;
     }
-    void Update()
-    {
-        //ping.text = PhotonNetwork.GetPing().ToString();
-    }
+   
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("pin") && _hit == false)
         {
             UpdateSound(_clip);
             _hit = true;
+          
         }
+        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("pin"))
+        {
+            cachedRot = transform.eulerAngles;
+            Collided = true;
+        }
+       
+
+    }
+    public Vector3 GetRightAXIS()
+    {
+        return rightAxis;
     }
   void FixedUpdate()
     {

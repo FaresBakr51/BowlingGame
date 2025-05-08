@@ -87,22 +87,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SpinBarLeft",
-                    "type": "Button",
-                    "id": "2d56c95f-e0a1-4c08-b8e6-fab6d8799dc3",
-                    "expectedControlType": "Button",
+                    "name": "SpinBar",
+                    "type": "PassThrough",
+                    "id": "19ebb7b1-b2ab-41ec-a670-e988babbc1a1",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SpinBarRight",
-                    "type": "Button",
-                    "id": "a69c7731-485a-47d9-b506-f5d5f89e990f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "driftbar2",
@@ -1042,45 +1033,56 @@
                 },
                 {
                     "name": "",
-                    "id": "b011c494-1d7e-4130-9dcb-648ae738208f",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "ddc3b7c1-fd47-4e36-a94b-b20f16c3bfcb",
+                    "path": "<XInputController>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SpinBarLeft",
+                    "action": "SpinBar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "28f14b4e-2aa9-4d40-b52c-f81077c3e91a",
-                    "path": "<Keyboard>/s",
+                    "id": "dae811d3-5fd2-46cf-bd56-0ec38cf88c4a",
+                    "path": "<SwitchProControllerHID>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SpinBarLeft",
+                    "action": "SpinBar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d00280bc-4014-415b-af67-75c68ad7ea4d",
-                    "path": "<Gamepad>/rightTrigger",
+                    "id": "24a1f457-e8a4-4e27-9735-86b891d4823f",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SpinBarRight",
+                    "action": "SpinBar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "0bcac202-3348-459c-8ac7-7059f3ff9d6a",
-                    "path": "<Keyboard>/r",
+                    "id": "1846d59a-f50c-4a62-b774-18b2e620015d",
+                    "path": "<DualShockGamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SpinBarRight",
+                    "action": "SpinBar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f0cfe4a-6e42-428c-81ab-f9df1f55c045",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpinBar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

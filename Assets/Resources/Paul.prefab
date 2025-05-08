@@ -4911,8 +4911,9 @@ GameObject:
   - component: {fileID: 1836619140433451883}
   - component: {fileID: 5951906885314900655}
   - component: {fileID: 7011236013127091561}
+  - component: {fileID: 8113568645098682790}
   m_Layer: 0
-  m_Name: Ball02
+  m_Name: BallPrefab
   m_TagString: ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5014,7 +5015,7 @@ Rigidbody:
   m_GameObject: {fileID: 468316450950524577}
   serializedVersion: 4
   m_Mass: 15
-  m_Drag: 0
+  m_Drag: 0.02
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -5169,6 +5170,7 @@ MonoBehaviour:
   ping: {fileID: 6683189479971202577}
   RTT: 0
   teleportIfFarDistance: 3
+  Collided: 0
 --- !u!96 &7011236013127091561
 TrailRenderer:
   serializedVersion: 3
@@ -5282,6 +5284,18 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
+--- !u!114 &8113568645098682790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468316450950524577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3faa778899b24247837e164e16f803c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1497730540837205645
 GameObject:
   m_ObjectHideFlags: 0
@@ -7993,12 +8007,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ball: {fileID: 468316450950524577}
+  startTorque: 0
+  splineT: 0
   _playerhand: {fileID: 6475400318924308723}
   _BallConstantPos: {x: -0.0233, y: 0.046, z: 0.0044}
   _power: 0
   _camera: {fileID: 6475400319270017575}
   _powerSliderImg: {fileID: 8580840722371035638}
-  minBowlPower: 225
+  minBowlPower: 230
   maxBowlPower: 300
   _hookScrollRect: {fileID: 6902136946888687711}
   spinScroll: {fileID: 5462393626518906789}
@@ -8011,18 +8027,17 @@ MonoBehaviour:
   _speed: 0.5
   _slidertime: 0
   hookDuration: 0.8
-  spinDuration: 0.2
+  spinDuration: 0.4
   _scrolltime: 0
   _spinTime: 0
   _MyPlayCanavas: {fileID: 6475400319801822849}
   _hookcalclated: 0
   spinCalculated: 0
   _driftvalue: 0
-  spinMinValue: 0
-  spinMaxValue: 600
-  leftSpin: 1
+  spinMinValue: -10
+  spinMaxValue: 10
+  leftSpin: 0
   spinvalue: 0
-  spinScaler: 600
   _driftMaxval: 420
   _canhit: 0
   _roundscore: 0
@@ -8130,6 +8145,7 @@ MonoBehaviour:
   force: 0
   minPower: 225
   maxPower: 300
+  CanMakeAction: 0
 --- !u!114 &1648955904132123506
 MonoBehaviour:
   m_ObjectHideFlags: 0
